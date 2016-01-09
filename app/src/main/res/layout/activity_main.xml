@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".MainActivity">
+    <Button
+        android:id="@+id/submit_button"
+        android:text="Submit"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="onSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_centerInParent="true"
+        android:layout_above="@id/submit_button"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/teamName"
+                android:hint="Team name"
+                android:inputType="textAutoComplete"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/entry1"
+                android:inputType="text"
+                android:hint="Entry 1"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/name1"
+                android:inputType="textPersonName"
+                android:layout_marginTop="10dp"
+                android:hint="Name 1"
+                android:ems="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/entry2"
+                android:inputType="text"
+                android:hint="Entry 2"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/name2"
+                android:inputType="textPersonName"
+                android:layout_marginTop="10dp"
+                android:hint="Name 2"
+                android:ems="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/entry3"
+                android:inputType="text"
+                android:hint="Entry 3"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/name3"
+                android:inputType="textPersonName"
+                android:layout_marginTop="10dp"
+                android:hint="Name 3"
+                android:ems="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
