@@ -27,20 +27,14 @@ public class PostRequest {
         this.data = d;
     }
     public String post(){
-        String result = "";
+        String result;
         try {
             HttpPost request = new HttpPost(url);
-            //request.setHeader("Content-type", "application/json");
             HttpResponse response = null;
             request.setEntity(new UrlEncodedFormEntity(data));
-//            if(!params.isEmpty()) {
-//                StringEntity sEntity = new StringEntity(params, "UTF-8");
-//                request.setEntity(sEntity);
-//            }
             HttpClient httpClient = new DefaultHttpClient();
             response = httpClient.execute(request);
             result = EntityUtils.toString(response.getEntity());
-            //loginResponse = new JSONObject(result);
         }catch (UnknownHostException e) {
             result = "internetNotAvailable";
         } catch (Exception e) {

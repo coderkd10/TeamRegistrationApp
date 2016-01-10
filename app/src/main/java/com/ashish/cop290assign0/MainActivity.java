@@ -30,7 +30,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
-    ProgressDialog progressDialog;
     EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
         init();
     }
 
+    //Initializing UI components
     private void init(){
         teamNameTextBox = (EditText)findViewById(R.id.teamName);
         entry1TextBox = (EditText)findViewById(R.id.entry1);
@@ -47,9 +47,11 @@ public class MainActivity extends ActionBarActivity {
         name2TextBox = (EditText)findViewById(R.id.name2);
         entry3TextBox = (EditText)findViewById(R.id.entry3);
         name3TextBox = (EditText)findViewById(R.id.name3);
+        //Storing editTextViews for adding asterisk to required fields
         EditText[] editTextViews = {teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox};
         addRedAsterisk(editTextViews);
     }
+    //Adds asterisk to editTexts using SpannableString(used for selective formatting of strings ex. color,on click url).
     private void addRedAsterisk(EditText[] e_array){
         for(EditText e : e_array) {
             String text = e.getHint().toString();
@@ -85,7 +87,10 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    //Extracts and returns all the required data from the editTexts in an ArrayList
     private ArrayList<NameValuePair> getData(){
+        //Getting data from the editTexts
         String teamName = teamNameTextBox.getText().toString();
         String entry1 = entry1TextBox.getText().toString();
         String name1 = name1TextBox.getText().toString();
@@ -93,62 +98,87 @@ public class MainActivity extends ActionBarActivity {
         String name2 = name2TextBox.getText().toString();
         String entry3 = entry3TextBox.getText().toString();
         String name3 = name3TextBox.getText().toString();
+
+        //Adding data to ArrayList in NameValuePair form for sending to the server.
         ArrayList<NameValuePair> data = new ArrayList<>();
         data.add(new BasicNameValuePair("teamname", teamName));
         data.add(new BasicNameValuePair("entry1", entry1));
-        data.add(new BasicNameValuePair("name1", teamName));
+        data.add(new BasicNameValuePair("name1", name1));
         data.add(new BasicNameValuePair("entry2", entry2));
         data.add(new BasicNameValuePair("name2", name2));
         data.add(new BasicNameValuePair("entry3", entry3));
         data.add(new BasicNameValuePair("name3", name3));
+
+        //Checking for input errors
+        if(!isValidInput(teamName, entry1, name1, entry2, name2, entry3, name3))
+            data = null;
+        return data;
+    }
+
+    //Checks for valid input and shows error accordingly.
+    private boolean isValidInput(String teamName, String entry1,
+                               String name1,String entry2,
+                               String name2,String entry3,String name3){
+        boolean result = true;
         if(teamName.isEmpty()){
             teamNameTextBox.setError("Team name can't be empty!");
-            data = null;
+            result = false;
         }
         if(entry1.isEmpty()) {
             entry1TextBox.setError("Entry1 can't be empty!");
-            data = null;
+            result = false;
         }
         if(name1.isEmpty()) {
             name1TextBox.setError("Name1 can't be empty!");
-            data = null;
+            result = false;
         }
         if(entry2.isEmpty()){
             entry2TextBox.setError("Entry2 can't be empty!");
-            data = null;
+            result = false;
         }
         if(name2.isEmpty()){
             name2TextBox.setError("Name2 can't be empty!");
-            data = null;
+            result = false;
         }
         if(entry3.isEmpty() && !name3.isEmpty()){
             entry3TextBox.setError("Name3 entered, please enter entry for this name!");
-            data = null;
+            result = false;
         }
         if(name3.isEmpty() && !entry3.isEmpty()){
             name3TextBox.setError("Entry3 entered, please enter name for this entry!");
-            data = null;
+            result = false;
         }
-        return data;
+        return result;
     }
+    //Called on submit button click
     public void onSubmit(View v){
-        String url = "http://agni.iitd.ernet.in/cop290/assign0/register/";
-        ArrayList<NameValuePair> data = getData();
+        ArrayList<NameValuePair> data = getData(); //getting all data from ediTexts
         if(data!=null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            progressDialog.setCancelable(false);
-            progressDialog.setTitle("Please wait");
-            progressDialog.setMessage("Sending data to the server.....");
-            progressDialog.show();
-            new sendDataToServer(data).execute(url);
+            //Creating a progressDialog to shows while the data is being posted.
+            ProgressDialog pDialog = createProgressDialog("Please wait", "Sending data to the server.....");
+            //posting to the server
+            new sendDataToServer(data,pDialog).execute(Config.SERVER_URL);
         }
 
     }
+    //Creates a progressDialog
+    private ProgressDialog createProgressDialog(String title,String description){
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(description);
+        progressDialog.show();
+        return progressDialog;
+    }
+
+    //Posting data to the server asynchronously
     class sendDataToServer extends AsyncTask<String, Void, String> {
 		ArrayList<NameValuePair> data;
-		public sendDataToServer(ArrayList<NameValuePair> d){
+        ProgressDialog progressDialog;
+		public sendDataToServer(ArrayList<NameValuePair> d,ProgressDialog p){
 			data = d;
+            progressDialog = p;
 		}
         protected String doInBackground(String... urls) {
             PostRequest request = new PostRequest(urls[0], data);
@@ -159,14 +189,16 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(String res) {
             try {
                 progressDialog.dismiss();
+                //Checking post request result
                 if(res.equalsIgnoreCase("internetNotAvailable")){
                     make_dialog("Uh-oh","Looks like you're not connected to the internet.Please check your internet connection and try again.","Ok");
                 }
                 else if(res.toLowerCase().contains("exception")){
-                    make_dialog("Some error occured!",res,"Ok");
+                    make_dialog("Some error occured!","There was some error in posting the data,contact server administrator.","Ok");
                 }
                 else {
                     JSONObject response = new JSONObject(res);
+                    //Checking post request response
                     if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
                         make_dialog("Data not posted!","Some required fields are missing!","Ok");
                     else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
@@ -184,6 +216,7 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
+    //to clear editText contents
     private void resetTextBoxes(){
         teamNameTextBox.setText("");
         entry1TextBox.setText("");
@@ -193,6 +226,7 @@ public class MainActivity extends ActionBarActivity {
         entry3TextBox.setText("");
         name3TextBox.setText("");
     }
+    //creates and shows a custom dialog
     private void make_dialog(String title,String msg,String button_text){
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
