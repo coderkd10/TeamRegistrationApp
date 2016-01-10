@@ -10,7 +10,7 @@ public class validating_editText {
     // type denotes is it the name, or the entry number being evaluated
     private boolean Validate(String testString, int type){
         final String Name_type = "^[\\p{L} .'-]+$";
-        final String Entry_No="(\\d{4})((?:[a-zA-Z][a-zA-Z]+))(\\d{5})";
+        final String Entry_No="(\\d{4})((?:[a-zA-Z][a-zA-Z]\\d))(\\d{4})";
         if (type == 1) return isValid(testString, Name_type);
         return isValid(testString, Entry_No);
     }
