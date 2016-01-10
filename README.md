@@ -8,6 +8,6 @@
 * Build user manual / help
 * Add credits page
 
-### New features
+###New features
 * Generalise other type of form filling
  - Integrate with Google Docs & Survey Monkey
