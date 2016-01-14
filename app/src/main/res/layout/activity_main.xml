@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="#786993"
+    android:background="#9fd46c"
     tools:context=".MainActivity">
     <LinearLayout
         android:id="@+id/pager_layout"
@@ -22,7 +22,7 @@
             android:id="@+id/indicator"
             app:pageColor="#bababa"
             app:fillColor="#fff"
-            android:background="#786993"
+            android:background="#9fd46c"
             android:layout_marginBottom="10dp"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent" />

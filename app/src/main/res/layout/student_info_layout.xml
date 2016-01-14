@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#786993">
+    android:background="#9fd46c">
     <RelativeLayout
         android:layout_alignParentLeft="true"
         android:layout_width="wrap_content"
@@ -63,8 +63,8 @@
             android:id="@+id/entryCode"
             android:ems="10"
             android:inputType="text"
-            android:textColor="#ffffff"
-            android:textColorHint="#e7e7e7"
+            android:textColor="#000000"
+            android:textColorHint="#727272"
             android:theme="@style/editTextBackg"
             android:hint="Entry no."
             android:layout_centerHorizontal="true"
@@ -77,8 +77,8 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="Name"
-            android:textColor="#ffffff"
-            android:textColorHint="#e7e7e7"
+            android:textColor="#000000"
+            android:textColorHint="#727272"
             android:theme="@style/editTextBackg"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/centered_view"
@@ -145,7 +145,7 @@
                 android:id="@+id/display_name"
                 android:text="Student's name"
                 android:textSize="22dp"
-                android:textColor="#ffffff"
+                android:textColor="#000"
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -154,7 +154,7 @@
                 android:layout_below="@id/display_name"
                 android:text="entry code"
                 android:textSize="18dp"
-                android:textColor="#ffffff"
+                android:textColor="#000"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
