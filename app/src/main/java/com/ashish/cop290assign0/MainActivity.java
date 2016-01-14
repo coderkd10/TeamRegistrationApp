@@ -23,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.viewpagerindicator.CirclePageIndicator;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
@@ -34,8 +36,15 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
+<<<<<<< HEAD
     public static String[] names,entryCodes;
     public static String teamName;
+=======
+    public String[] names,entryCodes;
+    public String teamName;
+    public static LdapFetcher mLdapFetcher;
+
+>>>>>>> kd
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +52,7 @@ public class MainActivity extends ActionBarActivity {
         init();
         names = new String[3];
         entryCodes = new String[3];
+        mLdapFetcher = new LdapFetcher(getApplicationContext());
     }
 //    private List<Bitmap> getDummyImages(){
 //        images = new ArrayList<>();

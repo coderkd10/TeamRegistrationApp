@@ -2,11 +2,14 @@ package com.ashish.cop290assign0;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.github.siyamed.shapeimageview.CircularImageView;
+
+import org.json.JSONObject;
 
 public final class PagerFragment extends Fragment {
     private String name,entryCode;
@@ -111,7 +118,13 @@ public final class PagerFragment extends Fragment {
         });
     }
 
-    private void addOnTextChangeListener(final EditText editText){
+    private void addOnTextChangeListener(final LinearLayout layout){
+        final EditText editText = ((EditText)layout.findViewById(R.id.entryCode)); //also entry number text box
+        //EditText entryNumBox = (EditText) layout.findViewById(R.id.entryCode);
+        final EditText nameBox = (EditText) layout.findViewById(R.id.name);
+        final View okBttn = layout.findViewById(R.id.save_data);
+        final CircularImageView personImgView = (CircularImageView) layout.findViewById(R.id.img);
+
         editText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -126,13 +139,45 @@ public final class PagerFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                if (InputValidator.validateEntryCode(editText.getText().toString()))
-                    fetchStudentDetails(editText.getText().toString());
+                if (InputValidator.validateEntryCode(editText.getText().toString()) && count < 11)
+                    fetchAndEditStudentDetails(editText.getText().toString(), editText, nameBox, okBttn, personImgView);
             }
         });
     }
-    private void fetchStudentDetails(String entryCode){
 
+    private void fetchAndEditStudentDetails(String entryCode, final EditText entryNumBox, final EditText nameBox, final View okBttn, final CircularImageView personImgView){
+        /**
+         * TODO
+         * 1. Fetch Details of student with entry number `entryCode`
+         * 2. Change picture received according to the picture received
+         * 3. Change name according to name received
+         * 4. Click done button
+         */
+        MainActivity.mLdapFetcher.getAndHandleStudentDetails(entryCode, new LdapFetcher.studentJsonDataHandler() {
+            @Override
+            public void onGetJson(JSONObject studentDataJson) {
+                try {
+                    if (studentDataJson.getBoolean("isValid")) {
+                        entryNumBox.setText(studentDataJson.getString("entryNumber"));
+                        nameBox.setText(studentDataJson.getString("name"));
+                        if (studentDataJson.has("img")) {
+                            byte[] b = Base64.decode(studentDataJson.getString("img"), Base64.DEFAULT);
+                            Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
+                            personImgView.setImageBitmap(bmp);
+                        } else {
+                            personImgView.setImageResource(R.mipmap.ic_launcher);
+                        }
+                        //TODO: close keyboard. Following approaches not working!
+                        //okBttn.requestFocus();
+                        //personImgView.clearFocus();
+                        okBttn.performClick();
+                    }
+                    ;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
