@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 
 public final class PagerFragment extends Fragment {
     private String name,entryCode;
@@ -51,18 +52,22 @@ public final class PagerFragment extends Fragment {
     }
 
     private void setOnClickListeners(final LinearLayout layout){
+
+        layout.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String entryCode = ((TextView)layout.findViewById(R.id.entryCode)).getText().toString();
+                String name = ((TextView)layout.findViewById(R.id.name)).getText().toString();
+
+                layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
+                layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
+            }
+        });
         layout.findViewById(R.id.edit_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 layout.findViewById(R.id.display_layout).setVisibility(View.GONE);
                 layout.findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
-            }
-        });
-        layout.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
-                layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
             }
         });
     }
