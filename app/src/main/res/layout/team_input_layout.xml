@@ -63,7 +63,7 @@
             android:inputType="text"
             android:textColor="@color/primaryColor"
             android:textColorHint="#727272"
-            android:theme="@style/editTextBackg"
+            android:theme="@style/editTextBackground"
             android:hint="Team name"
             android:layout_centerHorizontal="true"
             android:layout_above="@id/centered_view"

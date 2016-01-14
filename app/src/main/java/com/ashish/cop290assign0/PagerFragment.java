@@ -63,7 +63,7 @@ public final class PagerFragment extends Fragment {
         else {
             child = inflater.inflate(R.layout.student_info_layout, null);
             layout.addView(child);
-            addOnTextChangeListener((EditText) layout.findViewById(R.id.entryCode));
+            addOnTextChangeListener(layout);
             ((TextView) layout.findViewById(R.id.member_no)).setText("#" + position);
         }
         setOnClickListeners(layout);

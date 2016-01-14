@@ -36,15 +36,10 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
-<<<<<<< HEAD
     public static String[] names,entryCodes;
     public static String teamName;
-=======
-    public String[] names,entryCodes;
-    public String teamName;
     public static LdapFetcher mLdapFetcher;
 
->>>>>>> kd
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
