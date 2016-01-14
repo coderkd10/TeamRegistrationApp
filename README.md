@@ -10,6 +10,8 @@
 * Add credits page  
 
 ###Immediate
+* Design document
+* Comment code and create javadocs
 * Categorize class files into directories
 	* restructure package
 * Add submit button
