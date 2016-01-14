@@ -35,8 +35,8 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
 //    }
     @Override
     public Fragment getItem(int position) {
-        //int pos = position%names.size();
-        return PagerFragment.newInstance();
+        int pos = position%3;
+        return PagerFragment.newInstance(pos);
     }
 
     @Override

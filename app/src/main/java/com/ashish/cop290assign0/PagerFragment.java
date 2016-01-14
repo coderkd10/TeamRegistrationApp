@@ -19,7 +19,7 @@ import android.widget.TextView;
 public final class PagerFragment extends Fragment {
     private String name,entryCode;
     private Bitmap image;
-    public static PagerFragment newInstance() {
+    public static PagerFragment newInstance(int p) {
         PagerFragment fragment = new PagerFragment();
 //        try {
 //            byte[] b = Base64.decode(img, Base64.DEFAULT);
@@ -27,6 +27,8 @@ public final class PagerFragment extends Fragment {
 //        }catch(Exception e){
 //            fragment.image = null;
 //        }
+        fragment.image = null;
+        fragment.position = p;
         return fragment;
     }
     private int position = 0;
@@ -51,6 +53,7 @@ public final class PagerFragment extends Fragment {
 
         setOnClickListeners(layout);
         addOnTextChangeListener((EditText)layout.findViewById(R.id.entryCode));
+        ((TextView)layout.findViewById(R.id.member_no)).setText("#"+(position+1));
         return layout;
     }
 
@@ -64,14 +67,16 @@ public final class PagerFragment extends Fragment {
                 boolean isEntryCodeValid = InputValidator.validateEntryCode(entryCode);
                 boolean isNameValid = InputValidator.validateName(name);
                 if (!entryCode.isEmpty() && !name.isEmpty()) {
+                    boolean isInvalid = false;
                     if (!isEntryCodeValid) {
                         ((EditText) layout.findViewById(R.id.entryCode)).setError("Invalid entry no!");
-                        return;
+                        isInvalid = true;
                     }
                     if (!isNameValid) {
                         ((EditText) layout.findViewById(R.id.name)).setError("Invalid name!");
-                        return;
+                        isInvalid = true;
                     }
+                    if(isInvalid) return;
                     ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
                     ((TextView) layout.findViewById(R.id.display_name)).setText(name);
                     layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);

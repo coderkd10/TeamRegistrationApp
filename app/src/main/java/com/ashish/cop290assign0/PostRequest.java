@@ -1,15 +1,10 @@
 package com.ashish.cop290assign0;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -32,8 +27,7 @@ public class PostRequest {
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost request = new HttpPost(url);
             request.setEntity(new UrlEncodedFormEntity(data));
-            HttpResponse response = null;
-            response = httpClient.execute(request);
+            HttpResponse response = httpClient.execute(request);
             result = EntityUtils.toString(response.getEntity());
         }catch (UnknownHostException e) {
             result = "internetNotAvailable";
