@@ -3,10 +3,12 @@ package com.ashish.cop290assign0;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -26,46 +28,67 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
+    //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
+    List<Bitmap> images;
+    List<String> names;
+    List<String> entryCodes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
     }
-
+//    private List<Bitmap> getDummyImages(){
+//        images = new ArrayList<>();
+//        images.add(null);
+//        images.add(null);
+//        images.add(null);
+//        return images;
+//    }
+//    private List<String> getDummyNames(){
+//        names = new ArrayList<>();
+//        names.add("");
+//        names.add("");
+//        names.add("");
+//        return names;
+//    }
+//    private List<String> getDummyEntryCodes(){
+//        entryCodes = new ArrayList<>();
+//        entryCodes.add("");
+//        entryCodes.add("");
+//        entryCodes.add("");
+//        return entryCodes;
+//    }
     //Initializing UI components
     private void init(){
-        teamNameTextBox = (EditText)findViewById(R.id.teamName);
-        entry1TextBox = (EditText)findViewById(R.id.entry1);
-        name1TextBox = (EditText)findViewById(R.id.name1);
-        entry2TextBox = (EditText)findViewById(R.id.entry2);
-        name2TextBox = (EditText)findViewById(R.id.name2);
-        entry3TextBox = (EditText)findViewById(R.id.entry3);
-        name3TextBox = (EditText)findViewById(R.id.name3);
-        //Storing editTextViews for adding asterisk to required fields
-        EditText[] editTextViews = {teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox};
-        addRedAsterisk(editTextViews);
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setOffscreenPageLimit(2);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.setVals(3);
+        pager.setAdapter(adapter);
+        CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        circleIndicator.setViewPager(pager);
     }
     //Adds asterisk to editTexts using SpannableString(used for selective formatting of strings ex. color,on click url).
-    private void addRedAsterisk(EditText[] e_array){
-        for(EditText e : e_array) {
-            String text = e.getHint().toString();
-            String asterisk = " *";
-            SpannableStringBuilder builder = new SpannableStringBuilder();
-            builder.append(text);
-            int start = builder.length();
-            builder.append(asterisk);
-            int end = builder.length();
-            builder.setSpan(new ForegroundColorSpan(Color.RED), start, end,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            e.setHint(builder);
-        }
-    }
+//    private void addRedAsterisk(EditText[] e_array){
+//        for(EditText e : e_array) {
+//            String text = e.getHint().toString();
+//            String asterisk = " *";
+//            SpannableStringBuilder builder = new SpannableStringBuilder();
+//            builder.append(text);
+//            int start = builder.length();
+//            builder.append(asterisk);
+//            int end = builder.length();
+//            builder.setSpan(new ForegroundColorSpan(Color.RED), start, end,
+//                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            e.setHint(builder);
+//        }
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -89,76 +112,76 @@ public class MainActivity extends ActionBarActivity {
     }
 
     //Extracts and returns all the required data from the editTexts in an ArrayList
-    private ArrayList<NameValuePair> getData(){
-        //Getting data from the editTexts
-        String teamName = teamNameTextBox.getText().toString();
-        String entry1 = entry1TextBox.getText().toString();
-        String name1 = name1TextBox.getText().toString();
-        String entry2 = entry2TextBox.getText().toString();
-        String name2 = name2TextBox.getText().toString();
-        String entry3 = entry3TextBox.getText().toString();
-        String name3 = name3TextBox.getText().toString();
-
-        //Adding data to ArrayList in NameValuePair form for sending to the server.
-        ArrayList<NameValuePair> data = new ArrayList<>();
-        data.add(new BasicNameValuePair("teamname", teamName));
-        data.add(new BasicNameValuePair("entry1", entry1));
-        data.add(new BasicNameValuePair("name1", name1));
-        data.add(new BasicNameValuePair("entry2", entry2));
-        data.add(new BasicNameValuePair("name2", name2));
-        data.add(new BasicNameValuePair("entry3", entry3));
-        data.add(new BasicNameValuePair("name3", name3));
-
-        //Checking for input errors
-        if(!isValidInput(teamName, entry1, name1, entry2, name2, entry3, name3))
-            data = null;
-        return data;
-    }
+//    private ArrayList<NameValuePair> getData(){
+//        //Getting data from the editTexts
+//        String teamName = teamNameTextBox.getText().toString();
+//        String entry1 = entry1TextBox.getText().toString();
+//        String name1 = name1TextBox.getText().toString();
+//        String entry2 = entry2TextBox.getText().toString();
+//        String name2 = name2TextBox.getText().toString();
+//        String entry3 = entry3TextBox.getText().toString();
+//        String name3 = name3TextBox.getText().toString();
+//
+//        //Adding data to ArrayList in NameValuePair form for sending to the server.
+//        ArrayList<NameValuePair> data = new ArrayList<>();
+//        data.add(new BasicNameValuePair("teamname", teamName));
+//        data.add(new BasicNameValuePair("entry1", entry1));
+//        data.add(new BasicNameValuePair("name1", name1));
+//        data.add(new BasicNameValuePair("entry2", entry2));
+//        data.add(new BasicNameValuePair("name2", name2));
+//        data.add(new BasicNameValuePair("entry3", entry3));
+//        data.add(new BasicNameValuePair("name3", name3));
+//
+//        //Checking for input errors
+//        if(!isValidInput(teamName, entry1, name1, entry2, name2, entry3, name3))
+//            data = null;
+//        return data;
+//    }
 
     //Checks for valid input and shows error accordingly.
-    private boolean isValidInput(String teamName, String entry1,
-                               String name1,String entry2,
-                               String name2,String entry3,String name3){
-        boolean result = true;
-        if(teamName.isEmpty()){
-            teamNameTextBox.setError("Team name can't be empty!");
-            result = false;
-        }
-        if(entry1.isEmpty()) {
-            entry1TextBox.setError("Entry1 can't be empty!");
-            result = false;
-        }
-        if(name1.isEmpty()) {
-            name1TextBox.setError("Name1 can't be empty!");
-            result = false;
-        }
-        if(entry2.isEmpty()){
-            entry2TextBox.setError("Entry2 can't be empty!");
-            result = false;
-        }
-        if(name2.isEmpty()){
-            name2TextBox.setError("Name2 can't be empty!");
-            result = false;
-        }
-        if(entry3.isEmpty() && !name3.isEmpty()){
-            entry3TextBox.setError("Name3 entered, please enter entry for this name!");
-            result = false;
-        }
-        if(name3.isEmpty() && !entry3.isEmpty()){
-            name3TextBox.setError("Entry3 entered, please enter name for this entry!");
-            result = false;
-        }
-        return result;
-    }
+//    private boolean isValidInput(String teamName, String entry1,
+//                               String name1,String entry2,
+//                               String name2,String entry3,String name3){
+//        boolean result = true;
+//        if(teamName.isEmpty()){
+//            teamNameTextBox.setError("Team name can't be empty!");
+//            result = false;
+//        }
+//        if(entry1.isEmpty()) {
+//            entry1TextBox.setError("Entry1 can't be empty!");
+//            result = false;
+//        }
+//        if(name1.isEmpty()) {
+//            name1TextBox.setError("Name1 can't be empty!");
+//            result = false;
+//        }
+//        if(entry2.isEmpty()){
+//            entry2TextBox.setError("Entry2 can't be empty!");
+//            result = false;
+//        }
+//        if(name2.isEmpty()){
+//            name2TextBox.setError("Name2 can't be empty!");
+//            result = false;
+//        }
+//        if(entry3.isEmpty() && !name3.isEmpty()){
+//            entry3TextBox.setError("Name3 entered, please enter entry for this name!");
+//            result = false;
+//        }
+//        if(name3.isEmpty() && !entry3.isEmpty()){
+//            name3TextBox.setError("Entry3 entered, please enter name for this entry!");
+//            result = false;
+//        }
+//        return result;
+//    }
     //Called on submit button click
     public void onSubmit(View v){
-        ArrayList<NameValuePair> data = getData(); //getting all data from ediTexts
-        if(data!=null) {
-            //Creating a progressDialog to shows while the data is being posted.
-            ProgressDialog pDialog = createProgressDialog("Please wait", "Sending data to the server.....");
-            //posting to the server
-            new sendDataToServer(data,pDialog).execute(Config.SERVER_URL);
-        }
+//        ArrayList<NameValuePair> data = getData(); //getting all data from ediTexts
+//        if(data!=null) {
+//            //Creating a progressDialog to shows while the data is being posted.
+//            ProgressDialog pDialog = createProgressDialog("Please wait", "Sending data to the server.....");
+//            //posting to the server
+//            new sendDataToServer(data,pDialog).execute(Config.SERVER_URL);
+//        }
 
     }
     //Creates a progressDialog
@@ -200,12 +223,12 @@ public class MainActivity extends ActionBarActivity {
                     JSONObject response = new JSONObject(res);
                     //Checking post request response
                     if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
-                        make_dialog("Data not posted!","Some required fields are missing!","Ok");
+                        make_dialog("Data not posted!", "Some required fields are missing!","Ok");
                     else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
                         make_dialog("Data not posted!","One or more users with given details have already registered.","Ok");
                     else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
                         make_dialog("Data posted!", "Registration completed", "Ok");
-                        resetTextBoxes();
+                        //resetTextBoxes();
                     }
                     else
                         make_dialog("Umm...","Unexpected response from the server.\nResponse : "+res,"Ok");
@@ -217,15 +240,15 @@ public class MainActivity extends ActionBarActivity {
         }
     }
     //to clear editText contents
-    private void resetTextBoxes(){
-        teamNameTextBox.setText("");
-        entry1TextBox.setText("");
-        name1TextBox.setText("");
-        entry2TextBox.setText("");
-        name2TextBox.setText("");
-        entry3TextBox.setText("");
-        name3TextBox.setText("");
-    }
+//    private void resetTextBoxes(){
+//        teamNameTextBox.setText("");
+//        entry1TextBox.setText("");
+//        name1TextBox.setText("");
+//        entry2TextBox.setText("");
+//        name2TextBox.setText("");
+//        entry3TextBox.setText("");
+//        name3TextBox.setText("");
+//    }
     //creates and shows a custom dialog
     private void make_dialog(String title,String msg,String button_text){
         final Dialog dialog = new Dialog(MainActivity.this);
