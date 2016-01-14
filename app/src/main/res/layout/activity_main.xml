@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
-        <com.ashish.cop290assign0.CirclePageIndicator
+        <com.viewpagerindicator.CirclePageIndicator
             android:id="@+id/indicator"
             app:pageColor="#bababa"
             app:fillColor="#fff"
