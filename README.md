@@ -10,6 +10,8 @@
 * Add credits page  
 
 ###Immediate
+* Categorize class files into directories
+	* restructure package
 * Add submit button
 * Add Welcome page
 * Add confirmation page
