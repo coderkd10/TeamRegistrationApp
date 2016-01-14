@@ -47,13 +47,19 @@ public final class PagerFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater,final ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = new LinearLayout(getActivity());
         layout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        View child = inflater.inflate(
-                R.layout.student_info_layout, null);
-        layout.addView(child);
+        View child;
+        if(position == 0) {
+            child = inflater.inflate(R.layout.team_input_layout, null);
+            layout.addView(child);
 
+        }
+        else {
+            child = inflater.inflate(R.layout.student_info_layout, null);
+            layout.addView(child);
+            addOnTextChangeListener((EditText) layout.findViewById(R.id.entryCode));
+            ((TextView) layout.findViewById(R.id.member_no)).setText("#" + position);
+        }
         setOnClickListeners(layout);
-        addOnTextChangeListener((EditText)layout.findViewById(R.id.entryCode));
-        ((TextView)layout.findViewById(R.id.member_no)).setText("#"+(position+1));
         return layout;
     }
 
@@ -62,25 +68,37 @@ public final class PagerFragment extends Fragment {
         layout.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String entryCode = ((EditText) layout.findViewById(R.id.entryCode)).getText().toString().trim();
-                String name = ((EditText) layout.findViewById(R.id.name)).getText().toString().trim();
-                boolean isEntryCodeValid = InputValidator.validateEntryCode(entryCode);
-                boolean isNameValid = InputValidator.validateName(name);
-                if (!entryCode.isEmpty() && !name.isEmpty()) {
-                    boolean isInvalid = false;
-                    if (!isEntryCodeValid) {
-                        ((EditText) layout.findViewById(R.id.entryCode)).setError("Invalid entry no!");
-                        isInvalid = true;
+                if(position != 0) {
+                    String entryCode = ((EditText) layout.findViewById(R.id.entryCode)).getText().toString().trim();
+                    String name = ((EditText) layout.findViewById(R.id.name)).getText().toString().trim();
+                    boolean isEntryCodeValid = InputValidator.validateEntryCode(entryCode);
+                    boolean isNameValid = InputValidator.validateName(name);
+                    if (!entryCode.isEmpty() && !name.isEmpty()) {
+                        boolean isInvalid = false;
+                        if (!isEntryCodeValid) {
+                            ((EditText) layout.findViewById(R.id.entryCode)).setError("Invalid entry no!");
+                            isInvalid = true;
+                        }
+                        if (!isNameValid) {
+                            ((EditText) layout.findViewById(R.id.name)).setError("Invalid name!");
+                            isInvalid = true;
+                        }
+                        if (isInvalid) return;
+                        MainActivity.names[position-1] = name;
+                        MainActivity.entryCodes[position-1] = entryCode;
+                        ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
+                        ((TextView) layout.findViewById(R.id.display_name)).setText(name);
+                        layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
+                        layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                     }
-                    if (!isNameValid) {
-                        ((EditText) layout.findViewById(R.id.name)).setError("Invalid name!");
-                        isInvalid = true;
+                }else{
+                    String teamName = ((EditText) layout.findViewById(R.id.team_name)).getText().toString().trim();
+                    if(!teamName.isEmpty()){
+                        MainActivity.teamName = teamName;
+                        ((TextView) layout.findViewById(R.id.display_team_name)).setText(teamName);
+                        layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
+                        layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                     }
-                    if(isInvalid) return;
-                    ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
-                    ((TextView) layout.findViewById(R.id.display_name)).setText(name);
-                    layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
-                    layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                 }
             }
         });
