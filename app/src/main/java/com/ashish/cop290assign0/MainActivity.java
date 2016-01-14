@@ -34,14 +34,15 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
-    List<Bitmap> images;
-    List<String> names;
-    List<String> entryCodes;
+    public String[] names,entryCodes;
+    public String teamName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        names = new String[3];
+        entryCodes = new String[3];
     }
 //    private List<Bitmap> getDummyImages(){
 //        images = new ArrayList<>();
