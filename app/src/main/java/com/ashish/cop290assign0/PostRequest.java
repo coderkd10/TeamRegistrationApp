@@ -28,11 +28,11 @@ public class PostRequest {
     }
     public String post(){
         String result;
-        try {
-            HttpPost request = new HttpPost(url);
-            HttpResponse response = null;
-            request.setEntity(new UrlEncodedFormEntity(data));
+        try {// client, request, response.. in that order.
             HttpClient httpClient = new DefaultHttpClient();
+            HttpPost request = new HttpPost(url);
+            request.setEntity(new UrlEncodedFormEntity(data));
+            HttpResponse response = null;
             response = httpClient.execute(request);
             result = EntityUtils.toString(response.getEntity());
         }catch (UnknownHostException e) {
