@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -48,7 +50,7 @@ public final class PagerFragment extends Fragment {
         layout.addView(child);
 
         setOnClickListeners(layout);
-
+        addOnTextChangeListener((EditText)layout.findViewById(R.id.entryCode));
         return layout;
     }
 
@@ -70,8 +72,8 @@ public final class PagerFragment extends Fragment {
                         ((EditText) layout.findViewById(R.id.name)).setError("Invalid name!");
                         return;
                     }
-                    ((TextView)layout.findViewById(R.id.display_entry_code)).setText(entryCode);
-                    ((TextView)layout.findViewById(R.id.display_name)).setText(name);
+                    ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
+                    ((TextView) layout.findViewById(R.id.display_name)).setText(name);
                     layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                     layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                 }
@@ -84,6 +86,30 @@ public final class PagerFragment extends Fragment {
                 layout.findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void addOnTextChangeListener(final EditText editText){
+        editText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if (InputValidator.validateEntryCode(editText.getText().toString()))
+                    fetchStudentDetails(editText.getText().toString());
+            }
+        });
+    }
+    private void fetchStudentDetails(String entryCode){
+
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
