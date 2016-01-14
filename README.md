@@ -10,6 +10,7 @@
 * Add credits page  
 
 ###Immediate
+* Add icon of apk
 * Design document
 * Comment code and create javadocs
 * Categorize class files into directories
