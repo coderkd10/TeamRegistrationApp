@@ -14,6 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * Code taken from Jake Wharton's Android ViewPagerIndicator
+ * @link https://github.com/JakeWharton/ViewPagerIndicator
+ */
 package com.ashish.cop290assign0;
 
 import android.content.Context;
