@@ -25,4 +25,5 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
     compile 'com.mcxiaoke.volley:library-aar:1.0.1'
     compile 'com.viewpagerindicator:library:2.4.1@aar'
+    compile 'org.jsoup:jsoup:1.7.2'
 }

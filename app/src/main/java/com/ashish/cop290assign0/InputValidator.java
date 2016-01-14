@@ -8,20 +8,11 @@ import java.util.regex.Pattern;
 public class InputValidator {
     // validates entries
     // validates name
-    public static boolean validateName(String testString){
-        String nameTypeRegex = "^[\\p{L} .'-]+$";
-        return isValid(testString, nameTypeRegex);
+    public static boolean validateName(String inputName){
+        return inputName.matches(Config.REGEX_NAME);
     }
     // validates entrycode
-    public static boolean validateEntryCode(String testString){
-        String entryNoRegex="(\\d{4})((?:[a-zA-Z][a-zA-Z]\\d))(\\d{4})";
-        return isValid(testString, entryNoRegex);
-    }
-
-    // validates a given string using a regex pattern
-    private static boolean isValid(String test, String regexPattern){
-        Pattern regx = Pattern.compile(regexPattern);
-        Matcher match = regx.matcher(test);
-        return match.matches();
+    public static boolean validateEntryCode(String inputEntryNumber){
+        return inputEntryNumber.matches(Config.REGEX_ENTRY_NUMBER);
     }
 }

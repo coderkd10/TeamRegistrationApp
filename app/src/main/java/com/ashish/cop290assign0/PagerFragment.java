@@ -109,11 +109,18 @@ public final class PagerFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 if (InputValidator.validateEntryCode(editText.getText().toString()))
-                    fetchStudentDetails(editText.getText().toString());
+                    fetchAndEditStudentDetails(editText.getText().toString());
             }
         });
     }
-    private void fetchStudentDetails(String entryCode){
+    private void fetchAndEditStudentDetails(String entryCode){
+        /**
+         * TODO
+         * 1. Fetch Details of student with entry number `entryCode`
+         * 2. Change picture received according to the picture received
+         * 3. Change name according to name received
+         * 4. Click done button
+         */
 
     }
     @Override
