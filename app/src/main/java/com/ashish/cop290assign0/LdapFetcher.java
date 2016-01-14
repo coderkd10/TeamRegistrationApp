@@ -37,7 +37,7 @@ public class LdapFetcher {
         ldapRequestQueue = Volley.newRequestQueue(context);
     }
 
-    public void getStudentDetails(String inputEntryNumber, final studentJsonDataHandler jsonHandler){
+    public void getAndHandleStudentDetails(String inputEntryNumber,final studentJsonDataHandler jsonHandler){
         StringRequest strReq = new StringRequest(
                 Request.Method.GET,
                 Config.LDAP_BASE_URL+"?uid="+entryNumToUserId(inputEntryNumber),

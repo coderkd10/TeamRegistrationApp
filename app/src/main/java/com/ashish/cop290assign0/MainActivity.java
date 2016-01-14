@@ -38,6 +38,8 @@ public class MainActivity extends ActionBarActivity {
     //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
     public String[] names,entryCodes;
     public String teamName;
+    public static LdapFetcher mLdapFetcher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class MainActivity extends ActionBarActivity {
         init();
         names = new String[3];
         entryCodes = new String[3];
+        mLdapFetcher = new LdapFetcher(getApplicationContext());
     }
 //    private List<Bitmap> getDummyImages(){
 //        images = new ArrayList<>();
