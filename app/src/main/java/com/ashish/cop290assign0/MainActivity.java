@@ -30,15 +30,17 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
 
     //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
-    public static String[] names,entryCodes;
+    public static String[] names,entryCodes,images;
     public static String teamName;
     public static LdapFetcher mLdapFetcher;
+    private int[] visibility;
     ViewPager pager;
 
     @Override
@@ -47,10 +49,17 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         init();
         if(savedInstanceState != null) {
-            pager.setCurrentItem(savedInstanceState.getInt("current-page"));
+            pager.setCurrentItem(savedInstanceState.getInt("currentPage"));
+            visibility = savedInstanceState.getIntArray("visibility");
+            teamName = savedInstanceState.getString("teamName");
+            names = savedInstanceState.getStringArray("names");
+            entryCodes = savedInstanceState.getStringArray("entryCodes");
+            images = savedInstanceState.getStringArray("images");
         }
         names = new String[3];
         entryCodes = new String[3];
+        images = new String[3];
+        visibility = new int[4];
         mLdapFetcher = new LdapFetcher(getApplicationContext());
     }
 //    private List<Bitmap> getDummyImages(){
@@ -98,10 +107,16 @@ public class MainActivity extends ActionBarActivity {
 //            e.setHint(builder);
 //        }
 //    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("current-page", pager.getCurrentItem());
+        outState.putInt("currentPage", pager.getCurrentItem());
+        outState.putIntArray("visibility", visibility);
+        outState.putString("teamName", teamName);
+        outState.putStringArray("names", names);
+        outState.putStringArray("entryCodes", entryCodes);
+        outState.putStringArray("images", images);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
