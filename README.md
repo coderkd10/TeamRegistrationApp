@@ -21,14 +21,14 @@
 * Add credits page
 * merge kansal's validator branch.
 * remove keyboard on valid response.
-* Add border around image if img from ldap is found. (@r-ashish check this if done).
+* ~~Add border around image if img from ldap is found.~~ (@r-ashish check this if done).
 * merge kansal's validator branch.
 * remove keyboard on valid response.
 * ~~incase of invalid entry number (i.e. response of the form <h1> ()</h1>) reflect this in entry number input text box.~~
 
 
 ##Issues
-* First fill entry number - 2013ee10431.
+* ~~First fill entry number - 2013ee10431.~~ (FIXED)(@abhishek_kedia check)
 	1. Gets Abhishek Kedia's photo, name, entry number.
 	2. Now click on edit this entry.
 	3. Fill entry number - 2013ee10432.
