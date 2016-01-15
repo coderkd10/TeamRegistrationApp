@@ -127,7 +127,7 @@
             <com.github.siyamed.shapeimageview.CircularImageView
                 android:id="@+id/img"
                 android:src="@mipmap/ic_launcher"
-                app:siBorderWidth="2dp"
+                app:siBorderWidth="3dp"
                 app:siBorderColor="@color/backgroundColor"
                 android:layout_width="120dp"
                 android:layout_height="120dp"/>
