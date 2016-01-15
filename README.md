@@ -1,4 +1,5 @@
 #COP290 Assignment 0 : Team Registration App  
+slack channel [https://cop290ninjacoders.slack.com/messages](https://cop290ninjacoders.slack.com/messages)
 
 ##TODO
 ###Overall  
