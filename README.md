@@ -19,15 +19,26 @@
 * Add Welcome page
 * Add confirmation page
 * Add credits page
-* Add border around image if img from ldap is found.
 * merge kansal's validator branch.
 * remove keyboard on valid response.
-* incase of invalid entry number (i.e. response of the form <h1> ()</h1>) reflect this in entry number input text box.* Add border around image if img from ldap is found.
+* Add border around image if img from ldap is found. (@ashish check this if done).
 * merge kansal's validator branch.
 * remove keyboard on valid response.
-* incase of invalid entry number (i.e. response of the form <h1> ()</h1>) reflect this in entry number input text box.
+* ~~incase of invalid entry number (i.e. response of the form <h1> ()</h1>) reflect this in entry number input text box.~~
 
 
+##Issues
+* First fill entry number - 2013ee10431.
+	1. Gets Abhishek Kedia's photo, name, entry number.
+	2. Now click on edit this entry.
+	3. Fill entry number - 2013ee10432.
+	4. Gets Abhishek Anand's data. It has no photo.
+	5. Now rotatte screen. You get Abhishek Kedia's photo instead of no photo.
+* Checking entry number field when name is empty.
+	1. Clear out name field, if there is anything already there.
+	2. fill incomplete (and invalid) entry number.
+	3. Click submit button.
+	4. This does not give invalid entry number error. 
 
 
 ###New features
