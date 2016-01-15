@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.github.siyamed.shapeimageview.CircularImageView;
 
 import org.json.JSONObject;
@@ -99,18 +100,22 @@ public final class PagerFragment extends Fragment {
         return layout;
     }
     private boolean isInvalid = false;
+    
     private void setOnClickListeners(final LinearLayout layout){
 
         layout.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(position != 0) {
+                    Log.d("save","Btn Pressed!");
                     String entryCode = ((EditText) layout.findViewById(R.id.entryCode)).getText().toString().trim();
                     String name = ((EditText) layout.findViewById(R.id.name)).getText().toString().trim();
+                    Log.d("save_data",String.format("entry number = %s, name = %s",entryCode,name));
                     boolean isEntryCodeValid = InputValidator.validateEntryCode(entryCode);
                     boolean isNameValid = InputValidator.validateName(name);
                     if (!entryCode.isEmpty() && !name.isEmpty()) {
                         //boolean isInvalid = false;
+                        //isInvalid = false; //cannot do this
                         if (!isEntryCodeValid) {
                             ((EditText) layout.findViewById(R.id.entryCode)).setError("Invalid entry no!");
                             isInvalid = true;
@@ -127,6 +132,17 @@ public final class PagerFragment extends Fragment {
                         MainActivity.visibility[position] = 1;
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
+                    } else {
+                        if(name.isEmpty()) {
+                            ((EditText) layout.findViewById(R.id.name)).setError("Name cannot be empty!");
+                            //TODO remove this error once user enters correct enry number and details are fetched from ldap.
+                        }
+                        if(entryCode.isEmpty()) {
+                            ((EditText) layout.findViewById(R.id.entryCode)).setError("Entry Number cannot be empty!");
+                        } else {
+                            if(!isEntryCodeValid)
+                                ((EditText) layout.findViewById(R.id.entryCode)).setError("Invalid entry no!");
+                        }
                     }
                 }else{
                     String teamName = ((EditText) layout.findViewById(R.id.team_name)).getText().toString().trim();
@@ -177,7 +193,7 @@ public final class PagerFragment extends Fragment {
         });
     }
 
-    private void fetchAndEditStudentDetails(String entryCode, final EditText entryNumBox, final EditText nameBox, final View okBttn, final CircularImageView personImgView){
+    private void fetchAndEditStudentDetails(final String entryCode, final EditText entryNumBox, final EditText nameBox, final View okBttn, final CircularImageView personImgView){
         /**
          * TODO
          * 1. Fetch Details of student with entry number `entryCode`
@@ -213,7 +229,17 @@ public final class PagerFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-        });
+        }, new LdapFetcher.ldapRequestErrorHandler(){
+                    @Override
+                    public void handle(VolleyError error){
+                        if(!entryCode.isEmpty()){
+                            if(InputValidator.validateEntryCode(entryCode)){
+                                isInvalid = false;
+                            }
+                        }
+                    }
+                }
+        ); //TODO indent properly
     }
     private Bitmap decodeBase64(String i){
         byte[] b = Base64.decode(i, Base64.DEFAULT);

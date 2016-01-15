@@ -32,12 +32,16 @@ public class LdapFetcher {
         void onGetJson(JSONObject studentDataJson);
     }
 
+    public interface ldapRequestErrorHandler{
+        void handle(VolleyError error);
+    }
+
     private RequestQueue ldapRequestQueue;
     LdapFetcher(Context context){
         ldapRequestQueue = Volley.newRequestQueue(context);
     }
 
-    public void getAndHandleStudentDetails(String inputEntryNumber,final studentJsonDataHandler jsonHandler){
+    public void getAndHandleStudentDetails(String inputEntryNumber,final studentJsonDataHandler jsonHandler, final ldapRequestErrorHandler errorHandler){
         StringRequest strReq = new StringRequest(
                 Request.Method.GET,
                 Config.LDAP_BASE_URL+"?uid="+entryNumToUserId(inputEntryNumber),
@@ -54,10 +58,20 @@ public class LdapFetcher {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        errorHandler.handle(error);
                     }
                 }
         );
         ldapRequestQueue.add(strReq);
+    }
+
+    public void getAndHandleStudentDetails(String inputEntryNumber,final studentJsonDataHandler jsonHandler){
+        getAndHandleStudentDetails(inputEntryNumber, jsonHandler, new ldapRequestErrorHandler() {
+            @Override
+            public void handle(VolleyError error) {
+                //do nothing
+            }
+        });
     }
 
     private String entryNumToUserId(String entryNum){
