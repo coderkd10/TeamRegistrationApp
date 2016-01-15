@@ -112,24 +112,31 @@ public class LdapFetcher {
                 String entryNum = entryNumMatcher.group(0);
                 entryNum = entryNum.substring(1,entryNum.length()-1);
                 String fullName = h1HeaderText.replaceAll(entryNumRegex,"").trim();
-                String[] nameParts = fullName.split(" ");
-                if(nameParts.length == 0) {
+                if(fullName.isEmpty()) {
                     toReturn.put("isValid",false);
                 } else {
                     toReturn.put("isValid",true);
                     toReturn.put("entryNumber",entryNum);
-                    if(nameParts.length == 1 || nameParts.length == 2) {
-                        toReturn.put("name",fullName);
-                    } else {
-                        StringBuilder shortName = new StringBuilder();
-                        for(int i=0; i<nameParts.length-2; i++){
-                            shortName.append(nameParts[i].charAt(0)).append(". ");
-                        }
-                        shortName.append(nameParts[nameParts.length-2]).append(" ");
-                        shortName.append(nameParts[nameParts.length-1]);
-                        toReturn.put("name", shortName.toString());
-                    }
+                    toReturn.put("name",fullName);
                 }
+//                String[] nameParts = fullName.split(" ");
+//                if(nameParts.length == 0) {
+//                    toReturn.put("isValid",false);
+//                } else {
+//                    toReturn.put("isValid",true);
+//                    toReturn.put("entryNumber",entryNum);
+//                    if(nameParts.length == 1 || nameParts.length == 2) {
+//                        toReturn.put("name",fullName);
+//                    } else {
+//                        StringBuilder shortName = new StringBuilder();
+//                        for(int i=0; i<nameParts.length-2; i++){
+//                            shortName.append(nameParts[i].charAt(0)).append(". ");
+//                        }
+//                        shortName.append(nameParts[nameParts.length-2]).append(" ");
+//                        shortName.append(nameParts[nameParts.length-1]);
+//                        toReturn.put("name", shortName.toString());
+//                    }
+//                }
                 Elements imgElements = ldapRes.getElementsByTag("img");
                 Log.d("imgElements", imgElements.toString());
                 if(!imgElements.isEmpty()){
