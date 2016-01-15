@@ -40,8 +40,9 @@ public class MainActivity extends ActionBarActivity {
     public static String[] names,entryCodes,images;
     public static String teamName;
     public static LdapFetcher mLdapFetcher;
-    private int[] visibility;
+    public static int[] visibility;
     ViewPager pager;
+    ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +57,10 @@ public class MainActivity extends ActionBarActivity {
             entryCodes = savedInstanceState.getStringArray("entryCodes");
             images = savedInstanceState.getStringArray("images");
         }
-        names = new String[3];
-        entryCodes = new String[3];
-        images = new String[3];
-        visibility = new int[4];
+        adapter.setVals(4, teamName, names, entryCodes, images, visibility);
+        pager.setAdapter(adapter);
+        CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        circleIndicator.setViewPager(pager);
         mLdapFetcher = new LdapFetcher(getApplicationContext());
     }
 //    private List<Bitmap> getDummyImages(){
@@ -85,12 +86,13 @@ public class MainActivity extends ActionBarActivity {
 //    }
     //Initializing UI components
     private void init(){
+        names = new String[4];
+        entryCodes = new String[4];
+        images = new String[4];
+        visibility = new int[4];
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),4);
-        pager.setAdapter(adapter);
-        CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
-        circleIndicator.setViewPager(pager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
     }
     //Adds asterisk to editTexts using SpannableString(used for selective formatting of strings ex. color,on click url).
 //    private void addRedAsterisk(EditText[] e_array){

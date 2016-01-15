@@ -14,10 +14,19 @@ import java.util.List;
 public class ViewPagerAdapter extends PagerAdapter {
     FragmentManager fragmentManager;
     Fragment[] fragments;
-
-    public ViewPagerAdapter(FragmentManager fm,int size){
+    String[] names,entryCodes,images;
+    String teamName;
+    private int[] visibility;
+    public ViewPagerAdapter(FragmentManager fm){
         fragmentManager = fm;
+    }
+    public void setVals(int size,String t,String[] n,String[] e,String[] i,int[] v){
         fragments = new Fragment[size];
+        teamName = t;
+        names = n;
+        entryCodes = e;
+        images = i;
+        visibility = v;
     }
 
     @Override
@@ -51,7 +60,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     public Fragment getItem(int position){
         int pos = position%getCount();
         if(fragments[pos] == null){
-            fragments[pos] = PagerFragment.newInstance(pos);
+            fragments[pos] = PagerFragment.newInstance(pos,visibility[pos],names[pos],entryCodes[pos],images[pos],teamName);
         }
         return fragments[pos];
     }

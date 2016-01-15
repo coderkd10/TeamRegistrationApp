@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -24,9 +25,10 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import org.json.JSONObject;
 
 public final class PagerFragment extends Fragment {
-    private String name,entryCode;
-    private Bitmap image;
-    public static PagerFragment newInstance(int p) {
+    private String name,entryCode,image,teamName;
+    private  int visibility;
+    LinearLayout l;
+    public static PagerFragment newInstance(int p,int v, String n,String e,String i,String t) {
         PagerFragment fragment = new PagerFragment();
 //        try {
 //            byte[] b = Base64.decode(img, Base64.DEFAULT);
@@ -34,8 +36,12 @@ public final class PagerFragment extends Fragment {
 //        }catch(Exception e){
 //            fragment.image = null;
 //        }
-        fragment.image = null;
         fragment.position = p;
+        fragment.visibility = v;
+        fragment.name = n;
+        fragment.entryCode = e;
+        fragment.image = i;
+        fragment.teamName = t;
         return fragment;
     }
     private int position = 0;
@@ -44,11 +50,30 @@ public final class PagerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        if ((savedInstanceState != null) && savedInstanceState.containsKey(KEY_CONTENT)) {
-//            mContent = savedInstanceState.getString(KEY_CONTENT);
-//        }
+        if (savedInstanceState != null) {
+            if(savedInstanceState.containsKey("teamName"))
+                teamName = savedInstanceState.getString("teamName");
+            name = savedInstanceState.getString("name");
+            entryCode = savedInstanceState.getString("entryCode");
+        }
     }
 
+    private void init(LinearLayout layout){
+        if(visibility == 1){
+            layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
+            layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
+        }
+        if(position == 0) {
+            ((TextView)layout.findViewById(R.id.display_team_name)).setText(teamName);
+            ((EditText)layout.findViewById(R.id.team_name)).setText(teamName);
+        }else{
+            ((TextView)layout.findViewById(R.id.display_name)).setText(name);
+            ((TextView)layout.findViewById(R.id.display_entry_code)).setText(entryCode);
+            if(image!=null)((ImageView)layout.findViewById(R.id.img)).setImageBitmap(decodeBase64(image));
+            ((EditText)layout.findViewById(R.id.name)).setText(name);
+            ((EditText)layout.findViewById(R.id.entryCode)).setText(entryCode);
+        }
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater,final ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +91,7 @@ public final class PagerFragment extends Fragment {
             addOnTextChangeListener(layout);
             ((TextView) layout.findViewById(R.id.member_no)).setText("#" + position);
         }
+        init(layout);
         setOnClickListeners(layout);
         return layout;
     }
@@ -91,10 +117,11 @@ public final class PagerFragment extends Fragment {
                             isInvalid = true;
                         }
                         if (isInvalid) return;
-                        MainActivity.names[position-1] = name;
-                        MainActivity.entryCodes[position-1] = entryCode;
+                        MainActivity.names[position] = name;
+                        MainActivity.entryCodes[position] = entryCode;
                         ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
                         ((TextView) layout.findViewById(R.id.display_name)).setText(name);
+                        MainActivity.visibility[position] = 1;
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                     }
@@ -103,6 +130,7 @@ public final class PagerFragment extends Fragment {
                     if(!teamName.isEmpty()){
                         MainActivity.teamName = teamName;
                         ((TextView) layout.findViewById(R.id.display_team_name)).setText(teamName);
+                        MainActivity.visibility[position] = 1;
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                     }
@@ -112,6 +140,7 @@ public final class PagerFragment extends Fragment {
         layout.findViewById(R.id.edit_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MainActivity.visibility[position] = 0;
                 layout.findViewById(R.id.display_layout).setVisibility(View.GONE);
                 layout.findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
             }
@@ -161,9 +190,9 @@ public final class PagerFragment extends Fragment {
                         entryNumBox.setText(studentDataJson.getString("entryNumber"));
                         nameBox.setText(studentDataJson.getString("name"));
                         if (studentDataJson.has("img")) {
-                            byte[] b = Base64.decode(studentDataJson.getString("img"), Base64.DEFAULT);
-                            Bitmap bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
-                            personImgView.setImageBitmap(bmp);
+                            String img = studentDataJson.getString("img");
+                            MainActivity.images[position] = img;
+                            personImgView.setImageBitmap(decodeBase64(img));
                         } else {
                             personImgView.setImageResource(R.mipmap.ic_launcher);
                         }
@@ -179,10 +208,23 @@ public final class PagerFragment extends Fragment {
             }
         });
     }
+    private Bitmap decodeBase64(String i){
+        byte[] b = Base64.decode(i, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(b, 0, b.length);
+    }
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putString(KEY_CONTENT, mContent);
+        if(position==0) {
+            String t = ((EditText) l.findViewById(R.id.team_name)).getText().toString();
+            outState.putString("teamName", t);
+        }
+        else {
+            String n = ((EditText) l.findViewById(R.id.name)).getText().toString();
+            String e = ((EditText) l.findViewById(R.id.entryCode)).getText().toString();
+            outState.putString("name", n);
+            outState.putString("entryCode", e);
+        }
     }
     private int dp2Pix(float i){
         Resources r = getResources();
