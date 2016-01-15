@@ -3,6 +3,7 @@ package com.ashish.cop290assign0;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -213,8 +214,11 @@ public final class PagerFragment extends Fragment {
                             String img = studentDataJson.getString("img");
                             MainActivity.images[position] = img;
                             personImgView.setImageBitmap(decodeBase64(img));
+                            personImgView.setBorderColor(Color.parseColor("#ff3C16"));
                         } else {
+                            MainActivity.images[position] = "";
                             personImgView.setImageResource(R.mipmap.ic_launcher);
+                            personImgView.setBorderColor(Color.parseColor("#e7e7e7"));
                         }
                         //TODO: close keyboard. Following approaches not working!
                         //okBttn.requestFocus();
