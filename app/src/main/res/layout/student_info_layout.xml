@@ -4,184 +4,189 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor">
+    android:background="@drawable/layout_shadow">
     <RelativeLayout
-        android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:background="@color/backgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <RelativeLayout
-            android:id="@+id/member_text"
-            android:layout_marginLeft="45dp"
-            android:layout_marginTop="-5dp"
-            android:background="@drawable/red_shadow"
+            android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <TextView
+            <RelativeLayout
+                android:id="@+id/member_text"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="-5dp"
+                android:background="@drawable/red_shadow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginLeft="20dp"
+                    android:layout_centerVertical="true"
+                    android:text="Member"
+                    android:textSize="18sp"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="20dp"
+                    android:textColor="#ffffff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_marginLeft="20dp"
-                android:layout_centerVertical="true"
-                android:text="Member"
-                android:textSize="18sp"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:textColor="#ffffff"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+                <View
+                    android:clickable="true"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/red_btn"/>
+                <TextView
+                    android:id="@+id/member_no"
+                    android:text="#1"
+                    android:textSize="22sp"
+                    android:textColor="#ffffff"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
         </RelativeLayout>
         <RelativeLayout
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:id="@+id/input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <View
-                android:clickable="true"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:id="@+id/centered_view"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/red_btn"/>
-            <TextView
-                android:id="@+id/member_no"
-                android:text="#1"
-                android:textSize="22sp"
-                android:textColor="#ffffff"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/input_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <View
-            android:id="@+id/centered_view"
-            android:layout_centerInParent="true"
-            android:layout_width="0dp"
-            android:layout_height="0dp"/>
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
 
-        <EditText
-            android:id="@+id/entryCode"
-            android:ems="10"
-            android:inputType="text"
-            android:textColor="@color/primaryColor"
-            android:textColorHint="#727272"
-            android:theme="@style/editTextBackground"
-            android:hint="Entry no."
-            android:layout_centerHorizontal="true"
-            android:layout_above="@id/centered_view"
-            android:layout_marginBottom="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/name"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="Name"
-            android:textColor="@color/primaryColor"
-            android:textColorHint="#727272"
-            android:theme="@style/editTextBackground"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/centered_view"
-            android:layout_marginTop="-20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <RelativeLayout
-            android:layout_below="@id/name"
-            android:layout_marginRight="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <View
-                android:id="@+id/save_data"
-                android:clickable="true"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/red_button_backg"/>
-            <ImageView
-                android:src="@drawable/ic_done_white_48dp"
-                android:tint="#fff"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </RelativeLayout>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/display_layout"
-        android:visibility="gone"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <View
-            android:id="@+id/centered_view_2"
-            android:layout_centerInParent="true"
-            android:layout_width="0dp"
-            android:layout_height="0dp"/>
-        <RelativeLayout
-            android:id="@+id/img_layout"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <com.github.siyamed.shapeimageview.CircularImageView
-                android:id="@+id/img"
-                android:src="@mipmap/ic_launcher"
-                app:siBorderWidth="3dp"
-                app:siBorderColor="@color/backgroundColor"
-                android:layout_width="120dp"
-                android:layout_height="120dp"/>
-        </RelativeLayout>
-        <LinearLayout
-            android:id="@+id/details_layout"
-            android:layout_below="@id/img_layout"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/display_name"
-                android:text="Student's name"
-                android:textSize="22dp"
-                android:maxWidth="220dp"
-                android:gravity="center"
+            <EditText
+                android:id="@+id/entryCode"
+                android:ems="10"
+                android:inputType="text"
                 android:textColor="@color/primaryColor"
+                android:textColorHint="#727272"
+                android:theme="@style/editTextBackground"
+                android:hint="Entry no."
                 android:layout_centerHorizontal="true"
+                android:layout_above="@id/centered_view"
+                android:layout_marginBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/display_entry_code"
-                android:layout_below="@id/display_name"
-                android:text="entry code"
-                android:textSize="18dp"
+            <EditText
+                android:id="@+id/name"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="Name"
                 android:textColor="@color/primaryColor"
+                android:textColorHint="#727272"
+                android:theme="@style/editTextBackground"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
+                android:layout_below="@id/centered_view"
+                android:layout_marginTop="-20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </LinearLayout>
+            <RelativeLayout
+                android:layout_below="@id/name"
+                android:layout_marginRight="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <View
+                    android:id="@+id/save_data"
+                    android:clickable="true"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/red_button_backg"/>
+                <ImageView
+                    android:src="@drawable/ic_done_white_48dp"
+                    android:tint="#fff"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+            </RelativeLayout>
+        </RelativeLayout>
         <RelativeLayout
-            android:layout_toRightOf="@id/details_layout"
-            android:layout_above="@id/details_layout"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="-60dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:id="@+id/display_layout"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <View
-                android:id="@+id/edit_data"
-                android:clickable="true"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:background="@drawable/red_button_backg"/>
-            <ImageView
-                android:src="@drawable/ic_create_white_48dp"
-                android:tint="#fff"
+                android:id="@+id/centered_view_2"
                 android:layout_centerInParent="true"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+            <RelativeLayout
+                android:id="@+id/img_layout"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.github.siyamed.shapeimageview.CircularImageView
+                    android:id="@+id/img"
+                    android:src="@mipmap/ic_launcher"
+                    app:siBorderWidth="3dp"
+                    app:siBorderColor="@color/backgroundColor"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"/>
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/details_layout"
+                android:layout_below="@id/img_layout"
                 android:gravity="center"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/display_name"
+                    android:text="Student's name"
+                    android:textSize="22dp"
+                    android:maxWidth="220dp"
+                    android:gravity="center"
+                    android:textColor="@color/primaryColor"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/display_entry_code"
+                    android:layout_below="@id/display_name"
+                    android:text="entry code"
+                    android:textSize="18dp"
+                    android:textColor="@color/primaryColor"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_toRightOf="@id/details_layout"
+                android:layout_above="@id/details_layout"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="-60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <View
+                    android:id="@+id/edit_data"
+                    android:clickable="true"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/red_button_backg"/>
+                <ImageView
+                    android:src="@drawable/ic_create_white_48dp"
+                    android:tint="#fff"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

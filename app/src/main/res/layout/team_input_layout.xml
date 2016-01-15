@@ -2,169 +2,174 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor">
+    android:background="@drawable/layout_shadow">
     <RelativeLayout
-        android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:background="@color/backgroundColor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <RelativeLayout
-            android:id="@+id/member_text"
-            android:layout_marginLeft="45dp"
-            android:layout_marginTop="-5dp"
-            android:background="@drawable/red_shadow"
+            android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <TextView
+            <RelativeLayout
+                android:id="@+id/member_text"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="-5dp"
+                android:background="@drawable/red_shadow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginLeft="20dp"
+                    android:layout_centerVertical="true"
+                    android:text="Team name"
+                    android:textSize="18sp"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_marginLeft="20dp"
-                android:layout_centerVertical="true"
-                android:text="Team name"
-                android:textSize="18sp"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center"
-                android:textColor="#ffffff"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+                <View
+                    android:clickable="true"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/red_btn"/>
+                <TextView
+                    android:id="@+id/member_no"
+                    android:text="#"
+                    android:textSize="22sp"
+                    android:textColor="#ffffff"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
         </RelativeLayout>
         <RelativeLayout
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:id="@+id/input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <View
-                android:clickable="true"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:id="@+id/centered_view"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/red_btn"/>
-            <TextView
-                android:id="@+id/member_no"
-                android:text="#"
-                android:textSize="22sp"
-                android:textColor="#ffffff"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/input_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <View
-            android:id="@+id/centered_view"
-            android:layout_centerInParent="true"
-            android:layout_width="0dp"
-            android:layout_height="0dp"/>
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
 
-        <EditText
-            android:id="@+id/team_name"
-            android:ems="10"
-            android:inputType="text"
-            android:textColor="@color/primaryColor"
-            android:textColorHint="#727272"
-            android:theme="@style/editTextBackground"
-            android:hint="Team name"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@id/centered_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <RelativeLayout
-            android:layout_below="@id/team_name"
-            android:layout_marginRight="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <View
-                android:id="@+id/save_data"
-                android:clickable="true"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/red_button_backg"/>
-            <ImageView
-                android:src="@drawable/ic_done_white_48dp"
-                android:tint="#fff"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </RelativeLayout>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/display_layout"
-        android:visibility="gone"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:id="@+id/team_icon"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <View
-                android:clickable="true"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@drawable/red_btn"/>
-            <ImageView
-                android:src="@drawable/ic_group_white_48dp"
-                android:tint="#fff"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/team_name_layout"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/red_shadow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/display_team_name"
-                android:layout_marginRight="20dp"
-                android:scrollbars = "vertical"
-                android:layout_centerVertical="true"
-                android:text="Team name"
-                android:textSize="20sp"
-                android:maxHeight="90dp"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center"
-                android:textColor="#ffffff"
+            <EditText
+                android:id="@+id/team_name"
+                android:ems="10"
+                android:inputType="text"
+                android:textColor="@color/primaryColor"
+                android:textColorHint="#727272"
+                android:theme="@style/editTextBackground"
+                android:hint="Team name"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@id/centered_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_below="@id/team_name"
+                android:layout_marginRight="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <View
+                    android:id="@+id/save_data"
+                    android:clickable="true"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/red_button_backg"/>
+                <ImageView
+                    android:src="@drawable/ic_done_white_48dp"
+                    android:tint="#fff"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+            </RelativeLayout>
         </RelativeLayout>
         <RelativeLayout
-            android:id="@+id/edit_button_layout"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/team_name_layout"
-            android:layout_marginLeft="-80dp"
-            android:layout_marginBottom="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <View
-                android:id="@+id/edit_data"
-                android:clickable="true"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:background="@drawable/red_button_backg"/>
-            <ImageView
-                android:src="@drawable/ic_create_white_48dp"
-                android:tint="#fff"
+            android:id="@+id/display_layout"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/team_icon"
                 android:layout_centerInParent="true"
-                android:gravity="center"
-                android:layout_width="25dp"
-                android:layout_height="25dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <View
+                    android:clickable="true"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/red_btn"/>
+                <ImageView
+                    android:src="@drawable/ic_group_white_48dp"
+                    android:tint="#fff"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/team_name_layout"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/red_shadow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/display_team_name"
+                    android:layout_marginRight="20dp"
+                    android:scrollbars = "vertical"
+                    android:layout_centerVertical="true"
+                    android:text="Team name"
+                    android:textSize="20sp"
+                    android:maxHeight="90dp"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/edit_button_layout"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/team_name_layout"
+                android:layout_marginLeft="-80dp"
+                android:layout_marginBottom="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <View
+                    android:id="@+id/edit_data"
+                    android:clickable="true"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/red_button_backg"/>
+                <ImageView
+                    android:src="@drawable/ic_create_white_48dp"
+                    android:tint="#fff"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

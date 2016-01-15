@@ -199,6 +199,7 @@ public final class PagerFragment extends Fragment {
                             personImgView.setImageBitmap(decodeBase64(img));
                             personImgView.setBorderColor(Color.parseColor("#ff3C16"));
                         } else {
+                            MainActivity.images[position] = "";
                             personImgView.setImageResource(R.mipmap.ic_launcher);
                             personImgView.setBorderColor(Color.parseColor("#e7e7e7"));
                         }
