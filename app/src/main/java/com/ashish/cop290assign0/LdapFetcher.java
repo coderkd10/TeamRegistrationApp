@@ -111,7 +111,7 @@ public class LdapFetcher {
                         for(int i=0; i<nameParts.length-2; i++){
                             shortName.append(nameParts[i].charAt(0)).append(". ");
                         }
-                        shortName.append(nameParts[nameParts.length-2]);
+                        shortName.append(nameParts[nameParts.length-2]).append(" ");
                         shortName.append(nameParts[nameParts.length-1]);
                         toReturn.put("name", shortName.toString());
                     }
