@@ -46,6 +46,12 @@
 	4. ^gives error.
 	5. now type a correct entrt number and press submit again. Does not work.~~
 
+* Entry number size not limit not restricted and not checking sometimes:
+	1. Connect to internet.
+	2. Enter entry number 2013EE10430. -> automatically checks that this is invalid as soon as you enter this. Also you cannot enter any more characters.
+	3. ^ this is behavior is correct, and is expected always. But sometimes not respected as below.
+	4. Enter 2013eez10430222222222 ... as many characters you want.
+	5. ^ does not check / stop allowing more entries.
 
 ###New features
 * Add suggestions from name also along with entry number.
