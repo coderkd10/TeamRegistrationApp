@@ -1,6 +1,5 @@
 package com.ashish.cop290assign0;
 
-import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,15 +7,13 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ViewPagerAdapter extends PagerAdapter {
     FragmentManager fragmentManager;
     Fragment[] fragments;
     String[] names,entryCodes,images;
     String teamName;
     private int[] visibility;
+    FragmentTransaction mTransaction;
     public ViewPagerAdapter(FragmentManager fm){
         fragmentManager = fm;
     }
@@ -32,18 +29,19 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         assert(0 <= position && position < fragments.length);
-        FragmentTransaction trans = fragmentManager.beginTransaction();
-        trans.remove(fragments[position]);
-        trans.commit();
+        mTransaction = fragmentManager.beginTransaction();
+        mTransaction.detach(fragments[position]);
+        mTransaction.remove(fragments[position]);
+        mTransaction.commit();
         fragments[position] = null;
     }
 
     @Override
     public Fragment instantiateItem(ViewGroup container, int position){
         Fragment fragment = getItem(position);
-        FragmentTransaction trans = fragmentManager.beginTransaction();
-        trans.add(container.getId(),fragment,"fragment:"+position);
-        trans.commit();
+        mTransaction = fragmentManager.beginTransaction();
+        mTransaction.add(container.getId(), fragment, "fragment:" + position);
+        mTransaction.commit();
         return fragment;
     }
 
@@ -63,5 +61,12 @@ public class ViewPagerAdapter extends PagerAdapter {
             fragments[pos] = PagerFragment.newInstance(pos,visibility[pos],names[pos],entryCodes[pos],images[pos],teamName);
         }
         return fragments[pos];
+    }
+    @Override
+    public void finishUpdate(ViewGroup container) {
+        if (mTransaction != null) {
+            mTransaction = null;
+            fragmentManager.executePendingTransactions();
+        }
     }
 }

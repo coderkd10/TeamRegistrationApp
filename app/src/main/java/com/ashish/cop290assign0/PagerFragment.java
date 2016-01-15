@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -65,6 +66,7 @@ public final class PagerFragment extends Fragment {
         }
         if(position == 0) {
             ((TextView)layout.findViewById(R.id.display_team_name)).setText(teamName);
+            ((TextView)layout.findViewById(R.id.display_team_name)).setMovementMethod(new ScrollingMovementMethod());
             ((EditText)layout.findViewById(R.id.team_name)).setText(teamName);
         }else{
             ((TextView)layout.findViewById(R.id.display_name)).setText(name);
