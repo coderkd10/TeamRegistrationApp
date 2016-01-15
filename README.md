@@ -28,7 +28,7 @@
 
 
 ##Issues
-* First fill entry number - 2013ee10431.
+* ~~First fill entry number - 2013ee10431.~~ (FIXED)(@abhishek_kedia check)
 	1. Gets Abhishek Kedia's photo, name, entry number.
 	2. Now click on edit this entry.
 	3. Fill entry number - 2013ee10432.
