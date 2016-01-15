@@ -21,7 +21,7 @@
 * Add credits page
 * merge kansal's validator branch.
 * remove keyboard on valid response.
-* Add border around image if img from ldap is found. (@r-ashish check this if done).
+* ~~Add border around image if img from ldap is found.~~ (@r-ashish check this if done).
 * merge kansal's validator branch.
 * remove keyboard on valid response.
 * ~~incase of invalid entry number (i.e. response of the form <h1> ()</h1>) reflect this in entry number input text box.~~
