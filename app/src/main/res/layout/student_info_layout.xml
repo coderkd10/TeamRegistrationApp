@@ -145,6 +145,8 @@
                 android:id="@+id/display_name"
                 android:text="Student's name"
                 android:textSize="22dp"
+                android:maxWidth="220dp"
+                android:gravity="center"
                 android:textColor="@color/primaryColor"
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
@@ -163,7 +165,7 @@
         <RelativeLayout
             android:layout_toRightOf="@id/details_layout"
             android:layout_above="@id/details_layout"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginBottom="-60dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">

@@ -63,16 +63,16 @@ public class LdapFetcher {
     private String entryNumToUserId(String entryNum){
         String entryNumDataExtractRegEx = "20(\\d{2})([a-zA-z]{2}[a-zA-z\\d])(\\d{4})";
         Pattern entryNumDataExtractPattern = Pattern.compile(entryNumDataExtractRegEx);
-        Matcher entryNumDatMatcher = entryNumDataExtractPattern.matcher(entryNum);
-        if(!entryNumDatMatcher.find() || entryNumDatMatcher.groupCount() < 3)
+        Matcher entryNumDataMatcher = entryNumDataExtractPattern.matcher(entryNum);
+        if(!entryNumDataMatcher.find() || entryNumDataMatcher.groupCount() < 3)
             return "ee1130431";
         else {
-            Log.d("group(1)=",entryNumDatMatcher.group(1));
-            Log.d("group(0)=",entryNumDatMatcher.group(0));
-            Log.d("group(2)=",entryNumDatMatcher.group(2));
-            Log.d("group(3)=",entryNumDatMatcher.group(3));
+            Log.d("group(1)=",entryNumDataMatcher.group(1));
+            Log.d("group(0)=",entryNumDataMatcher.group(0));
+            Log.d("group(2)=",entryNumDataMatcher.group(2));
+            Log.d("group(3)=",entryNumDataMatcher.group(3));
 
-            String userId = entryNumDatMatcher.group(2) + entryNumDatMatcher.group(1) + entryNumDatMatcher.group(3);
+            String userId = entryNumDataMatcher.group(2) + entryNumDataMatcher.group(1) + entryNumDataMatcher.group(3);
             Log.d("userID of " + entryNum,userId);
             return userId;
         }

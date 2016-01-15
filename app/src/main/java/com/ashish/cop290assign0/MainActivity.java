@@ -30,23 +30,37 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
 
     //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
-    public static String[] names,entryCodes;
+    public static String[] names,entryCodes,images;
     public static String teamName;
     public static LdapFetcher mLdapFetcher;
+    public static int[] visibility;
+    ViewPager pager;
+    ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        names = new String[3];
-        entryCodes = new String[3];
+        if(savedInstanceState != null) {
+            pager.setCurrentItem(savedInstanceState.getInt("currentPage"));
+            visibility = savedInstanceState.getIntArray("visibility");
+            teamName = savedInstanceState.getString("teamName");
+            names = savedInstanceState.getStringArray("names");
+            entryCodes = savedInstanceState.getStringArray("entryCodes");
+            images = savedInstanceState.getStringArray("images");
+        }
+        adapter.setVals(4, teamName, names, entryCodes, images, visibility);
+        pager.setAdapter(adapter);
+        CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        circleIndicator.setViewPager(pager);
         mLdapFetcher = new LdapFetcher(getApplicationContext());
     }
 //    private List<Bitmap> getDummyImages(){
@@ -72,13 +86,13 @@ public class MainActivity extends ActionBarActivity {
 //    }
     //Initializing UI components
     private void init(){
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        names = new String[4];
+        entryCodes = new String[4];
+        images = new String[4];
+        visibility = new int[4];
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.setVals(4);
-        pager.setAdapter(adapter);
-        CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
-        circleIndicator.setViewPager(pager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
     }
     //Adds asterisk to editTexts using SpannableString(used for selective formatting of strings ex. color,on click url).
 //    private void addRedAsterisk(EditText[] e_array){
@@ -95,6 +109,17 @@ public class MainActivity extends ActionBarActivity {
 //            e.setHint(builder);
 //        }
 //    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("currentPage", pager.getCurrentItem());
+        outState.putIntArray("visibility", visibility);
+        outState.putString("teamName", teamName);
+        outState.putStringArray("names", names);
+        outState.putStringArray("entryCodes", entryCodes);
+        outState.putStringArray("images", images);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
