@@ -31,5 +31,6 @@
 
 
 ###New features
+* Add suggestions from name also along with entry number.
 * Generalise other type of form filling
 	* Integrate with Google Docs & Survey Monkey
