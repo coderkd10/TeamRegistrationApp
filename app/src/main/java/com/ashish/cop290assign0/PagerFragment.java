@@ -91,6 +91,7 @@ public final class PagerFragment extends Fragment {
             addOnTextChangeListener(layout);
             ((TextView) layout.findViewById(R.id.member_no)).setText("#" + position);
         }
+        l = layout;
         init(layout);
         setOnClickListeners(layout);
         return layout;
