@@ -39,12 +39,16 @@ public class MainActivity extends ActionBarActivity {
     public static String[] names,entryCodes;
     public static String teamName;
     public static LdapFetcher mLdapFetcher;
+    ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        if(savedInstanceState != null) {
+            pager.setCurrentItem(savedInstanceState.getInt("current-page"));
+        }
         names = new String[3];
         entryCodes = new String[3];
         mLdapFetcher = new LdapFetcher(getApplicationContext());
@@ -72,10 +76,9 @@ public class MainActivity extends ActionBarActivity {
 //    }
     //Initializing UI components
     private void init(){
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.setVals(4);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),4);
         pager.setAdapter(adapter);
         CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         circleIndicator.setViewPager(pager);
@@ -95,6 +98,11 @@ public class MainActivity extends ActionBarActivity {
 //            e.setHint(builder);
 //        }
 //    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("current-page", pager.getCurrentItem());
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
