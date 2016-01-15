@@ -72,7 +72,8 @@ public final class PagerFragment extends Fragment {
         }else{
             ((TextView)layout.findViewById(R.id.display_name)).setText(name);
             ((TextView)layout.findViewById(R.id.display_entry_code)).setText(entryCode);
-            if(image!=null)((ImageView)layout.findViewById(R.id.img)).setImageBitmap(decodeBase64(image));
+            if(image!=null && !image.isEmpty())
+                ((ImageView)layout.findViewById(R.id.img)).setImageBitmap(decodeBase64(image));
             ((EditText)layout.findViewById(R.id.name)).setText(name);
             ((EditText)layout.findViewById(R.id.entryCode)).setText(entryCode);
         }
