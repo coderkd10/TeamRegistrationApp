@@ -98,7 +98,7 @@ public final class PagerFragment extends Fragment {
         setOnClickListeners(layout);
         return layout;
     }
-
+    private boolean isInvalid = false;
     private void setOnClickListeners(final LinearLayout layout){
 
         layout.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
@@ -110,7 +110,7 @@ public final class PagerFragment extends Fragment {
                     boolean isEntryCodeValid = InputValidator.validateEntryCode(entryCode);
                     boolean isNameValid = InputValidator.validateName(name);
                     if (!entryCode.isEmpty() && !name.isEmpty()) {
-                        boolean isInvalid = false;
+                        //boolean isInvalid = false;
                         if (!isEntryCodeValid) {
                             ((EditText) layout.findViewById(R.id.entryCode)).setError("Invalid entry no!");
                             isInvalid = true;
@@ -190,6 +190,7 @@ public final class PagerFragment extends Fragment {
             public void onGetJson(JSONObject studentDataJson) {
                 try {
                     if (studentDataJson.getBoolean("isValid")) {
+                        isInvalid = false;
                         entryNumBox.setText(studentDataJson.getString("entryNumber"));
                         nameBox.setText(studentDataJson.getString("name"));
                         if (studentDataJson.has("img")) {
@@ -203,6 +204,9 @@ public final class PagerFragment extends Fragment {
                         //okBttn.requestFocus();
                         //personImgView.clearFocus();
                         okBttn.performClick();
+                    } else {
+                        isInvalid = true;
+                        entryNumBox.setError("Invalid entry no!");
                     }
                     ;
                 } catch (Exception e) {

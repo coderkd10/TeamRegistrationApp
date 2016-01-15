@@ -61,6 +61,7 @@
 
         <EditText
             android:id="@+id/entryCode"
+            android:maxLength="11"
             android:ems="10"
             android:inputType="text"
             android:textColor="@color/primaryColor"
