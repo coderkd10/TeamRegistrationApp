@@ -137,6 +137,11 @@ public final class PagerFragment extends Fragment {
                         hideKeyboard(v); //hidden keyboard
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
+
+                        if(position == 2 || position == 3) {
+                            layout.findViewById(R.id.submit_bttn).setVisibility(View.VISIBLE);
+                        }
+
                     } else {
                         if(name.isEmpty()) {
                             ((EditText) layout.findViewById(R.id.name)).setError("Name cannot be empty!");
@@ -167,6 +172,11 @@ public final class PagerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity.visibility[position] = 0;
+
+                if(position == 2 || position == 3) {
+                    layout.findViewById(R.id.submit_bttn).setVisibility(View.GONE);
+                }
+
                 layout.findViewById(R.id.display_layout).setVisibility(View.GONE);
                 layout.findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
             }
