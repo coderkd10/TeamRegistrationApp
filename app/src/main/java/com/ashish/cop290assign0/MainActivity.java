@@ -31,7 +31,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -142,9 +144,9 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Extracts and returns all the required data from the editTexts in an ArrayList
-//    private ArrayList<NameValuePair> getData(){
-//        //Getting data from the editTexts
+   // Extracts and returns all the required data from the editTexts in an ArrayList
+    private Map<String, String> getData(){
+        //Getting data from the editTexts
 //        String teamName = teamNameTextBox.getText().toString();
 //        String entry1 = entry1TextBox.getText().toString();
 //        String name1 = name1TextBox.getText().toString();
@@ -152,30 +154,30 @@ public class MainActivity extends ActionBarActivity {
 //        String name2 = name2TextBox.getText().toString();
 //        String entry3 = entry3TextBox.getText().toString();
 //        String name3 = name3TextBox.getText().toString();
-//
-//        //Adding data to ArrayList in NameValuePair form for sending to the server.
-//        ArrayList<NameValuePair> data = new ArrayList<>();
-//        data.add(new BasicNameValuePair("teamname", teamName));
-//        data.add(new BasicNameValuePair("entry1", entry1));
-//        data.add(new BasicNameValuePair("name1", name1));
-//        data.add(new BasicNameValuePair("entry2", entry2));
-//        data.add(new BasicNameValuePair("name2", name2));
-//        data.add(new BasicNameValuePair("entry3", entry3));
-//        data.add(new BasicNameValuePair("name3", name3));
-//
-//        //Checking for input errors
-//        if(!isValidInput(teamName, entry1, name1, entry2, name2, entry3, name3))
-//            data = null;
-//        return data;
-//    }
+
+        //Adding data to ArrayList in NameValuePair form for sending to the server.
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("teamname", teamName);
+        data.put("entry1", entryCodes[1]);
+        data.put("name1", names[1]);
+        data.put("entry2", entryCodes[2]);
+        data.put("name2", names[2]);
+        data.put("entry3", entryCodes[3]);
+        data.put("name3", names[3]);
+        //Checking for input errors
+        if(!isValidInput(teamName, entryCodes[1], names[1], entryCodes[2], names[2], entryCodes[3], names[3]))
+            data = null;
+        return data;
+    }
 
     //Checks for valid input and shows error accordingly.
-//    private boolean isValidInput(String teamName, String entry1,
-//                               String name1,String entry2,
-//                               String name2,String entry3,String name3){
-//        boolean result = true;
+    private boolean isValidInput(String teamName, String entry1,
+                               String name1,String entry2,
+                               String name2,String entry3,String name3){
+        boolean result = true;
+        //// TODO: 16/01/16  
 //        if(teamName.isEmpty()){
-//            teamNameTextBox.setError("Team name can't be empty!");
+//            //teamNameTextBox.setError("Team name can't be empty!");
 //            result = false;
 //        }
 //        if(entry1.isEmpty()) {
@@ -202,8 +204,8 @@ public class MainActivity extends ActionBarActivity {
 //            name3TextBox.setError("Entry3 entered, please enter name for this entry!");
 //            result = false;
 //        }
-//        return result;
-//    }
+        return result;
+    }
     //Called on submit button click
     public void onSubmit(View v){
 //        ArrayList<NameValuePair> data = getData(); //getting all data from ediTexts
@@ -227,50 +229,50 @@ public class MainActivity extends ActionBarActivity {
     }
 
     //Posting data to the server asynchronously
-    class sendDataToServer extends AsyncTask<String, Void, String> {
-		ArrayList<NameValuePair> data;
-        ProgressDialog progressDialog;
-		public sendDataToServer(ArrayList<NameValuePair> d,ProgressDialog p){
-			data = d;
-            progressDialog = p;
-		}
-        protected String doInBackground(String... urls) {
-            PostRequest request = new PostRequest(urls[0], data);
-            String result = request.post();
-            return result;
-        }
-
-        protected void onPostExecute(String res) {
-            try {
-                progressDialog.dismiss();
-                //Checking post request result
-                if(res.equalsIgnoreCase("internetNotAvailable")){
-                    make_dialog("Uh-oh","Looks like you're not connected to the internet.Please check your internet connection and try again.","Ok");
-                }
-                else if(res.toLowerCase().contains("exception")){
-                    make_dialog("Some error occured!","There was some error in posting the data,contact server administrator.","Ok");
-                }
-                else {
-                    JSONObject response = new JSONObject(res);
-                    //Checking post request response
-                    if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
-                        make_dialog("Data not posted!", "Some required fields are missing!","Ok");
-                    else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
-                        make_dialog("Data not posted!","One or more users with given details have already registered.","Ok");
-                    else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
-                        make_dialog("Data posted!", "Registration completed", "Ok");
-                        //resetTextBoxes();
-                    }
-                    else
-                        make_dialog("Umm...","Unexpected response from the server.\nResponse : "+res,"Ok");
-                }
-
-            } catch (Exception e) {
-                make_dialog("Unable to send the data!","Please check your internet connection and try again.","Ok");
-            }
-        }
-    }
-    //to clear editText contents
+//    class sendDataToServer extends AsyncTask<String, Void, String> {
+//		ArrayList<NameValuePair> data;
+//        ProgressDialog progressDialog;
+//		public sendDataToServer(ArrayList<NameValuePair> d,ProgressDialog p){
+//			data = d;
+//            progressDialog = p;
+//		}
+//        protected String doInBackground(String... urls) {
+//            PostRequest request = new PostRequest(urls[0], data);
+//            String result = request.post();
+//            return result;
+//        }
+//
+//        protected void onPostExecute(String res) {
+//            try {
+//                progressDialog.dismiss();
+//                //Checking post request result
+//                if(res.equalsIgnoreCase("internetNotAvailable")){
+//                    make_dialog("Uh-oh","Looks like you're not connected to the internet.Please check your internet connection and try again.","Ok");
+//                }
+//                else if(res.toLowerCase().contains("exception")){
+//                    make_dialog("Some error occured!","There was some error in posting the data,contact server administrator.","Ok");
+//                }
+//                else {
+//                    JSONObject response = new JSONObject(res);
+//                    //Checking post request response
+//                    if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
+//                        make_dialog("Data not posted!", "Some required fields are missing!","Ok");
+//                    else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
+//                        make_dialog("Data not posted!","One or more users with given details have already registered.","Ok");
+//                    else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
+//                        make_dialog("Data posted!", "Registration completed", "Ok");
+//                        //resetTextBoxes();
+//                    }
+//                    else
+//                        make_dialog("Umm...","Unexpected response from the server.\nResponse : "+res,"Ok");
+//                }
+//
+//            } catch (Exception e) {
+//                make_dialog("Unable to send the data!","Please check your internet connection and try again.","Ok");
+//            }
+//        }
+//    }
+//    //to clear editText contents
 //    private void resetTextBoxes(){
 //        teamNameTextBox.setText("");
 //        entry1TextBox.setText("");

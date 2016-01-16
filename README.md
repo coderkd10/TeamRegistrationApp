@@ -21,7 +21,7 @@ slack channel [https://cop290ninjacoders.slack.com/messages](https://cop290ninja
 * Add confirmation page
 * Add credits page
 * merge kansal's validator branch.
-* remove keyboard on valid response.
+* ~~remove keyboard on valid response.~~
 * ~~Add border around image if img from ldap is found.~~ (@r-ashish check this if done).
 * merge kansal's validator branch.
 * remove keyboard on valid response.
