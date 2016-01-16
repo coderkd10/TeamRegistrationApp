@@ -191,6 +191,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/submit_bttn"
+        android:clickable="true"
         android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
