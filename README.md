@@ -49,7 +49,7 @@ slack channel [https://cop290ninjacoders.slack.com/messages](https://cop290ninja
 	4. ^gives error.
 	5. now type a correct entrt number and press submit again. Does not work.~~
 
-* Entry number size not limit not restricted and not checking sometimes:
+* Entry number size not limit not restricted and not checking sometimes:(@abhishek_kedia : have you applied android:maxLength="10" property for entryCode editText ?) 
 	1. Connect to internet.
 	2. Enter entry number 2013EE10430. -> automatically checks that this is invalid as soon as you enter this. Also you cannot enter any more characters.
 	3. ^ this is behavior is correct, and is expected always. But sometimes not respected as below.
