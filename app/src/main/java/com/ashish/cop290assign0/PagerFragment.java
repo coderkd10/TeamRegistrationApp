@@ -1,5 +1,6 @@
 package com.ashish.cop290assign0;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -132,6 +134,7 @@ public final class PagerFragment extends Fragment {
                         ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
                         ((TextView) layout.findViewById(R.id.display_name)).setText(name);
                         MainActivity.visibility[position] = 1;
+                        hideKeyboard(v); //hidden keyboard
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                     } else {
@@ -152,6 +155,7 @@ public final class PagerFragment extends Fragment {
                         MainActivity.teamName = teamName;
                         ((TextView) layout.findViewById(R.id.display_team_name)).setText(teamName);
                         MainActivity.visibility[position] = 1;
+                        hideKeyboard(v); //hidden keyboard
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                     }
@@ -204,41 +208,41 @@ public final class PagerFragment extends Fragment {
          * 4. Click done button
          */
         MainActivity.mLdapFetcher.getAndHandleStudentDetails(entryCode, new LdapFetcher.studentJsonDataHandler() {
-            @Override
-            public void onGetJson(JSONObject studentDataJson) {
-                try {
-                    if (studentDataJson.getBoolean("isValid")) {
-                        isInvalid = false;
-                        entryNumBox.setText(studentDataJson.getString("entryNumber"));
-                        nameBox.setText(studentDataJson.getString("name"));
-                        if (studentDataJson.has("img")) {
-                            String img = studentDataJson.getString("img");
-                            MainActivity.images[position] = img;
-                            personImgView.setImageBitmap(decodeBase64(img));
-                            personImgView.setBorderColor(Color.parseColor("#ff3C16"));
-                        } else {
-                            MainActivity.images[position] = "";
-                            personImgView.setImageResource(R.mipmap.ic_launcher);
-                            personImgView.setBorderColor(Color.parseColor("#e7e7e7"));
-                        }
-                        //TODO: close keyboard. Following approaches not working!
-                        //okBttn.requestFocus();
-                        //personImgView.clearFocus();
-                        okBttn.performClick();
-                    } else {
-                        isInvalid = true;
-                        entryNumBox.setError("Invalid entry no!");
-                    }
-                    ;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new LdapFetcher.ldapRequestErrorHandler(){
                     @Override
-                    public void handle(VolleyError error){
-                        if(!entryCode.isEmpty()){
-                            if(InputValidator.validateEntryCode(entryCode)){
+                    public void onGetJson(JSONObject studentDataJson) {
+                        try {
+                            if (studentDataJson.getBoolean("isValid")) {
+                                isInvalid = false;
+                                entryNumBox.setText(studentDataJson.getString("entryNumber"));
+                                nameBox.setText(studentDataJson.getString("name"));
+                                if (studentDataJson.has("img")) {
+                                    String img = studentDataJson.getString("img");
+                                    MainActivity.images[position] = img;
+                                    personImgView.setImageBitmap(decodeBase64(img));
+                                    personImgView.setBorderColor(Color.parseColor("#ff3C16"));
+                                } else {
+                                    MainActivity.images[position] = "";
+                                    personImgView.setImageResource(R.mipmap.ic_launcher);
+                                    personImgView.setBorderColor(Color.parseColor("#e7e7e7"));
+                                }
+                                //TODO: close keyboard. Following approaches not working!
+                                //okBttn.requestFocus();
+                                //personImgView.clearFocus();
+                                okBttn.performClick();
+                            } else {
+                                isInvalid = true;
+                                entryNumBox.setError("Invalid entry no!");
+                            }
+                            ;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new LdapFetcher.ldapRequestErrorHandler() {
+                    @Override
+                    public void handle(VolleyError error) {
+                        if (!entryCode.isEmpty()) {
+                            if (InputValidator.validateEntryCode(entryCode)) {
                                 isInvalid = false;
                             }
                         }
@@ -267,5 +271,10 @@ public final class PagerFragment extends Fragment {
     private int dp2Pix(float i){
         Resources r = getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, i, r.getDisplayMetrics());
+    }
+
+    private void hideKeyboard(View v){
+        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(),0);
     }
 }
