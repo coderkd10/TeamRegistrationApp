@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +43,7 @@ public class MainActivity extends ActionBarActivity {
     public static String[] names,entryCodes,images;
     public static String teamName;
     public static LdapFetcher mLdapFetcher;
+    public static PostRequest mPostRequest;
     public static int[] visibility;
     ViewPager pager;
     ViewPagerAdapter adapter;
@@ -64,6 +66,7 @@ public class MainActivity extends ActionBarActivity {
         CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         circleIndicator.setViewPager(pager);
         mLdapFetcher = new LdapFetcher(getApplicationContext());
+        mPostRequest = new PostRequest(getApplicationContext());
     }
 //    private List<Bitmap> getDummyImages(){
 //        images = new ArrayList<>();
@@ -145,7 +148,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
    // Extracts and returns all the required data from the editTexts in an ArrayList
-    private Map<String, String> getData(){
+    private static Map<String, String> getData(){
         //Getting data from the editTexts
 //        String teamName = teamNameTextBox.getText().toString();
 //        String entry1 = entry1TextBox.getText().toString();
@@ -165,8 +168,8 @@ public class MainActivity extends ActionBarActivity {
         data.put("entry3", entryCodes[3]);
         data.put("name3", names[3]);
         //Checking for input errors
-        if(!isValidInput(teamName, entryCodes[1], names[1], entryCodes[2], names[2], entryCodes[3], names[3]))
-            data = null;
+//        if(!isValidInput(teamName, entryCodes[1], names[1], entryCodes[2], names[2], entryCodes[3], names[3]))
+//            data = null;
         return data;
     }
 
@@ -207,7 +210,7 @@ public class MainActivity extends ActionBarActivity {
         return result;
     }
     //Called on submit button click
-    public void onSubmit(View v){
+    public static void onSubmit(View v){
 //        ArrayList<NameValuePair> data = getData(); //getting all data from ediTexts
 //        if(data!=null) {
 //            //Creating a progressDialog to shows while the data is being posted.
@@ -215,8 +218,16 @@ public class MainActivity extends ActionBarActivity {
 //            //posting to the server
 //            new sendDataToServer(data,pDialog).execute(Config.SERVER_URL);
 //        }
-
+        Log.d("onSubmit",getData().toString());
+        mPostRequest.post(Config.SERVER_URL, getData(), new PostRequest.ServerResponseHandler() {
+            @Override
+            public void handle(String response) {
+                //TODO
+            }
+        });
     }
+
+
     //Creates a progressDialog
     private ProgressDialog createProgressDialog(String title,String description){
         ProgressDialog progressDialog = new ProgressDialog(this);

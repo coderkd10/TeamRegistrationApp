@@ -1,6 +1,7 @@
 package com.ashish.cop290assign0;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 import java.lang.reflect.Method;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -27,19 +29,18 @@ import java.util.Map;
  */
 
 public class PostRequest {
-    String url;
-    Map<String, String> data;
+    //String url;
+    //Map<String, String> data;
     private RequestQueue requestQueue;
-    public PostRequest(String url,Map<String,String> data, Context context){
-        this.url = url;
-        this.data = data;
+    public PostRequest(Context context){
+        //this.url = url;
+        //this.data = data;
         this.requestQueue = Volley.newRequestQueue(context);
     }
     public interface ServerResponseHandler{
         public void handle(String response);
     }
-    public void post(final ServerResponseHandler handler){
-        String result;
+    public void post(String url, final Map<String,String> data, final ServerResponseHandler handler){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 url,
                 new Response.Listener<String>() {
@@ -47,18 +48,19 @@ public class PostRequest {
                     public void onResponse(String response) {
                         //show after successful response
                         handler.handle(response);
+                        Log.d("post","Got response:"+response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // todo
+                Log.e("post","Volley error:"+ error.toString());
             }
         }){
             @Override
             protected Map<String, String> getParams(){
-                return data;
+                return new HashMap<>(data);
             }
-
         };
         requestQueue.add(stringRequest);
     }

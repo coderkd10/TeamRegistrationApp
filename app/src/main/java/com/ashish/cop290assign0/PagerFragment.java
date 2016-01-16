@@ -173,7 +173,7 @@ public final class PagerFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity.visibility[position] = 0;
 
-                if(position == 2 || position == 3) {
+                if (position == 2 || position == 3) {
                     layout.findViewById(R.id.submit_bttn).setVisibility(View.GONE);
                 }
 
@@ -181,12 +181,16 @@ public final class PagerFragment extends Fragment {
                 layout.findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
             }
         });
-        layout.findViewById(R.id.submit_bttn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //call method to send via volley
-            }
-        });
+        Log.d("***", Boolean.toString(layout.findViewById(R.id.submit_bttn) == null));
+        View submitBttn = layout.findViewById(R.id.submit_bttn);
+        if(submitBttn != null){
+            submitBttn.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    MainActivity.onSubmit(v);
+                }
+            });
+        }
     }
 
     private void addOnTextChangeListener(final LinearLayout layout){
