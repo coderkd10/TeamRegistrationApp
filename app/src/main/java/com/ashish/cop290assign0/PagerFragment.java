@@ -140,7 +140,6 @@ public final class PagerFragment extends Fragment {
                     } else {
                         if(name.isEmpty()) {
                             ((EditText) layout.findViewById(R.id.name)).setError("Name cannot be empty!");
-                            //TODO remove this error once user enters correct enry number and details are fetched from ldap.
                         }
                         if(entryCode.isEmpty()) {
                             ((EditText) layout.findViewById(R.id.entryCode)).setError("Entry Number cannot be empty!");
@@ -158,6 +157,8 @@ public final class PagerFragment extends Fragment {
                         hideKeyboard(v); //hidden keyboard
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
+                    } else{
+                        ((EditText) layout.findViewById(R.id.team_name)).setError("Team name cannot be empty");
                     }
                 }
             }
@@ -195,6 +196,9 @@ public final class PagerFragment extends Fragment {
                                       int before, int count) {
                 if (InputValidator.validateEntryCode(editText.getText().toString()) && count < 11)
                     fetchAndEditStudentDetails(editText.getText().toString(), editText, nameBox, okBttn, personImgView);
+                if (editText.getText().toString().length() == 11 && !InputValidator.validateEntryCode(editText.getText().toString())){
+                    editText.setError("Invalid entry no!");
+                }
             }
         });
     }
@@ -213,6 +217,7 @@ public final class PagerFragment extends Fragment {
                         try {
                             if (studentDataJson.getBoolean("isValid")) {
                                 isInvalid = false;
+                                nameBox.setError(null); //remove if there is any error marked in name box
                                 entryNumBox.setText(studentDataJson.getString("entryNumber"));
                                 nameBox.setText(studentDataJson.getString("name"));
                                 if (studentDataJson.has("img")) {
@@ -225,9 +230,6 @@ public final class PagerFragment extends Fragment {
                                     personImgView.setImageResource(R.mipmap.ic_launcher);
                                     personImgView.setBorderColor(Color.parseColor("#e7e7e7"));
                                 }
-                                //TODO: close keyboard. Following approaches not working!
-                                //okBttn.requestFocus();
-                                //personImgView.clearFocus();
                                 okBttn.performClick();
                             } else {
                                 isInvalid = true;
