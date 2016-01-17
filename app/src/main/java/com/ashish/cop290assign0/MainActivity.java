@@ -24,10 +24,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -210,27 +212,55 @@ public class MainActivity extends ActionBarActivity {
         return result;
     }
     //Called on submit button click
-    public static void onSubmit(View v){
-//        ArrayList<NameValuePair> data = getData(); //getting all data from ediTexts
-//        if(data!=null) {
-//            //Creating a progressDialog to shows while the data is being posted.
-//            ProgressDialog pDialog = createProgressDialog("Please wait", "Sending data to the server.....");
-//            //posting to the server
-//            new sendDataToServer(data,pDialog).execute(Config.SERVER_URL);
-//        }
-        Log.d("onSubmit",getData().toString());
-        mPostRequest.post(Config.SERVER_URL, getData(), new PostRequest.ServerResponseHandler() {
-            @Override
-            public void handle(String response) {
-                //TODO
-            }
-        });
+    public static void onSubmit(final View v){
+        Map<String,String> data = getData();
+        if(data!=null) {
+            //Creating a progressDialog to shows while the data is being posted.
+            final ProgressDialog pDialog = createProgressDialog(v,"Please wait", "Sending data to the server.....");
+            Log.d("onSubmit", data.toString());
+            //posting to the server
+            mPostRequest.post(Config.SERVER_URL, getData(),
+                    new PostRequest.ServerResponseHandler() {
+                        @Override
+                        public void handle(String response) {
+                            //TODO
+                            pDialog.dismiss();
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
+                                    make_dialog(v,"Data not posted!", "Some required fields are missing!","Ok");
+                                else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
+                                    make_dialog(v,"Data not posted!","One or more users with given details have already registered.","Ok");
+                                else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
+                                    make_dialog(v, "Data posted!", "Registration completed", "Ok");
+                                    //resetTextBoxes();
+                                }
+                            } catch (JSONException jsonException) {
+                                make_dialog(v,"Umm...","Unexpected response from the server, contact server administrator!","Ok");
+                            } catch (Exception e) {
+                                make_dialog(v,"Uh-oh","Something bad happened. Might be aliens!","Ok");
+                            }
+                        }
+                    },
+                    new PostRequest.ErrorHandler(){
+                        @Override
+                        public void handle(VolleyError error) {
+                            pDialog.dismiss();
+                            make_dialog(v,"Uh-oh","Looks like you're not connected to the internet.Please check your internet connection and try again.","Ok");
+                        }
+                    }
+            );
+        } else {
+            //data is null
+            //some input is invalid
+            //TODO handle invalid input case
+        }
     }
 
 
     //Creates a progressDialog
-    private ProgressDialog createProgressDialog(String title,String description){
-        ProgressDialog progressDialog = new ProgressDialog(this);
+    private static ProgressDialog createProgressDialog(View v,String title,String description){
+        ProgressDialog progressDialog = new ProgressDialog(v.getContext());
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         progressDialog.setCancelable(false);
         progressDialog.setTitle(title);
@@ -294,8 +324,8 @@ public class MainActivity extends ActionBarActivity {
 //        name3TextBox.setText("");
 //    }
     //creates and shows a custom dialog
-    private void make_dialog(String title,String msg,String button_text){
-        final Dialog dialog = new Dialog(MainActivity.this);
+    private static void make_dialog(View v,String title,String msg,String button_text){
+        final Dialog dialog = new Dialog(v.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.error_dialog_layout);
         //dialog.setCancelable(false);

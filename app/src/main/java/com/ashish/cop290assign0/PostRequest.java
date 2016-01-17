@@ -38,25 +38,30 @@ public class PostRequest {
         this.requestQueue = Volley.newRequestQueue(context);
     }
     public interface ServerResponseHandler{
-        public void handle(String response);
+        void handle(String response);
     }
-    public void post(String url, final Map<String,String> data, final ServerResponseHandler handler){
+    public interface ErrorHandler{
+        void handle(VolleyError error);
+    }
+    public void post(String url, final Map<String,String> data, final ServerResponseHandler responseHandler,final ErrorHandler errorHandler){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         //show after successful response
-                        handler.handle(response);
+                        responseHandler.handle(response);
                         Log.d("post","Got response:"+response);
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // todo
-                Log.e("post","Volley error:"+ error.toString());
-            }
-        }){
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        errorHandler.handle(error);
+                        Log.e("post", "Volley error:" + error.toString());
+                    }
+                }
+        ){
             @Override
             protected Map<String, String> getParams(){
                 return new HashMap<>(data);
