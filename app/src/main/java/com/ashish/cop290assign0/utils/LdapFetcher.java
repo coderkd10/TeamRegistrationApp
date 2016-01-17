@@ -36,8 +36,8 @@ public class LdapFetcher {
 
     private RequestQueue ldapRequestQueue;
 
-    public LdapFetcher(Context context){
-        ldapRequestQueue = Volley.newRequestQueue(context);
+    public LdapFetcher(RequestQueue requestQueue){
+        ldapRequestQueue = requestQueue;
     }
 
     public void getAndHandleStudentDetails(String inputEntryNumber,final studentJsonDataHandler jsonHandler, final ldapRequestErrorHandler errorHandler){

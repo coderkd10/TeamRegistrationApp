@@ -16,7 +16,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.ashish.cop290assign0.utils.LdapFetcher;
 import com.ashish.cop290assign0.utils.PostRequest;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -56,8 +58,10 @@ public class MainActivity extends ActionBarActivity {
         pager.setAdapter(adapter);
         CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         circleIndicator.setViewPager(pager);
-        mLdapFetcher = new LdapFetcher(getApplicationContext());
-        mPostRequest = new PostRequest(getApplicationContext());
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        mLdapFetcher = new LdapFetcher(requestQueue);
+        mPostRequest = new PostRequest(requestQueue);
     }
 //    private List<Bitmap> getDummyImages(){
 //        images = new ArrayList<>();
