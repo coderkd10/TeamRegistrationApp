@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
@@ -25,6 +24,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.ashish.cop290assign0.utils.InputValidator;
+import com.ashish.cop290assign0.utils.LdapFetcher;
 import com.github.siyamed.shapeimageview.CircularImageView;
 
 import org.json.JSONObject;
@@ -115,8 +116,8 @@ public final class PagerFragment extends Fragment {
                     String entryCode = ((EditText) layout.findViewById(R.id.entryCode)).getText().toString().trim();
                     String name = ((EditText) layout.findViewById(R.id.name)).getText().toString().trim();
                     Log.d("save_data",String.format("entry number = %s, name = %s",entryCode,name));
-                    boolean isEntryCodeValid = InputValidator.validateEntryCode(entryCode);
-                    boolean isNameValid = InputValidator.validateName(name);
+                    boolean isEntryCodeValid = InputValidator.isValidEntryCodeStructure(entryCode);
+                    boolean isNameValid = InputValidator.isValidName(name);
                     if (!entryCode.isEmpty() && !name.isEmpty()) {
                         //boolean isInvalid = false;
                         //isInvalid = false; //cannot do this
@@ -214,9 +215,9 @@ public final class PagerFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                if (InputValidator.validateEntryCode(editText.getText().toString()) && count < 11)
+                if (InputValidator.isValidEntryCodeStructure(editText.getText().toString()) && count < 11)
                     fetchAndEditStudentDetails(editText.getText().toString(), editText, nameBox, okBttn, personImgView);
-                if (editText.getText().toString().length() == 11 && !InputValidator.validateEntryCode(editText.getText().toString())){
+                if (editText.getText().toString().length() == 11 && !InputValidator.isValidEntryCodeStructure(editText.getText().toString())){
                     editText.setError("Invalid entry no!");
                 }
             }
@@ -264,7 +265,7 @@ public final class PagerFragment extends Fragment {
                     @Override
                     public void handle(VolleyError error) {
                         if (!entryCode.isEmpty()) {
-                            if (InputValidator.validateEntryCode(entryCode)) {
+                            if (InputValidator.isValidEntryCodeStructure(entryCode)) {
                                 isInvalid = false;
                             }
                         }

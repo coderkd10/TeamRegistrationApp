@@ -1,9 +1,6 @@
-package com.ashish.cop290assign0;
+package com.ashish.cop290assign0.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -12,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ashish.cop290assign0.Config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +35,8 @@ public class LdapFetcher {
     }
 
     private RequestQueue ldapRequestQueue;
-    LdapFetcher(Context context){
+
+    public LdapFetcher(Context context){
         ldapRequestQueue = Volley.newRequestQueue(context);
     }
 

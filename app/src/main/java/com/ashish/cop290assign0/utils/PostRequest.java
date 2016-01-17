@@ -1,4 +1,4 @@
-package com.ashish.cop290assign0;
+package com.ashish.cop290assign0.utils;
 
 import android.content.Context;
 import android.util.Log;
