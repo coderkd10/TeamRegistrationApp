@@ -9,6 +9,7 @@ import com.ashish.cop290assign0.utils.InputValidator;
 public class Member {
     private String entryNumber;
     private String name;
+    private String image;
 
     public Member() {};
     public Member(String entryNumber, String name) throws IllegalArgumentException {
