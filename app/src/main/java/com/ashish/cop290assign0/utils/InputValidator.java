@@ -6,6 +6,7 @@ import com.ashish.cop290assign0.Config;
  * @author Arnav Kansal
  */
 public class InputValidator {
+
     /**
      * Checks if the entered name is valid.
      * A name is considered to be valid if it is a string only of letters (from any language), spaces, . , ', - only.
