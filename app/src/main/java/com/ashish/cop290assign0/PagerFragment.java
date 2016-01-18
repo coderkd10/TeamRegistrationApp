@@ -34,6 +34,7 @@ public final class PagerFragment extends Fragment {
     private String name,entryCode,image,teamName;
     private  int visibility;
     LinearLayout l;
+    private boolean isInvalid;
     public static PagerFragment newInstance(int p,int v, String n,String e,String i,String t) {
         PagerFragment fragment = new PagerFragment();
 //        try {
@@ -81,6 +82,7 @@ public final class PagerFragment extends Fragment {
             ((EditText)layout.findViewById(R.id.name)).setText(name);
             ((EditText)layout.findViewById(R.id.entryCode)).setText(entryCode);
         }
+        isInvalid = false;
     }
 
     @Override
@@ -104,8 +106,7 @@ public final class PagerFragment extends Fragment {
         setOnClickListeners(layout);
         return layout;
     }
-    private boolean isInvalid = false;
-    
+
     private void setOnClickListeners(final LinearLayout layout){
 
         layout.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
@@ -127,7 +128,9 @@ public final class PagerFragment extends Fragment {
                         if (!isNameValid) {
                             ((EditText) layout.findViewById(R.id.name)).setError("Invalid name!");
                             isInvalid = true;
-                        }
+                        }else
+                            ((EditText) layout.findViewById(R.id.name)).setError(null);
+                        Log.d("--->>>",isInvalid+"");
                         if (isInvalid) return;
                         Log.d("save_data",String.format("entry number = %s, name = %s",entryCode,name));
                         MainActivity.names[position] = name;
@@ -164,7 +167,7 @@ public final class PagerFragment extends Fragment {
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                     } else{
-                        ((EditText) layout.findViewById(R.id.team_name)).setError("Team name cannot be empty");
+                        ((EditText) layout.findViewById(R.id.team_name)).setError("Team name can't be empty");
                     }
                 }
             }
@@ -182,14 +185,12 @@ public final class PagerFragment extends Fragment {
                 layout.findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
             }
         });
-        Log.d("***", Boolean.toString(layout.findViewById(R.id.submit_bttn) == null));
-        View submitBttn = layout.findViewById(R.id.submit_bttn);
-        if(submitBttn != null){
-            submitBttn.setOnClickListener(new View.OnClickListener(){
+        if(position != 0) {
+            layout.findViewById(R.id.submit_bttn).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
+                public void onClick(View v) {
                     MainActivity.onSubmit(v);
-                }
+                    }
             });
         }
     }
@@ -217,8 +218,13 @@ public final class PagerFragment extends Fragment {
                                       int before, int count) {
                 if (InputValidator.isValidEntryCodeStructure(editText.getText().toString()) && count < 11)
                     fetchAndEditStudentDetails(editText.getText().toString(), editText, nameBox, okBttn, personImgView);
-                if (editText.getText().toString().length() == 11 && !InputValidator.isValidEntryCodeStructure(editText.getText().toString())) {
-                    editText.setError("Invalid entry no!");
+                if (editText.getText().toString().length() == 11){
+                    if(!InputValidator.isValidEntryCodeStructure(editText.getText().toString())) {
+                        isInvalid = true;
+                        editText.setError("Invalid entry no!");
+                    }
+                    else
+                        isInvalid = false;
                 }
             }
         });
