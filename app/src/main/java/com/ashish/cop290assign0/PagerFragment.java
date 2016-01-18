@@ -115,7 +115,6 @@ public final class PagerFragment extends Fragment {
                     Log.d("save","Btn Pressed!");
                     String entryCode = ((EditText) layout.findViewById(R.id.entryCode)).getText().toString().trim();
                     String name = ((EditText) layout.findViewById(R.id.name)).getText().toString().trim();
-                    Log.d("save_data",String.format("entry number = %s, name = %s",entryCode,name));
                     boolean isEntryCodeValid = InputValidator.isValidEntryCodeStructure(entryCode);
                     boolean isNameValid = InputValidator.isValidName(name);
                     if (!entryCode.isEmpty() && !name.isEmpty()) {
@@ -130,6 +129,7 @@ public final class PagerFragment extends Fragment {
                             isInvalid = true;
                         }
                         if (isInvalid) return;
+                        Log.d("save_data",String.format("entry number = %s, name = %s",entryCode,name));
                         MainActivity.names[position] = name;
                         MainActivity.entryCodes[position] = entryCode;
                         ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
@@ -217,7 +217,7 @@ public final class PagerFragment extends Fragment {
                                       int before, int count) {
                 if (InputValidator.isValidEntryCodeStructure(editText.getText().toString()) && count < 11)
                     fetchAndEditStudentDetails(editText.getText().toString(), editText, nameBox, okBttn, personImgView);
-                if (editText.getText().toString().length() == 11 && !InputValidator.isValidEntryCodeStructure(editText.getText().toString())){
+                if (editText.getText().toString().length() == 11 && !InputValidator.isValidEntryCodeStructure(editText.getText().toString())) {
                     editText.setError("Invalid entry no!");
                 }
             }
