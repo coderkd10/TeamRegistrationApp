@@ -118,40 +118,10 @@ public class MainActivity extends ActionBarActivity {
         outState.putStringArray("entryCodes", entryCodes);
         outState.putStringArray("images", images);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
    // Extracts and returns all the required data from the editTexts in an ArrayList
     private static Map<String, String> getData(){
-        //Getting data from the editTexts
-//        String teamName = teamNameTextBox.getText().toString();
-//        String entry1 = entry1TextBox.getText().toString();
-//        String name1 = name1TextBox.getText().toString();
-//        String entry2 = entry2TextBox.getText().toString();
-//        String name2 = name2TextBox.getText().toString();
-//        String entry3 = entry3TextBox.getText().toString();
-//        String name3 = name3TextBox.getText().toString();
-
-        //Adding data to ArrayList in NameValuePair form for sending to the server.
         Map<String, String> data = new HashMap<String, String>();
         data.put("teamname", teamName);
         data.put("entry1", entryCodes[1]);
