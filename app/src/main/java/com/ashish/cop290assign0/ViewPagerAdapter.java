@@ -7,23 +7,19 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ashish.cop290assign0.data.FormData;
+
 public class ViewPagerAdapter extends PagerAdapter {
     FragmentManager fragmentManager;
     Fragment[] fragments;
-    String[] names,entryCodes,images;
-    String teamName;
-    private int[] visibility;
+    FormData formData;
     FragmentTransaction mTransaction;
     public ViewPagerAdapter(FragmentManager fm){
         fragmentManager = fm;
     }
-    public void setVals(int size,String t,String[] n,String[] e,String[] i,int[] v){
+    public void setVals(int size,FormData formData){
         fragments = new Fragment[size];
-        teamName = t;
-        names = n;
-        entryCodes = e;
-        images = i;
-        visibility = v;
+        this.formData = formData;
     }
 
     @Override
@@ -58,7 +54,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     public Fragment getItem(int position){
         int pos = position%getCount();
         if(fragments[pos] == null){
-            fragments[pos] = PagerFragment.newInstance(pos,visibility[pos],names[pos],entryCodes[pos],images[pos],teamName);
+            fragments[pos] = PagerFragment.newInstance(pos,formData.getIsFilled(pos),formData.getTeamName(),formData.getMember(pos));
         }
         return fragments[pos];
     }

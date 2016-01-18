@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.ashish.cop290assign0.data.FormData;
 import com.ashish.cop290assign0.utils.LdapFetcher;
 import com.ashish.cop290assign0.utils.PostRequest;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public static String teamName;
     public static LdapFetcher mLdapFetcher;
     public static PostRequest mPostRequest;
-    public static int[] visibility;
+    public static boolean[] isFilled;
     static ViewPager pager;
     ViewPagerAdapter adapter;
 
@@ -49,13 +50,14 @@ public class MainActivity extends AppCompatActivity {
         init();
         if(savedInstanceState != null) {
             pager.setCurrentItem(savedInstanceState.getInt("currentPage"));
-            visibility = savedInstanceState.getIntArray("visibility");
+            isFilled = savedInstanceState.getBooleanArray("isFilled");
             teamName = savedInstanceState.getString("teamName");
             names = savedInstanceState.getStringArray("names");
             entryCodes = savedInstanceState.getStringArray("entryCodes");
             images = savedInstanceState.getStringArray("images");
         }
-        adapter.setVals(4, teamName, names, entryCodes, images, visibility);
+        //adapter.setVals(4, teamName, names, entryCodes, images, visibility);
+        adapter.setVals(4, FormData.initialize(teamName,names,entryCodes,images,isFilled));
         pager.setAdapter(adapter);
         CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         circleIndicator.setViewPager(pager);
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         names = new String[]{"","","",""};
         entryCodes = new String[]{"","","",""};
         images = new String[]{"","","",""};
-        visibility = new int[]{0,0,0,0};
+        isFilled = new boolean[]{false,false,false,false};
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentPage", pager.getCurrentItem());
-        outState.putIntArray("visibility", visibility);
+        outState.putBooleanArray("isFilled", isFilled);
         outState.putString("teamName", teamName);
         outState.putStringArray("names", names);
         outState.putStringArray("entryCodes", entryCodes);

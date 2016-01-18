@@ -24,6 +24,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.ashish.cop290assign0.data.Member;
 import com.ashish.cop290assign0.utils.InputValidator;
 import com.ashish.cop290assign0.utils.LdapFetcher;
 import com.github.siyamed.shapeimageview.CircularImageView;
@@ -31,42 +32,70 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import org.json.JSONObject;
 
 public final class PagerFragment extends Fragment {
-    private String name,entryCode,image,teamName;
-    private  int visibility;
-    LinearLayout l;
-    private boolean isInvalid;
-    public static PagerFragment newInstance(int p,int v, String n,String e,String i,String t) {
+    private Member member;
+    private String teamName;
+    private boolean isFilled;
+    private int position = 0;
+
+    public static PagerFragment newInstance(int position,boolean isFilled,String teamName, Member member) {
         PagerFragment fragment = new PagerFragment();
-//        try {
-//            byte[] b = Base64.decode(img, Base64.DEFAULT);
-//            fragment.image = BitmapFactory.decodeByteArray(b, 0, b.length);
-//        }catch(Exception e){
-//            fragment.image = null;
-//        }
-        fragment.position = p;
-        fragment.visibility = v;
-        fragment.name = n;
-        fragment.entryCode = e;
-        fragment.image = i;
-        fragment.teamName = t;
+        fragment.position = position;
+        fragment.isFilled = isFilled;
+        fragment.member = new Member(member);
+        fragment.teamName = teamName;
         return fragment;
     }
-    private int position = 0;
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isFilled",isFilled);
+        outState.putInt("position",position);
+        if(position==0) {
+            String t = ((EditText) getView().findViewById(R.id.team_name)).getText().toString();
+            outState.putString("teamName", t);
+        }
+        else {
+            String n = ((EditText) getView().findViewById(R.id.name)).getText().toString();
+            String e = ((EditText) getView().findViewById(R.id.entryCode)).getText().toString();
+            outState.putSerializable("member",new Member(n,e));
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
+            isFilled = savedInstanceState.getBoolean("isFilled");
+            position = savedInstanceState.getInt("position");
             if(savedInstanceState.containsKey("teamName"))
-                teamName = savedInstanceState.getString("teamName");
-            name = savedInstanceState.getString("name");
-            entryCode = savedInstanceState.getString("entryCode");
+                this.teamName = savedInstanceState.getString("teamName");
+            else {
+                this.member = (Member) savedInstanceState.getSerializable("member");
+            }
         }
+
     }
 
-    private void init(LinearLayout layout){
-        if(visibility == 1){
+    @Override
+    public View onCreateView(final LayoutInflater inflater,final ViewGroup container, Bundle savedInstanceState) {
+        View layout;
+        if(position == 0) {
+            layout = inflater.inflate(R.layout.team_input_layout, null);
+        }
+        else {
+            layout = inflater.inflate(R.layout.student_info_layout, null);
+            addOnTextChangeListener(layout);
+            ((TextView) layout.findViewById(R.id.member_no)).setText("#" + position);
+        }
+        init(layout);
+        setOnClickListeners(layout);
+        return layout;
+    }
+
+    private void init(View layout){
+        if(isFilled){
             layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
             layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
         }
@@ -75,39 +104,19 @@ public final class PagerFragment extends Fragment {
             ((TextView)layout.findViewById(R.id.display_team_name)).setMovementMethod(new ScrollingMovementMethod());
             ((EditText)layout.findViewById(R.id.team_name)).setText(teamName);
         }else{
-            ((TextView)layout.findViewById(R.id.display_name)).setText(name);
-            ((TextView)layout.findViewById(R.id.display_entry_code)).setText(entryCode);
-            if(image!=null && !image.isEmpty())
-                ((ImageView)layout.findViewById(R.id.img)).setImageBitmap(decodeBase64(image));
-            ((EditText)layout.findViewById(R.id.name)).setText(name);
-            ((EditText)layout.findViewById(R.id.entryCode)).setText(entryCode);
+            ((TextView)layout.findViewById(R.id.display_name)).setText(member.getName());
+            ((TextView)layout.findViewById(R.id.display_entry_code)).setText(member.getEntryNumber());
+            if(member.getImage()!=null && !member.getImage().isEmpty())
+                ((ImageView)layout.findViewById(R.id.img)).setImageBitmap(decodeBase64(member.getImage()));
+            ((EditText)layout.findViewById(R.id.name)).setText(member.getName());
+            ((EditText)layout.findViewById(R.id.entryCode)).setText(member.getEntryNumber());
         }
-        isInvalid = false;
+        isFilled = false;
     }
 
-    @Override
-    public View onCreateView(final LayoutInflater inflater,final ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout layout = new LinearLayout(getActivity());
-        layout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        View child;
-        if(position == 0) {
-            child = inflater.inflate(R.layout.team_input_layout, null);
-            layout.addView(child);
 
-        }
-        else {
-            child = inflater.inflate(R.layout.student_info_layout, null);
-            layout.addView(child);
-            addOnTextChangeListener(layout);
-            ((TextView) layout.findViewById(R.id.member_no)).setText("#" + position);
-        }
-        l = layout;
-        init(layout);
-        setOnClickListeners(layout);
-        return layout;
-    }
 
-    private void setOnClickListeners(final LinearLayout layout){
+    private void setOnClickListeners(final View layout){
 
         layout.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,25 +128,23 @@ public final class PagerFragment extends Fragment {
                     boolean isEntryCodeValid = InputValidator.isValidEntryCodeStructure(entryCode);
                     boolean isNameValid = InputValidator.isValidName(name);
                     if (!entryCode.isEmpty() && !name.isEmpty()) {
-                        //boolean isInvalid = false;
-                        //isInvalid = false; //cannot do this
                         if (!isEntryCodeValid) {
                             ((EditText) layout.findViewById(R.id.entryCode)).setError("Invalid entry no!");
-                            isInvalid = true;
+                            isFilled = false;
                         }
                         if (!isNameValid) {
                             ((EditText) layout.findViewById(R.id.name)).setError("Invalid name!");
-                            isInvalid = true;
-                        }else
+                            isFilled = false;
+                        } else
                             ((EditText) layout.findViewById(R.id.name)).setError(null);
-                        Log.d("--->>>",isInvalid+"");
-                        if (isInvalid) return;
+                        Log.d("--->>>", isFilled +"");
+                        if (!isFilled) return;
                         Log.d("save_data",String.format("entry number = %s, name = %s",entryCode,name));
                         MainActivity.names[position] = name;
                         MainActivity.entryCodes[position] = entryCode;
                         ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
                         ((TextView) layout.findViewById(R.id.display_name)).setText(name);
-                        MainActivity.visibility[position] = 1;
+                        MainActivity.isFilled[position] = true;
                         hideKeyboard(v); //hidden keyboard
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
@@ -162,7 +169,7 @@ public final class PagerFragment extends Fragment {
                     if(!teamName.isEmpty()){
                         MainActivity.teamName = teamName;
                         ((TextView) layout.findViewById(R.id.display_team_name)).setText(teamName);
-                        MainActivity.visibility[position] = 1;
+                        MainActivity.isFilled[position] = true;
                         hideKeyboard(v); //hidden keyboard
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
@@ -175,7 +182,7 @@ public final class PagerFragment extends Fragment {
         layout.findViewById(R.id.edit_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.visibility[position] = 0;
+                MainActivity.isFilled[position] = false;
 
                 if (position == 2 || position == 3) {
                     layout.findViewById(R.id.submit_bttn).setVisibility(View.GONE);
@@ -190,12 +197,12 @@ public final class PagerFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     MainActivity.onSubmit(v);
-                    }
+                }
             });
         }
     }
 
-    private void addOnTextChangeListener(final LinearLayout layout){
+    private void addOnTextChangeListener(final View layout){
         final EditText editText = ((EditText)layout.findViewById(R.id.entryCode)); //also entry number text box
         //EditText entryNumBox = (EditText) layout.findViewById(R.id.entryCode);
         final EditText nameBox = (EditText) layout.findViewById(R.id.name);
@@ -218,13 +225,12 @@ public final class PagerFragment extends Fragment {
                                       int before, int count) {
                 if (InputValidator.isValidEntryCodeStructure(editText.getText().toString()) && count < 11)
                     fetchAndEditStudentDetails(editText.getText().toString(), editText, nameBox, okBttn, personImgView);
-                if (editText.getText().toString().length() == 11){
-                    if(!InputValidator.isValidEntryCodeStructure(editText.getText().toString())) {
-                        isInvalid = true;
+                if (editText.getText().toString().length() == 11) {
+                    if (!InputValidator.isValidEntryCodeStructure(editText.getText().toString())) {
+                        isFilled = false;
                         editText.setError("Invalid entry no!");
-                    }
-                    else
-                        isInvalid = false;
+                    } else
+                        isFilled = true;
                 }
             }
         });
@@ -243,7 +249,7 @@ public final class PagerFragment extends Fragment {
                     public void onGetJson(JSONObject studentDataJson) {
                         try {
                             if (studentDataJson.getBoolean("isValid")) {
-                                isInvalid = false;
+                                isFilled = true;
                                 nameBox.setError(null); //remove if there is any error marked in name box
                                 entryNumBox.setText(studentDataJson.getString("entryNumber"));
                                 nameBox.setText(studentDataJson.getString("name"));
@@ -259,7 +265,7 @@ public final class PagerFragment extends Fragment {
                                 }
                                 okBttn.performClick();
                             } else {
-                                isInvalid = true;
+                                isFilled = false;
                                 entryNumBox.setError("Invalid entry no!");
                             }
                             ;
@@ -272,7 +278,7 @@ public final class PagerFragment extends Fragment {
                     public void handle(VolleyError error) {
                         if (!entryCode.isEmpty()) {
                             if (InputValidator.isValidEntryCodeStructure(entryCode)) {
-                                isInvalid = false;
+                                isFilled = true;
                             }
                         }
                     }
@@ -283,20 +289,7 @@ public final class PagerFragment extends Fragment {
         byte[] b = Base64.decode(i, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(b, 0, b.length);
     }
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if(position==0) {
-            String t = ((EditText) l.findViewById(R.id.team_name)).getText().toString();
-            outState.putString("teamName", t);
-        }
-        else {
-            String n = ((EditText) l.findViewById(R.id.name)).getText().toString();
-            String e = ((EditText) l.findViewById(R.id.entryCode)).getText().toString();
-            outState.putString("name", n);
-            outState.putString("entryCode", e);
-        }
-    }
+
     private int dp2Pix(float i){
         Resources r = getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, i, r.getDisplayMetrics());
