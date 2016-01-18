@@ -11,6 +11,7 @@ slack channel [https://cop290ninjacoders.slack.com/messages](https://cop290ninja
 * Add credits page  
 
 ###Immediate
+* Reset after sucessful submission.
 * Add icon of apk
 * Design document
 * Comment code and create javadocs

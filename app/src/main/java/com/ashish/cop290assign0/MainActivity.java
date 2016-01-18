@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public static LdapFetcher mLdapFetcher;
     public static PostRequest mPostRequest;
     public static int[] visibility;
-    ViewPager pager;
+    static ViewPager pager;
     ViewPagerAdapter adapter;
 
     @Override
@@ -86,10 +87,11 @@ public class MainActivity extends AppCompatActivity {
 //    }
     //Initializing UI components
     private void init(){
-        names = new String[4];
-        entryCodes = new String[4];
-        images = new String[4];
-        visibility = new int[4];
+        teamName = "";
+        names = new String[]{"","","",""};
+        entryCodes = new String[]{"","","",""};
+        images = new String[]{"","","",""};
+        visibility = new int[]{0,0,0,0};
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -120,40 +122,10 @@ public class MainActivity extends AppCompatActivity {
         outState.putStringArray("entryCodes", entryCodes);
         outState.putStringArray("images", images);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
    // Extracts and returns all the required data from the editTexts in an ArrayList
     private static Map<String, String> getData(){
-        //Getting data from the editTexts
-//        String teamName = teamNameTextBox.getText().toString();
-//        String entry1 = entry1TextBox.getText().toString();
-//        String name1 = name1TextBox.getText().toString();
-//        String entry2 = entry2TextBox.getText().toString();
-//        String name2 = name2TextBox.getText().toString();
-//        String entry3 = entry3TextBox.getText().toString();
-//        String name3 = name3TextBox.getText().toString();
-
-        //Adding data to ArrayList in NameValuePair form for sending to the server.
         Map<String, String> data = new HashMap<String, String>();
         data.put("teamname", teamName);
         data.put("entry1", entryCodes[1]);
@@ -163,46 +135,51 @@ public class MainActivity extends AppCompatActivity {
         data.put("entry3", entryCodes[3]);
         data.put("name3", names[3]);
         //Checking for input errors
-//        if(!isValidInput(teamName, entryCodes[1], names[1], entryCodes[2], names[2], entryCodes[3], names[3]))
-//            data = null;
+        if(!isValidInput(teamName, entryCodes[1], names[1], entryCodes[2], names[2], entryCodes[3], names[3]))
+            data = null;
         return data;
     }
 
     //Checks for valid input and shows error accordingly.
-    private boolean isValidInput(String teamName, String entry1,
+    private static boolean isValidInput(String teamName, String entry1,
                                String name1,String entry2,
                                String name2,String entry3,String name3){
-        boolean result = true;
-        //// TODO: 16/01/16  
-//        if(teamName.isEmpty()){
-//            //teamNameTextBox.setError("Team name can't be empty!");
-//            result = false;
-//        }
-//        if(entry1.isEmpty()) {
-//            entry1TextBox.setError("Entry1 can't be empty!");
-//            result = false;
-//        }
-//        if(name1.isEmpty()) {
-//            name1TextBox.setError("Name1 can't be empty!");
-//            result = false;
-//        }
-//        if(entry2.isEmpty()){
-//            entry2TextBox.setError("Entry2 can't be empty!");
-//            result = false;
-//        }
-//        if(name2.isEmpty()){
-//            name2TextBox.setError("Name2 can't be empty!");
-//            result = false;
-//        }
-//        if(entry3.isEmpty() && !name3.isEmpty()){
-//            entry3TextBox.setError("Name3 entered, please enter entry for this name!");
-//            result = false;
-//        }
-//        if(name3.isEmpty() && !entry3.isEmpty()){
-//            name3TextBox.setError("Entry3 entered, please enter name for this entry!");
-//            result = false;
-//        }
-        return result;
+        if(teamName.isEmpty()){
+            pager.setCurrentItem(0, true);
+            ((EditText)pager.getChildAt(0).findViewById(R.id.team_name)).setError("Team name can't be empty!");
+            return false;
+        }
+        if(entry1.isEmpty()) {
+            pager.setCurrentItem(1, true);
+            ((EditText)pager.getChildAt(1).findViewById(R.id.entryCode)).setError("Entry1 can't be empty!");
+            return false;
+        }
+        if(name1.isEmpty()) {
+            pager.setCurrentItem(1, true);
+            ((EditText)pager.getChildAt(1).findViewById(R.id.name)).setError("Name1 can't be empty!");
+            return false;
+        }
+        if(entry2.isEmpty()){
+            pager.setCurrentItem(2, true);
+            ((EditText)pager.getChildAt(2).findViewById(R.id.entryCode)).setError("Entry2 can't be empty!");
+            return false;
+        }
+        if(name2.isEmpty()){
+            pager.setCurrentItem(2, true);
+            ((EditText)pager.getChildAt(2).findViewById(R.id.name)).setError("Name2 can't be empty!");
+            return false;
+        }
+        if(entry3.isEmpty() && !name3.isEmpty()){
+            pager.setCurrentItem(3, true);
+            ((EditText)pager.getChildAt(3).findViewById(R.id.entryCode)).setError("Name3 entered, please enter entry for this name!");
+            return false;
+        }
+        if(name3.isEmpty() && !entry3.isEmpty()){
+            pager.setCurrentItem(3,true);
+            ((EditText)pager.getChildAt(3).findViewById(R.id.name)).setError("Entry3 entered, please enter name for this entry!");
+            return false;
+        }
+        return true;
     }
     //Called on submit button click
     public static void onSubmit(final View v){
