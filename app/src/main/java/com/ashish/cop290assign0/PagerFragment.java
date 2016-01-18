@@ -255,7 +255,7 @@ public final class PagerFragment extends Fragment {
                                 } else {
                                     MainActivity.images[position] = "";
                                     personImgView.setImageResource(R.mipmap.ic_launcher);
-                                    personImgView.setBorderColor(Color.parseColor("#e7e7e7"));
+                                    personImgView.setBorderColor(Color.parseColor("#ffffff"));
                                 }
                                 okBttn.performClick();
                             } else {
