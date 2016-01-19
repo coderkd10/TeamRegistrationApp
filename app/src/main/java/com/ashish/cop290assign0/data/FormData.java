@@ -1,10 +1,12 @@
 package com.ashish.cop290assign0.data;
 
+import java.io.Serializable;
+
 /**
  * Represents filled and saved form data.
  * @author Abhishek Kedia
  */
-public class FormData {
+public class FormData implements Serializable{
     private Member[] members;
     private String teamName;
     private boolean[] isFilled;
@@ -28,6 +30,18 @@ public class FormData {
         return formData;
     }
 
+    public static FormData initialize() {
+        FormData formData = new FormData();
+        formData.teamName = new String();
+        for(int index = 0; index < formData.members.length; index++) {
+            formData.members[index] = Member.intialize();
+        }
+        for(int index = 0; index < formData.isFilled.length; index++) {
+            formData.isFilled[index] = false;
+        }
+        return  formData;
+    }
+
     public Member getMember(int index) {
         if(index <= 3 && index >= 1) {
             return members[index - 1]; //index-1 is a ugly hack
@@ -44,5 +58,11 @@ public class FormData {
     }
     public boolean getIsFilled(int index) {
         return isFilled[index];
+    }
+    public void setIsFilled(int index, boolean isFilled) {
+        this.isFilled[index] = isFilled;
+    }
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }

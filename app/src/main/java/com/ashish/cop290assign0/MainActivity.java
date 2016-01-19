@@ -35,11 +35,12 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
-    public static String[] names,entryCodes,images;
-    public static String teamName;
+    //public static String[] names,entryCodes,images;
+    //public static String teamName;
     public static LdapFetcher mLdapFetcher;
     public static PostRequest mPostRequest;
-    public static boolean[] isFilled;
+    //public static boolean[] isFilled;
+    public static FormData mFormData;
     static ViewPager pager;
     ViewPagerAdapter adapter;
 
@@ -50,14 +51,16 @@ public class MainActivity extends AppCompatActivity {
         init();
         if(savedInstanceState != null) {
             pager.setCurrentItem(savedInstanceState.getInt("currentPage"));
-            isFilled = savedInstanceState.getBooleanArray("isFilled");
-            teamName = savedInstanceState.getString("teamName");
-            names = savedInstanceState.getStringArray("names");
-            entryCodes = savedInstanceState.getStringArray("entryCodes");
-            images = savedInstanceState.getStringArray("images");
+//            isFilled = savedInstanceState.getBooleanArray("isFilled");
+//            teamName = savedInstanceState.getString("teamName");
+//            names = savedInstanceState.getStringArray("names");
+//            entryCodes = savedInstanceState.getStringArray("entryCodes");
+//            images = savedInstanceState.getStringArray("images");
+            mFormData = (FormData) savedInstanceState.getSerializable("formData");
         }
         //adapter.setVals(4, teamName, names, entryCodes, images, visibility);
-        adapter.setVals(4, FormData.initialize(teamName,names,entryCodes,images,isFilled));
+        //adapter.setVals(4, FormData.initialize(teamName,names,entryCodes,images,isFilled));
+        adapter.setVals(4, this.mFormData);
         pager.setAdapter(adapter);
         CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         circleIndicator.setViewPager(pager);
@@ -65,6 +68,18 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         mLdapFetcher = new LdapFetcher(requestQueue);
         mPostRequest = new PostRequest(requestQueue);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("currentPage", pager.getCurrentItem());
+//        outState.putBooleanArray("isFilled", isFilled);
+//        outState.putString("teamName", teamName);
+//        outState.putStringArray("names", names);
+//        outState.putStringArray("entryCodes", entryCodes);
+//        outState.putStringArray("images", images);
+        outState.putSerializable("formData",mFormData);
     }
 //    private List<Bitmap> getDummyImages(){
 //        images = new ArrayList<>();
@@ -89,11 +104,12 @@ public class MainActivity extends AppCompatActivity {
 //    }
     //Initializing UI components
     private void init(){
-        teamName = "";
-        names = new String[]{"","","",""};
-        entryCodes = new String[]{"","","",""};
-        images = new String[]{"","","",""};
-        isFilled = new boolean[]{false,false,false,false};
+//        teamName = "";
+//        names = new String[]{"","","",""};
+//        entryCodes = new String[]{"","","",""};
+//        images = new String[]{"","","",""};
+//        isFilled = new boolean[]{false,false,false,false};
+        this.mFormData = FormData.initialize();
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -114,32 +130,30 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("currentPage", pager.getCurrentItem());
-        outState.putBooleanArray("isFilled", isFilled);
-        outState.putString("teamName", teamName);
-        outState.putStringArray("names", names);
-        outState.putStringArray("entryCodes", entryCodes);
-        outState.putStringArray("images", images);
-    }
+
 
 
    // Extracts and returns all the required data from the editTexts in an ArrayList
     private static Map<String, String> getData(){
         Map<String, String> data = new HashMap<String, String>();
-        data.put("teamname", teamName);
-        data.put("entry1", entryCodes[1]);
-        data.put("name1", names[1]);
-        data.put("entry2", entryCodes[2]);
-        data.put("name2", names[2]);
-        data.put("entry3", entryCodes[3]);
-        data.put("name3", names[3]);
+        data.put("teamname", mFormData.getTeamName());
+        data.put("entry1", mFormData.getMember(1).getEntryNumber());
+        data.put("name1", mFormData.getMember(1).getName());
+        data.put("entry2", mFormData.getMember(2).getEntryNumber());
+        data.put("name2", mFormData.getMember(2).getName());
+        data.put("entry3", mFormData.getMember(3).getEntryNumber());
+        data.put("name3", mFormData.getMember(3).getName());
         //Checking for input errors
-        if(!isValidInput(teamName, entryCodes[1], names[1], entryCodes[2], names[2], entryCodes[3], names[3]))
+        if(!isValidInput(mFormData))
             data = null;
         return data;
+    }
+
+    private static boolean isValidInput(FormData formData) {
+        return isValidInput(formData.getTeamName(),
+                mFormData.getMember(1).getEntryNumber(),mFormData.getMember(1).getName(),
+                mFormData.getMember(2).getEntryNumber(),mFormData.getMember(2).getName(),
+                mFormData.getMember(3).getEntryNumber(),mFormData.getMember(3).getName());
     }
 
     //Checks for valid input and shows error accordingly.

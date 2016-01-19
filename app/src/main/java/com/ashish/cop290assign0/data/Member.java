@@ -13,6 +13,14 @@ public class Member implements Serializable {
     private String name;
     private String image;
 
+    public static Member intialize() {
+        Member member = new Member();
+        member.entryNumber = new String();
+        member.name = new String();
+        member.image = new String();
+        return member;
+    }
+
     public Member() {};
     public Member(String entryNumber, String name) throws IllegalArgumentException {
         this();
@@ -20,7 +28,7 @@ public class Member implements Serializable {
         this.setName(name);
     }
     public Member(Member member){
-        this(member.getEntryNumber(),member.getName());
+        this(member.getEntryNumber(), member.getName());
     }
 
     public String getEntryNumber() {

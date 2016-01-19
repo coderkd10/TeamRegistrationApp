@@ -49,7 +49,7 @@ public final class PagerFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("isFilled",isFilled);
+        outState.putBoolean("isFilled", isFilled);
         outState.putInt("position",position);
         if(position==0) {
             String t = ((EditText) getView().findViewById(R.id.team_name)).getText().toString();
@@ -140,11 +140,17 @@ public final class PagerFragment extends Fragment {
                         Log.d("--->>>", isFilled +"");
                         if (!isFilled) return;
                         Log.d("save_data",String.format("entry number = %s, name = %s",entryCode,name));
-                        MainActivity.names[position] = name;
-                        MainActivity.entryCodes[position] = entryCode;
+//                        MainActivity.names[position] = name;
+//                        MainActivity.entryCodes[position] = entryCode;
+                        MainActivity.mFormData.getMember(position).setName(name);
+                        MainActivity.mFormData.getMember(position).setEntryNumber(entryCode);
+
                         ((TextView) layout.findViewById(R.id.display_entry_code)).setText(entryCode);
                         ((TextView) layout.findViewById(R.id.display_name)).setText(name);
-                        MainActivity.isFilled[position] = true;
+
+                        //MainActivity.isFilled[position] = true;
+                        MainActivity.mFormData.setIsFilled(position,true);
+
                         hideKeyboard(v); //hidden keyboard
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
@@ -167,9 +173,11 @@ public final class PagerFragment extends Fragment {
                 }else{
                     String teamName = ((EditText) layout.findViewById(R.id.team_name)).getText().toString().trim();
                     if(!teamName.isEmpty()){
-                        MainActivity.teamName = teamName;
+                        //MainActivity.teamName = teamName;
+                        MainActivity.mFormData.setTeamName(teamName);
                         ((TextView) layout.findViewById(R.id.display_team_name)).setText(teamName);
-                        MainActivity.isFilled[position] = true;
+                        //MainActivity.isFilled[position] = true;
+                        MainActivity.mFormData.setIsFilled(position,true);
                         hideKeyboard(v); //hidden keyboard
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
@@ -182,7 +190,8 @@ public final class PagerFragment extends Fragment {
         layout.findViewById(R.id.edit_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.isFilled[position] = false;
+                //MainActivity.isFilled[position] = false;
+                MainActivity.mFormData.setIsFilled(position,false);
 
                 if (position == 2 || position == 3) {
                     layout.findViewById(R.id.submit_bttn).setVisibility(View.GONE);
@@ -255,11 +264,13 @@ public final class PagerFragment extends Fragment {
                                 nameBox.setText(studentDataJson.getString("name"));
                                 if (studentDataJson.has("img")) {
                                     String img = studentDataJson.getString("img");
-                                    MainActivity.images[position] = img;
+                                    //MainActivity.images[position] = img;
+                                    MainActivity.mFormData.getMember(position).setImage(img);
                                     personImgView.setImageBitmap(decodeBase64(img));
                                     personImgView.setBorderColor(Color.parseColor("#ff3C16"));
                                 } else {
-                                    MainActivity.images[position] = "";
+                                    //MainActivity.images[position] = "";
+                                    MainActivity.mFormData.getMember(position).setImage("");
                                     personImgView.setImageResource(R.mipmap.ic_launcher);
                                     personImgView.setBorderColor(Color.parseColor("#ffffff"));
                                 }
