@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * Networking Utility to use Volley for data posting to server.
- * @author Arnav Kansal
+ * @author Arnav Kansal on 19/01/16
  */
 
 public class PostRequest {
@@ -40,12 +40,10 @@ public class PostRequest {
      *       “entry3” : “ &lt; value &gt; ”
      *       “name3” : “ &lt; value &gt; ”
      *   }
-     *
-     * source: <a href="http://stackoverflow.com/questions/15805555/java-regex-to-validate-full-name-allow-only-spaces-and-letters">Stack Overflow answer</a>
      * @param url   the url of the server
      * @param data  the data to be posted in above format
      * @param responseHandler   the section which takes over for successful response
-     * @param errorHandler    the section which takes over for invalid reponse
+     * @param errorHandler    the section which takes over for invalid response
      * @return              <code>void</code>
      */
     public void post(String url, final Map<String,String> data, final ServerResponseHandler responseHandler,final ErrorHandler errorHandler){
