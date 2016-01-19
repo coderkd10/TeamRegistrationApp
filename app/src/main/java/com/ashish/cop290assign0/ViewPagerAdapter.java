@@ -24,7 +24,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        assert(0 <= position && position < fragments.length);
+        assert(0 <= position && position < fragments.length);   //ask ashish why??
         mTransaction = fragmentManager.beginTransaction();
         mTransaction.detach(fragments[position]);
         mTransaction.remove(fragments[position]);

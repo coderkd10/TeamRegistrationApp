@@ -8,8 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,13 +31,9 @@ import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    //EditText teamNameTextBox,entry1TextBox,name1TextBox,entry2TextBox,name2TextBox,entry3TextBox,name3TextBox;
-    //public static String[] names,entryCodes,images;
-    //public static String teamName;
     public static LdapFetcher mLdapFetcher;
     public static PostRequest mPostRequest;
-    //public static boolean[] isFilled;
+
     public static FormData mFormData;
     static ViewPager pager;
     ViewPagerAdapter adapter;
@@ -51,16 +45,9 @@ public class MainActivity extends AppCompatActivity {
         init();
         if(savedInstanceState != null) {
             pager.setCurrentItem(savedInstanceState.getInt("currentPage"));
-//            isFilled = savedInstanceState.getBooleanArray("isFilled");
-//            teamName = savedInstanceState.getString("teamName");
-//            names = savedInstanceState.getStringArray("names");
-//            entryCodes = savedInstanceState.getStringArray("entryCodes");
-//            images = savedInstanceState.getStringArray("images");
             mFormData = (FormData) savedInstanceState.getSerializable("formData");
         }
-        //adapter.setVals(4, teamName, names, entryCodes, images, visibility);
-        //adapter.setVals(4, FormData.initialize(teamName,names,entryCodes,images,isFilled));
-        adapter.setVals(4, this.mFormData);
+        adapter.setVals(4, mFormData);
         pager.setAdapter(adapter);
         CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         circleIndicator.setViewPager(pager);
@@ -74,46 +61,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentPage", pager.getCurrentItem());
-//        outState.putBooleanArray("isFilled", isFilled);
-//        outState.putString("teamName", teamName);
-//        outState.putStringArray("names", names);
-//        outState.putStringArray("entryCodes", entryCodes);
-//        outState.putStringArray("images", images);
         outState.putSerializable("formData",mFormData);
     }
-//    private List<Bitmap> getDummyImages(){
-//        images = new ArrayList<>();
-//        images.add(null);
-//        images.add(null);
-//        images.add(null);
-//        return images;
-//    }
-//    private List<String> getDummyNames(){
-//        names = new ArrayList<>();
-//        names.add("");
-//        names.add("");
-//        names.add("");
-//        return names;
-//    }
-//    private List<String> getDummyEntryCodes(){
-//        entryCodes = new ArrayList<>();
-//        entryCodes.add("");
-//        entryCodes.add("");
-//        entryCodes.add("");
-//        return entryCodes;
-//    }
+
     //Initializing UI components
     private void init(){
-//        teamName = "";
-//        names = new String[]{"","","",""};
-//        entryCodes = new String[]{"","","",""};
-//        images = new String[]{"","","",""};
-//        isFilled = new boolean[]{false,false,false,false};
-        this.mFormData = FormData.initialize();
+        mFormData = FormData.initialize();
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
     }
+
     //Adds asterisk to editTexts using SpannableString(used for selective formatting of strings ex. color,on click url).
 //    private void addRedAsterisk(EditText[] e_array){
 //        for(EditText e : e_array) {
@@ -133,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-   // Extracts and returns all the required data from the editTexts in an ArrayList
+   // Extracts and returns all the required data from the editTexts in Map
     private static Map<String, String> getData(){
         Map<String, String> data = new HashMap<String, String>();
         data.put("teamname", mFormData.getTeamName());
@@ -255,60 +213,6 @@ public class MainActivity extends AppCompatActivity {
         return progressDialog;
     }
 
-    //Posting data to the server asynchronously
-//    class sendDataToServer extends AsyncTask<String, Void, String> {
-//		ArrayList<NameValuePair> data;
-//        ProgressDialog progressDialog;
-//		public sendDataToServer(ArrayList<NameValuePair> d,ProgressDialog p){
-//			data = d;
-//            progressDialog = p;
-//		}
-//        protected String doInBackground(String... urls) {
-//            PostRequest request = new PostRequest(urls[0], data);
-//            String result = request.post();
-//            return result;
-//        }
-//
-//        protected void onPostExecute(String res) {
-//            try {
-//                progressDialog.dismiss();
-//                //Checking post request result
-//                if(res.equalsIgnoreCase("internetNotAvailable")){
-//                    make_dialog("Uh-oh","Looks like you're not connected to the internet.Please check your internet connection and try again.","Ok");
-//                }
-//                else if(res.toLowerCase().contains("exception")){
-//                    make_dialog("Some error occured!","There was some error in posting the data,contact server administrator.","Ok");
-//                }
-//                else {
-//                    JSONObject response = new JSONObject(res);
-//                    //Checking post request response
-//                    if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
-//                        make_dialog("Data not posted!", "Some required fields are missing!","Ok");
-//                    else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
-//                        make_dialog("Data not posted!","One or more users with given details have already registered.","Ok");
-//                    else if(response.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
-//                        make_dialog("Data posted!", "Registration completed", "Ok");
-//                        //resetTextBoxes();
-//                    }
-//                    else
-//                        make_dialog("Umm...","Unexpected response from the server.\nResponse : "+res,"Ok");
-//                }
-//
-//            } catch (Exception e) {
-//                make_dialog("Unable to send the data!","Please check your internet connection and try again.","Ok");
-//            }
-//        }
-//    }
-//    //to clear editText contents
-//    private void resetTextBoxes(){
-//        teamNameTextBox.setText("");
-//        entry1TextBox.setText("");
-//        name1TextBox.setText("");
-//        entry2TextBox.setText("");
-//        name2TextBox.setText("");
-//        entry3TextBox.setText("");
-//        name3TextBox.setText("");
-//    }
     //creates and shows a custom dialog
     private static void make_dialog(View v,String title,String msg,String button_text){
         final Dialog dialog = new Dialog(v.getContext());
