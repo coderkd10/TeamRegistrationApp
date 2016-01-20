@@ -22,10 +22,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 /**
- * Created by kedia-abhishek on 15/1/16.
+ * Networking Utility to fetch data for auto-form completion/ data verification, uses Volley.
+ * @author Abhishek Kedia on 15/01/16
  */
-public class LdapFetcher {
 
+
+public class LdapFetcher {
+    /**
+     * Uses a GET request to fetch ldap data of student.
+     * @param
+     * @throws
+     * @return              
+     */
     public interface studentJsonDataHandler {
         void onGetJson(JSONObject studentDataJson);
     }

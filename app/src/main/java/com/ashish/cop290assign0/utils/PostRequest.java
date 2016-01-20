@@ -11,8 +11,10 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
- * Created by Ashish on 31/12/2015.
+ * Networking Utility to use Volley for data posting to server.
+ * @author Arnav Kansal on 19/01/16
  */
 
 public class PostRequest {
@@ -26,6 +28,24 @@ public class PostRequest {
     public interface ErrorHandler{
         void handle(VolleyError error);
     }
+    /**
+     * POSTS a StringRequest to the server.
+     * The format of the request is :
+     *  {
+     *       “teamname” : “ &lt; value &gt; ”
+     *       “entry1” : “ &lt; value &gt; ”
+     *       “name1” : “ &lt; value &gt; ”
+     *       “entry2” : “ &lt; value &gt; ”
+     *       “name2” : “ &lt; value &gt; ”
+     *       “entry3” : “ &lt; value &gt; ”
+     *       “name3” : “ &lt; value &gt; ”
+     *   }
+     * @param url   the url of the server
+     * @param data  the data to be posted in above format
+     * @param responseHandler   the section which takes over for successful response
+     * @param errorHandler    the section which takes over for invalid response
+     * @return              <code>void</code>
+     */
     public void post(String url, final Map<String,String> data, final ServerResponseHandler responseHandler,final ErrorHandler errorHandler){
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 url,
