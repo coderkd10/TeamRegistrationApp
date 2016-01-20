@@ -34,7 +34,7 @@ public class FormData implements Serializable{
         FormData formData = new FormData();
         formData.teamName = new String();
         for(int index = 0; index < formData.members.length; index++) {
-            formData.members[index] = Member.intialize();
+            formData.members[index] = Member.initialize();
         }
         for(int index = 0; index < formData.isFilled.length; index++) {
             formData.isFilled[index] = false;

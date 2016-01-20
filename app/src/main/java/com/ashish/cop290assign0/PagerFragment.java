@@ -8,8 +8,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -103,6 +106,7 @@ public final class PagerFragment extends Fragment {
             ((TextView)layout.findViewById(R.id.display_team_name)).setText(teamName);
             ((TextView)layout.findViewById(R.id.display_team_name)).setMovementMethod(new ScrollingMovementMethod());
             ((EditText)layout.findViewById(R.id.team_name)).setText(teamName);
+            addRedAsterisk((EditText) layout.findViewById(R.id.team_name));
         }else{
             ((TextView)layout.findViewById(R.id.display_name)).setText(member.getName());
             ((TextView)layout.findViewById(R.id.display_entry_code)).setText(member.getEntryNumber());
@@ -110,10 +114,27 @@ public final class PagerFragment extends Fragment {
                 ((ImageView)layout.findViewById(R.id.img)).setImageBitmap(decodeBase64(member.getImage()));
             ((EditText)layout.findViewById(R.id.name)).setText(member.getName());
             ((EditText)layout.findViewById(R.id.entryCode)).setText(member.getEntryNumber());
+            if (position != 3) {
+                addRedAsterisk((EditText) layout.findViewById(R.id.entryCode));
+                addRedAsterisk((EditText) layout.findViewById(R.id.name));
+            }
         }
         isFilled = false;
     }
 
+
+    //Adds asterisk to editTexts using SpannableString(used for selective formatting of strings ex. color,on click url).
+    private void addRedAsterisk(EditText e){
+        String text = e.getHint().toString();
+        String asterisk = " *";
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(text);
+        int start = builder.length();
+        builder.append(asterisk);
+        int end = builder.length();
+        builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        e.setHint(builder);
+    }
 
 
     private void setOnClickListeners(final View layout){
@@ -253,7 +274,8 @@ public final class PagerFragment extends Fragment {
          * 3. Change name according to name received
          * 4. Click done button
          */
-        MainActivity.mLdapFetcher.getAndHandleStudentDetails(entryCode, new LdapFetcher.studentJsonDataHandler() {
+        MainActivity.mLdapFetcher.getAndHandleStudentDetails(entryCode,
+                new LdapFetcher.studentJsonDataHandler() {
                     @Override
                     public void onGetJson(JSONObject studentDataJson) {
                         try {

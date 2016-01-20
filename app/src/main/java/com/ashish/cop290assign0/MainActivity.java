@@ -72,22 +72,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
     }
 
-    //Adds asterisk to editTexts using SpannableString(used for selective formatting of strings ex. color,on click url).
-//    private void addRedAsterisk(EditText[] e_array){
-//        for(EditText e : e_array) {
-//            String text = e.getHint().toString();
-//            String asterisk = " *";
-//            SpannableStringBuilder builder = new SpannableStringBuilder();
-//            builder.append(text);
-//            int start = builder.length();
-//            builder.append(asterisk);
-//            int end = builder.length();
-//            builder.setSpan(new ForegroundColorSpan(Color.RED), start, end,
-//                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            e.setHint(builder);
-//        }
-//    }
-
 
 
 

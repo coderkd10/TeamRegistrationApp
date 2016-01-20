@@ -13,7 +13,7 @@ public class Member implements Serializable {
     private String name;
     private String image;
 
-    public static Member intialize() {
+    public static Member initialize() {
         Member member = new Member();
         member.entryNumber = new String();
         member.name = new String();
