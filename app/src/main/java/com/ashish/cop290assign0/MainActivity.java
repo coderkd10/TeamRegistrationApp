@@ -71,26 +71,7 @@ public class MainActivity extends AppCompatActivity {
         pager.setOffscreenPageLimit(3);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
     }
-
-
-
-
-   // Extracts and returns all the required data from the editTexts in Map
-    private static Map<String, String> getData(){
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("teamname", mFormData.getTeamName());
-        data.put("entry1", mFormData.getMember(1).getEntryNumber());
-        data.put("name1", mFormData.getMember(1).getName());
-        data.put("entry2", mFormData.getMember(2).getEntryNumber());
-        data.put("name2", mFormData.getMember(2).getName());
-        data.put("entry3", mFormData.getMember(3).getEntryNumber());
-        data.put("name3", mFormData.getMember(3).getName());
-        //Checking for input errors
-        if(!isValidInput(mFormData))
-            data = null;
-        return data;
-    }
-
+    
     private static boolean isValidInput(FormData formData) {
         return isValidInput(formData.getTeamName(),
                 mFormData.getMember(1).getEntryNumber(),mFormData.getMember(1).getName(),
@@ -141,13 +122,15 @@ public class MainActivity extends AppCompatActivity {
     }
     //Called on submit button click
     public static void onSubmit(final View v){
-        Map<String,String> data = getData();
+        if(!isValidInput(mFormData))
+            return;
+        Map<String,String> data = mFormData.toMap();
         if(data!=null) {
             //Creating a progressDialog to shows while the data is being posted.
             final ProgressDialog pDialog = createProgressDialog(v,"Please wait", "Sending data to the server.....");
             Log.d("onSubmit", data.toString());
             //posting to the server
-            mPostRequest.post(Config.SERVER_URL, getData(),
+            mPostRequest.post(Config.SERVER_URL, data,
                     new PostRequest.ServerResponseHandler() {
                         @Override
                         public void handle(String response) {

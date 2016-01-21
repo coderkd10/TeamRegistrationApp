@@ -1,6 +1,8 @@
 package com.ashish.cop290assign0.data;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents filled and saved form data.
@@ -65,4 +67,30 @@ public class FormData implements Serializable{
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
+
+
+    public boolean isComplete() {
+        return isFilled[0] && isFilled[1] && isFilled[2];
+    }
+
+    public Map<String, String> toMap(){
+        if(!this.isComplete())
+            return null;
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("teamname", teamName);
+        data.put("entry1", members[0].getEntryNumber());
+        data.put("name1", members[0].getName());
+        data.put("entry2", members[1].getEntryNumber());
+        data.put("name2", members[1].getName());
+        if(isFilled[3]) {
+            data.put("entry3", members[2].getEntryNumber());
+            data.put("name3", members[2].getName());
+        } else {
+            data.put("entry3","");
+            data.put("name3","");
+        }
+
+        return data;
+    }
+
 }
