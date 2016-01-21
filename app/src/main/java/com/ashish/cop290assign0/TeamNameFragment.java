@@ -1,0 +1,129 @@
+package com.ashish.cop290assign0;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.android.volley.VolleyError;
+import com.ashish.cop290assign0.data.Member;
+import com.ashish.cop290assign0.utils.InputValidator;
+import com.ashish.cop290assign0.utils.LdapFetcher;
+import com.ashish.cop290assign0.utils.ScreenUtils;
+import com.github.siyamed.shapeimageview.CircularImageView;
+
+import org.json.JSONObject;
+
+public final class TeamNameFragment extends Fragment {
+    private String teamName;
+    boolean isFilled;
+
+    public static TeamNameFragment newInstance(String teamName) {
+        TeamNameFragment fragment = new TeamNameFragment();
+        fragment.isFilled = false;
+        fragment.teamName = teamName;
+        return fragment;
+    }
+
+    private String getFilledTeamName() {
+        return ScreenUtils.getStringFromEditText(getView(),R.id.team_name);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isFilled",isFilled);
+        outState.putString("teamName", teamName);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            this.isFilled = savedInstanceState.getBoolean("isFilled");
+            this.teamName = savedInstanceState.getString("teamName");
+        }
+    }
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater,final ViewGroup container, Bundle savedInstanceState) {
+        View view;
+        view = inflater.inflate(R.layout.team_input_layout, null);
+        init(view);
+        setOnClickListeners(view);
+        return view;
+    }
+
+    private void init(View view){
+        if(isFilled){
+            view.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.input_layout).setVisibility(View.GONE);
+        }
+        ((TextView)view.findViewById(R.id.display_team_name)).setText(teamName);
+        ((TextView)view.findViewById(R.id.display_team_name)).setMovementMethod(new ScrollingMovementMethod());
+        ((EditText)view.findViewById(R.id.team_name)).setText(teamName);
+        addRedAsterisk((EditText) view.findViewById(R.id.team_name));
+    }
+
+
+    //Adds asterisk to editTexts using SpannableString(used for selective formatting of strings ex. color,on click url).
+    private void addRedAsterisk(EditText e){
+        String text = e.getHint().toString();
+        String asterisk = " *";
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(text);
+        int start = builder.length();
+        builder.append(asterisk);
+        int end = builder.length();
+        builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        e.setHint(builder);
+    }
+
+
+    private void setOnClickListeners(final View view){
+
+        view.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String teamName = ((EditText) view.findViewById(R.id.team_name)).getText().toString().trim();
+                if(!teamName.isEmpty()){
+                    //MainActivity.teamName = teamName;
+                    MainActivity.mFormData.setTeamName(teamName);   //refactor
+                    ((TextView) view.findViewById(R.id.display_team_name)).setText(teamName);
+                    //MainActivity.isFilled[position] = true;
+                    //MainActivity.mFormData.setIsFilled(position,true);
+                    isFilled = true;
+                    ScreenUtils.hideKeyboard(v); //hidden keyboard
+                    view.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.input_layout).setVisibility(View.GONE);
+                } else{
+                    ((EditText) view.findViewById(R.id.team_name)).setError("Team name can't be empty");
+                }
+            }
+        });
+        view.findViewById(R.id.edit_data).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //MainActivity.isFilled[position] = false;
+                isFilled = false;
+                MainActivity.mFormData.setIsFilled(0, false);
+
+                view.findViewById(R.id.display_layout).setVisibility(View.GONE);
+                view.findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
+            }
+        });
+    }
+}

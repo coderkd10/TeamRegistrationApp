@@ -1,5 +1,7 @@
 package com.ashish.cop290assign0.data;
 
+import android.graphics.Bitmap;
+
 import com.ashish.cop290assign0.utils.InputValidator;
 
 import java.io.Serializable;
@@ -11,13 +13,13 @@ import java.io.Serializable;
 public class Member implements Serializable {
     private String entryNumber;
     private String name;
-    private String image;
+    private Bitmap image;
 
     public static Member initialize() {
         Member member = new Member();
         member.entryNumber = new String();
         member.name = new String();
-        member.image = new String();
+        member.image = null;
         return member;
     }
 
@@ -37,7 +39,7 @@ public class Member implements Serializable {
     public String getName() {
         return name;
     }
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
@@ -54,13 +56,20 @@ public class Member implements Serializable {
 //            throw new IllegalArgumentException("Invalid name");
 //    }
 
-    public void setEntryNumber(String entryNumber) {
+    public Member setEntryNumber(String entryNumber) {
         this.entryNumber = entryNumber;
+        return this;
     }
-    public void setName(String name) {
+    public Member setName(String name) {
         this.name = name;
+        return this;
     }
-    public void setImage(String image){
+    public Member setImage(Bitmap image)
+    {
         this.image = image;
+        return this;
+    }
+    public String toString() {
+        return String.format("{EntryNumber:%s, Name:%s, isImageNull:%b}",entryNumber,name,(image==null));
     }
 }

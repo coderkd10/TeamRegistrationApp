@@ -17,7 +17,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     public ViewPagerAdapter(FragmentManager fm){
         fragmentManager = fm;
     }
-    public void setVals(int size,FormData formData){
+    public void setVals(int size, FormData formData){
         fragments = new Fragment[size];
         this.formData = formData;
     }
@@ -54,7 +54,11 @@ public class ViewPagerAdapter extends PagerAdapter {
     public Fragment getItem(int position){
         int pos = position%getCount();
         if(fragments[pos] == null){
-            fragments[pos] = PagerFragment.newInstance(pos,formData.getIsFilled(pos),formData.getTeamName(),formData.getMember(pos));
+            if(pos == 0)
+                fragments[pos] = TeamNameFragment.newInstance(formData.getTeamName());
+            else
+                fragments[pos] = MemberFragment.newInstance(pos,formData.getMember(pos));
+            //fragments[pos] = MemberFragment.newInstance(pos, formData.getIsFilled(pos), formData.getTeamName(), formData.getMember(pos));
         }
         return fragments[pos];
     }

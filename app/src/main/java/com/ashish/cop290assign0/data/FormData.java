@@ -18,19 +18,19 @@ public class FormData implements Serializable{
         isFilled = new boolean[4];
     }
 
-    public static FormData initialize (String teamName, String[] names, String[] entryNumbers, String[] images, boolean[] isFilled){
-        FormData formData = new FormData();
-        formData.teamName = teamName;
-        for(int i=0; i<3; i++) {
-            Member member = new Member();
-            member.setEntryNumber(entryNumbers[i+1]);
-            member.setName(names[i+1]);
-            member.setImage(images[i+1]);
-            formData.members[i] = member;
-        }
-        formData.isFilled = isFilled;
-        return formData;
-    }
+//    public static FormData initialize (String teamName, String[] names, String[] entryNumbers, String[] images, boolean[] isFilled){
+//        FormData formData = new FormData();
+//        formData.teamName = teamName;
+//        for(int i=0; i<3; i++) {
+//            Member member = new Member();
+//            member.setEntryNumber(entryNumbers[i+1]);
+//            member.setName(names[i+1]);
+//            member.setImage(images[i+1]);
+//            formData.members[i] = member;
+//        }
+//        formData.isFilled = isFilled;
+//        return formData;
+//    }
 
     public static FormData initialize() {
         FormData formData = new FormData();
@@ -53,7 +53,7 @@ public class FormData implements Serializable{
         }
     }
     public void setMember(int index, Member member) {
-        members[index] = new Member(member);
+        members[index] = member;
     }
     public String getTeamName() {
         return teamName;
@@ -89,7 +89,6 @@ public class FormData implements Serializable{
             data.put("entry3","");
             data.put("name3","");
         }
-
         return data;
     }
 
