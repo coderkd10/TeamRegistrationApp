@@ -99,7 +99,7 @@ public final class MemberFragment extends Fragment {
         member.setEntryNumber(getFilledEntryNumber()).setName(getFilledName());
         FormData formData = MainActivity.mFormData;
         formData.setMember(position - 1, member);
-        formData.setIsFilled(position - 1, isFilled);
+        formData.setIsFilled(position, isFilled);
         return formData;
     }
 

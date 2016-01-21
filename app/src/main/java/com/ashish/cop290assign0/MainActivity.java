@@ -71,7 +71,17 @@ public class MainActivity extends AppCompatActivity {
         pager.setOffscreenPageLimit(3);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
     }
-    
+
+    private static boolean isAllFilled() {
+        for(int i=0; i<=2; i++) {
+            if(!mFormData.getIsFilled(i)) {
+                pager.setCurrentItem(1, true);
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static boolean isValidInput(FormData formData) {
         return isValidInput(formData.getTeamName(),
                 mFormData.getMember(1).getEntryNumber(),mFormData.getMember(1).getName(),
@@ -79,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 mFormData.getMember(3).getEntryNumber(),mFormData.getMember(3).getName());
     }
 
+    //TODO modularize
     //Checks for valid input and shows error accordingly.
     private static boolean isValidInput(String teamName, String entry1,
                                String name1,String entry2,
@@ -122,9 +133,14 @@ public class MainActivity extends AppCompatActivity {
     }
     //Called on submit button click
     public static void onSubmit(final View v){
+        Log.d(MainActivity.class.getSimpleName(),"Submit pressed. mFormData="+mFormData);
         if(!isValidInput(mFormData))
             return;
         Map<String,String> data = mFormData.toMap();
+        if(!isAllFilled())
+            return;
+
+        //Map<String,String> data = mFormData.toMap();
         if(data!=null) {
             //Creating a progressDialog to shows while the data is being posted.
             final ProgressDialog pDialog = createProgressDialog(v,"Please wait", "Sending data to the server.....");

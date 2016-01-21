@@ -104,8 +104,8 @@ public final class TeamNameFragment extends Fragment {
                     MainActivity.mFormData.setTeamName(teamName);   //refactor
                     ((TextView) view.findViewById(R.id.display_team_name)).setText(teamName);
                     //MainActivity.isFilled[position] = true;
-                    //MainActivity.mFormData.setIsFilled(position,true);
                     isFilled = true;
+                    MainActivity.mFormData.setIsFilled(0,true);
                     ScreenUtils.hideKeyboard(v); //hidden keyboard
                     view.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.input_layout).setVisibility(View.GONE);

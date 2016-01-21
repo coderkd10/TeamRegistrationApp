@@ -1,6 +1,7 @@
 package com.ashish.cop290assign0.data;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,6 +72,10 @@ public class FormData implements Serializable{
 
     public boolean isComplete() {
         return isFilled[0] && isFilled[1] && isFilled[2];
+    }
+
+    public String toString() {
+        return String.format("{members:%s; teamName:%s; isFilled:%s}", Arrays.toString(members),teamName,Arrays.toString(isFilled));
     }
 
     public Map<String, String> toMap(){
