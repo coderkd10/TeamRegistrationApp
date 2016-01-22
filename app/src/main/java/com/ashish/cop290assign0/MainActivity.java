@@ -38,8 +38,11 @@ public class MainActivity extends AppCompatActivity {
     static ViewPager pager;
     ViewPagerAdapter adapter;
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG,String.format("onCreate called. savedInstanceState:%s",savedInstanceState));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
@@ -61,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentPage", pager.getCurrentItem());
-        outState.putSerializable("formData",mFormData);
+        outState.putSerializable("formData", mFormData);
+        Log.d(TAG, String.format("onSaveInstanceState called. outState:%s", outState));
     }
 
     //Initializing UI components

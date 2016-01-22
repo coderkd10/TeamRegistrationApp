@@ -1,10 +1,15 @@
 package com.ashish.cop290assign0.data;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.util.Log;
 
 import com.ashish.cop290assign0.utils.InputValidator;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 
 /**
  * Represents a member (i.e. student) who details is to be entered.
@@ -13,7 +18,7 @@ import java.io.Serializable;
 public class Member implements Serializable {
     private String entryNumber;
     private String name;
-    private Bitmap image;
+    private byte[] image;
 
     public static Member initialize() {
         Member member = new Member();
@@ -40,7 +45,9 @@ public class Member implements Serializable {
         return name;
     }
     public Bitmap getImage() {
-        return image;
+        if(image == null)
+            return null;
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
 //    public void setEntryNumber(String entryNumber) throws IllegalArgumentException {
@@ -64,9 +71,21 @@ public class Member implements Serializable {
         this.name = name;
         return this;
     }
-    public Member setImage(Bitmap image)
+    //TODO take byte[]/base64 string as input
+    public Member setImage(Bitmap imageBitmap)
     {
-        this.image = image;
+        //Log.d("--> member setImage","isImageNull:"+(image==null)+", isGivenImageNull:"+(imageBitmap==null));
+        if(imageBitmap == null)
+            this.image = null;
+        else {
+//            ByteBuffer buffer = ByteBuffer.allocate(imageBitmap.getByteCount());
+//            imageBitmap.copyPixelsToBuffer(buffer);
+//            this.image = buffer.array();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            image = stream.toByteArray();
+        }
+        //Log.d("--> member setImage","done. isImageNull:"+(image==null));
         return this;
     }
     public String toString() {

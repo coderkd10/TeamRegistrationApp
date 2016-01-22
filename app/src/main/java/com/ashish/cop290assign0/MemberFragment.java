@@ -29,8 +29,15 @@ public final class MemberFragment extends Fragment {
     boolean isFilled;
     boolean isInvalidatedByLdap;
     private int position = 0;
+    private static final String TAG = MemberFragment.class.getSimpleName();
+
+    @Override
+    public String toString() {
+        return String.format("%s position:%d; member:%s; isFilled:%b; isInvalidatedByLdap:%b",TAG,position,member,isFilled,isInvalidatedByLdap);
+    }
 
     public static MemberFragment newInstance(int position, boolean isFilled, Member member) {
+        Log.d(TAG, String.format("newInstance called. position:%d; isFilled:%b; member:%s",position,isFilled,member));
         MemberFragment fragment = new MemberFragment();
         fragment.isFilled = isFilled;
         fragment.isInvalidatedByLdap = false;
@@ -111,10 +118,12 @@ public final class MemberFragment extends Fragment {
         outState.putBoolean("isFilled", isFilled);
         outState.putBoolean("isInvalidatedByLdap", isInvalidatedByLdap);
         outState.putSerializable("member", member.setEntryNumber(getFilledEntryNumber()).setName(getFilledName()));
+        Log.d(TAG, String.format("onSaveInstance called. position:%d; isFilled:%b; isInvalidatedByLdap:%b; member:%s; outState:%s", position, isFilled, isInvalidatedByLdap, member, outState));
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, String.format("[%d] onCreate called. saveInstanceState:%s", position, savedInstanceState));
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             this.isFilled = savedInstanceState.getBoolean("isFilled");
@@ -126,6 +135,7 @@ public final class MemberFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater,final ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, String.format("[%d] onCreateView called. savedInstanceState:%s, inflater:%s, container:%s", position, savedInstanceState, inflater, container));
         View view;
         view = inflater.inflate(R.layout.student_info_layout, null);
         addEntryNumberOnTextChangeListener(view);
@@ -137,12 +147,15 @@ public final class MemberFragment extends Fragment {
 
     @Override
     public void  onActivityCreated(Bundle savedInstanceState) {
+        Log.d(TAG,String.format("[%d] onActivityCreated called. savedInstanceState:%s",position,savedInstanceState));
         super.onActivityCreated(savedInstanceState);
         View view = getView();
         ((TextView)view.findViewById(R.id.display_name)).setText(member.getName());
         ((TextView)view.findViewById(R.id.display_entry_code)).setText(member.getEntryNumber());
-        if(member.getImage()!=null)
+        if(member.getImage()!=null) {
             setImage(member.getImage());
+            setImageBorder(Color.parseColor("#ff3C16"));
+        }
         setEntryNumber(member.getEntryNumber());
         setName(member.getName());
     }
@@ -265,9 +278,9 @@ public final class MemberFragment extends Fragment {
                                 if (studentDataJson.has("img")) {
                                     Bitmap img = ScreenUtils.base64StringToBitmap(studentDataJson.getString("img"));
                                     //MainActivity.images[position] = img;
-                                    //MainActivity.mFormData.getMember(position).setImage(img);
+                                    MainActivity.mFormData.getMember(position).setImage(img);
                                     member.setImage(img);
-                                    personImgView.setImageBitmap(img);
+                                    personImgView.setImageBitmap(member.getImage());
                                     personImgView.setBorderColor(Color.parseColor("#ff3C16"));
                                 } else {
                                     //MainActivity.images[position] = "";

@@ -68,7 +68,7 @@ public final class TeamNameFragment extends Fragment {
     }
 
     private void init(View view){
-        Log.d(TeamNameFragment.class.getSimpleName(),String.format("init called: isFilled:%b, teamName:%s", isFilled, teamName));
+//        Log.d(TeamNameFragment.class.getSimpleName(),String.format("init called: isFilled:%b, teamName:%s", isFilled, teamName));
         if(isFilled){
             view.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.input_layout).setVisibility(View.GONE);
