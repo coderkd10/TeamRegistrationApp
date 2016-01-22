@@ -17,8 +17,8 @@ public class Member implements Serializable {
 
     public static Member initialize() {
         Member member = new Member();
-        member.entryNumber = new String();
-        member.name = new String();
+        member.entryNumber = "";
+        member.name = "";
         member.image = null;
         return member;
     }
