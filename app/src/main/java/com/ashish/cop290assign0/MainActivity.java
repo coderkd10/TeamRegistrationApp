@@ -60,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         mPostRequest = new PostRequest(requestQueue);
     }
 
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//
+//    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

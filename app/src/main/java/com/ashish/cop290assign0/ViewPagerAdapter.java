@@ -43,10 +43,16 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public Fragment instantiateItem(ViewGroup container, int position){
         Log.i(TAG,String.format("instantiateItem called. position:%d, container:%s",position,container));
-        Fragment fragment = getItem(position);
-        mTransaction = fragmentManager.beginTransaction();
-        mTransaction.add(container.getId(), fragment, "fragment:" + position);
-        mTransaction.commit();
+        Fragment fragment = null;
+        if(position != 0) {
+            fragment=fragmentManager.findFragmentByTag("fragment:"+position);
+        }
+        if(fragment == null) {
+            fragment = getItem(position);
+            mTransaction = fragmentManager.beginTransaction();
+            mTransaction.add(container.getId(), fragment, "fragment:" + position);
+            mTransaction.commit();
+        }
         return fragment;
     }
 
@@ -69,7 +75,7 @@ public class ViewPagerAdapter extends PagerAdapter {
             if(pos == 0)
                 fragments[pos] = TeamNameFragment.newInstance(formData.getIsFilled(0),formData.getTeamName());
             else
-                fragments[pos] = MemberFragment.newInstance(pos,formData.getIsFilled(pos),formData.getMember(pos));
+                fragments[pos] = MemberFragment.newInstance(pos);
             //fragments[pos] = MemberFragment.newInstance(pos, formData.getIsFilled(pos), formData.getTeamName(), formData.getMember(pos));
         }
         return fragments[pos];

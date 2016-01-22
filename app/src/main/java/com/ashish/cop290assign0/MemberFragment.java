@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -25,29 +24,36 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import org.json.JSONObject;
 
 public final class MemberFragment extends Fragment {
-    private Member member;
-    boolean isFilled;
+    //private Member member;
+    //boolean isFilled;
     boolean isInvalidatedByLdap;
     private int position = 0;
     private static final String TAG = MemberFragment.class.getSimpleName();
 
     @Override
     public String toString() {
-        return String.format("%s position:%d; member:%s; isFilled:%b; isInvalidatedByLdap:%b",TAG,position,member,isFilled,isInvalidatedByLdap);
+        return String.format("%s isFilled:%b; isInvalidatedByLdap:%b",TAG,position,isInvalidatedByLdap);
     }
 
-    public static MemberFragment newInstance(int position, boolean isFilled, Member member) {
-        Log.d(TAG, String.format("newInstance called. position:%d; isFilled:%b; member:%s",position,isFilled,member));
+    public static MemberFragment newInstance(int position) {
+        Log.d(TAG, String.format("newInstance called. position:%d",position));
         MemberFragment fragment = new MemberFragment();
-        fragment.isFilled = isFilled;
         fragment.isInvalidatedByLdap = false;
         fragment.position = position;
-        fragment.member = member;
         return fragment;
     }
 
+    private Member getMember() {
+        return MainActivity.mFormData.getMember(position);
+    }
+    private boolean getIsfilled() {
+        return MainActivity.mFormData.getIsFilled(position);
+    }
+    private void setIsfilled(boolean isFilled) {
+        MainActivity.mFormData.setIsFilled(position,isFilled);
+    }
     private String getFilledEntryNumber() {
-        return ScreenUtils.getStringFromEditText(getView(),R.id.entryCode);
+        return ScreenUtils.getStringFromEditText(getView(), R.id.entryCode);
     }
     private String getFilledName() {
         return ScreenUtils.getStringFromEditText(getView(),R.id.name);
@@ -102,12 +108,8 @@ public final class MemberFragment extends Fragment {
         }
         return isValid && !isInvalidatedByLdap;
     }
-    private FormData saveDataToForm() {
-        member.setEntryNumber(getFilledEntryNumber()).setName(getFilledName());
-        FormData formData = MainActivity.mFormData;
-        formData.setMember(position - 1, member);
-        formData.setIsFilled(position, isFilled);
-        return formData;
+    private void saveFilledToForm() {
+        getMember().setEntryNumber(getFilledEntryNumber()).setName(getFilledName());
     }
 
 
@@ -115,10 +117,16 @@ public final class MemberFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("position", position);
-        outState.putBoolean("isFilled", isFilled);
-        outState.putBoolean("isInvalidatedByLdap", isInvalidatedByLdap);
-        outState.putSerializable("member", member.setEntryNumber(getFilledEntryNumber()).setName(getFilledName()));
-        Log.d(TAG, String.format("onSaveInstance called. position:%d; isFilled:%b; isInvalidatedByLdap:%b; member:%s; outState:%s", position, isFilled, isInvalidatedByLdap, member, outState));
+        //outState.putBoolean("isFilled", isFilled);
+        //outState.putBoolean("isInvalidatedByLdap", isInvalidatedByLdap);
+        //outState.putSerializable("member", member.setEntryNumber(getFilledEntryNumber()).setName(getFilledName()));
+        if(!getIsfilled()) {
+            if(!getFilledEntryNumber().isEmpty())
+                outState.putString("filledEntryNumber",getFilledEntryNumber());
+            if(!getFilledName().isEmpty())
+                outState.putString("filledName",getFilledName());
+        }
+        Log.d(TAG, String.format("onSaveInstance called. position:%d; isInvalidatedByLdap:%b; outState:%s", position, isInvalidatedByLdap, outState));
     }
 
     @Override
@@ -126,10 +134,11 @@ public final class MemberFragment extends Fragment {
         Log.d(TAG, String.format("[%d] onCreate called. saveInstanceState:%s", position, savedInstanceState));
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            this.isFilled = savedInstanceState.getBoolean("isFilled");
-            this.isInvalidatedByLdap = savedInstanceState.getBoolean("isInvalidatedByLdap");
+//            this.isFilled = savedInstanceState.getBoolean("isFilled");
+//            this.isInvalidatedByLdap = savedInstanceState.getBoolean("isInvalidatedByLdap");
             this.position = savedInstanceState.getInt("position");
-            this.member = (Member) savedInstanceState.getSerializable("member");
+//            this.member = (Member) savedInstanceState.getSerializable("member");
+            //if(savedInstanceState.containsKey("filledEntryNumber"))
         }
     }
 
@@ -150,18 +159,28 @@ public final class MemberFragment extends Fragment {
         Log.d(TAG,String.format("[%d] onActivityCreated called. savedInstanceState:%s",position,savedInstanceState));
         super.onActivityCreated(savedInstanceState);
         View view = getView();
-        ((TextView)view.findViewById(R.id.display_name)).setText(member.getName());
-        ((TextView)view.findViewById(R.id.display_entry_code)).setText(member.getEntryNumber());
-        if(member.getImage()!=null) {
-            setImage(member.getImage());
+        ((TextView)view.findViewById(R.id.display_name)).setText(getMember().getName());
+        ((TextView)view.findViewById(R.id.display_entry_code)).setText(getMember().getEntryNumber());
+        if(getMember().getImage()!=null) {
+            setImage(getMember().getImage());
             setImageBorder(Color.parseColor("#ff3C16"));
         }
-        setEntryNumber(member.getEntryNumber());
-        setName(member.getName());
+//        setEntryNumber(member.getEntryNumber());
+//        setName(member.getName());
+        if(savedInstanceState != null) {
+            if (savedInstanceState.containsKey("filledEntryNumber"))
+                setEntryNumber(savedInstanceState.getString("filledEntryNumber"));
+            else
+                setEntryNumber(getMember().getEntryNumber());
+            if (savedInstanceState.containsKey("filledName"))
+                setName(savedInstanceState.getString("filledName"));
+            else
+                setName(getMember().getName());
+        }
     }
 
     private void init(View view){
-        if(isFilled){
+        if(getIsfilled()){
             view.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.input_layout).setVisibility(View.GONE);
             if(position == 2 || position == 3)
@@ -179,11 +198,12 @@ public final class MemberFragment extends Fragment {
             public void onClick(View v) {
                 String entryCode = getFilledEntryNumber();
                 String name = getFilledName();
-                Log.i(MemberFragment.class.getSimpleName(),String.format("save_data %d pressed. entered:{%s,%s}; member:%s; isFilled:%b; isInvalidatedByLdap:%b",position,entryCode,name,member,isFilled,isInvalidatedByLdap));
+                Log.i(MemberFragment.class.getSimpleName(),String.format("save_data %d pressed. entered:{%s,%s}; member:%s; isFilled:%b; isInvalidatedByLdap:%b",position,entryCode,name,getMember(),getIsfilled(),isInvalidatedByLdap));
                 if(!isValidUserInput())
                     return;
-                isFilled = true;
-                saveDataToForm();
+                //isFilled = true;
+                saveFilledToForm();
+                setIsfilled(true);
                 //TODO write in a method
                 ((TextView) view.findViewById(R.id.display_entry_code)).setText(entryCode);
                 ((TextView) view.findViewById(R.id.display_name)).setText(name);
@@ -198,7 +218,7 @@ public final class MemberFragment extends Fragment {
         view.findViewById(R.id.edit_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isFilled = false;
+                //isFilled = false;
                 MainActivity.mFormData.setIsFilled(position, false);
 
                 if (position == 2 || position == 3) {
@@ -278,14 +298,14 @@ public final class MemberFragment extends Fragment {
                                 if (studentDataJson.has("img")) {
                                     Bitmap img = ScreenUtils.base64StringToBitmap(studentDataJson.getString("img"));
                                     //MainActivity.images[position] = img;
-                                    MainActivity.mFormData.getMember(position).setImage(img);
-                                    member.setImage(img);
-                                    personImgView.setImageBitmap(member.getImage());
+                                    //MainActivity.mFormData.getMember(position).setImage(img);
+                                    getMember().setImage(img);
+                                    personImgView.setImageBitmap(getMember().getImage());
                                     personImgView.setBorderColor(Color.parseColor("#ff3C16"));
                                 } else {
                                     //MainActivity.images[position] = "";
                                     //MainActivity.mFormData.getMember(position).setImage("");
-                                    member.setImage(null);
+                                    getMember().setImage(null);
                                     personImgView.setImageResource(R.mipmap.ic_launcher);
                                     personImgView.setBorderColor(Color.parseColor("#ffffff"));
                                 }
