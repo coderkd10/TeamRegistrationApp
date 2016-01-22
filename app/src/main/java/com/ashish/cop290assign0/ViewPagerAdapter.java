@@ -55,9 +55,9 @@ public class ViewPagerAdapter extends PagerAdapter {
         int pos = position%getCount();
         if(fragments[pos] == null){
             if(pos == 0)
-                fragments[pos] = TeamNameFragment.newInstance(formData.getTeamName());
+                fragments[pos] = TeamNameFragment.newInstance(formData.getIsFilled(0),formData.getTeamName());
             else
-                fragments[pos] = MemberFragment.newInstance(pos,formData.getMember(pos));
+                fragments[pos] = MemberFragment.newInstance(pos,formData.getIsFilled(pos),formData.getMember(pos));
             //fragments[pos] = MemberFragment.newInstance(pos, formData.getIsFilled(pos), formData.getTeamName(), formData.getMember(pos));
         }
         return fragments[pos];

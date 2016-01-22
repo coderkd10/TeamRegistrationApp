@@ -30,9 +30,9 @@ public final class MemberFragment extends Fragment {
     boolean isInvalidatedByLdap;
     private int position = 0;
 
-    public static MemberFragment newInstance(int position, Member member) {
+    public static MemberFragment newInstance(int position, boolean isFilled, Member member) {
         MemberFragment fragment = new MemberFragment();
-        fragment.isFilled = false;
+        fragment.isFilled = isFilled;
         fragment.isInvalidatedByLdap = false;
         fragment.position = position;
         fragment.member = member;
