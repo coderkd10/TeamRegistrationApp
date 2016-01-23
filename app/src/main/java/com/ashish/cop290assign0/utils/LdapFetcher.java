@@ -48,6 +48,7 @@ public class LdapFetcher {
             }
         };
     }
+
     public void getAndHandleStudentDetails(final String inputEntryNumber, final StudentJsonDataHandler resultHandler, final Response.ErrorListener errorHandler){
         String studentUserId;
         try{
@@ -61,7 +62,6 @@ public class LdapFetcher {
         Log.d(TAG,String.format("Sending request for entryNumber:%s",inputEntryNumber));
         ldapRequestQueue.add(strReq);
     }
-
     public void getAndHandleStudentDetails(final String inputEntryNumber, final StudentJsonDataHandler resultHandler){
         getAndHandleStudentDetails(inputEntryNumber, resultHandler, new Response.ErrorListener(){
             @Override
