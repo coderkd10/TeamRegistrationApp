@@ -44,14 +44,16 @@ public class ViewPagerAdapter extends PagerAdapter {
     public Fragment instantiateItem(ViewGroup container, int position){
         Log.i(TAG,String.format("instantiateItem called. position:%d, container:%s",position,container));
         Fragment fragment = null;
-        if(position != 0) {
+        //if(position != 0) {
             fragment=fragmentManager.findFragmentByTag("fragment:"+position);
-        }
+        //}
         if(fragment == null) {
             fragment = getItem(position);
             mTransaction = fragmentManager.beginTransaction();
             mTransaction.add(container.getId(), fragment, "fragment:" + position);
             mTransaction.commit();
+        } else {
+            Log.d(TAG,"instantiateItem, reused previous fragment");
         }
         return fragment;
     }
@@ -73,7 +75,8 @@ public class ViewPagerAdapter extends PagerAdapter {
         int pos = position%getCount();
         if(fragments[pos] == null){
             if(pos == 0)
-                fragments[pos] = TeamNameFragment.newInstance(formData.getIsFilled(0),formData.getTeamName());
+                fragments[pos] = TeamNameFragment.newInstance();
+//                fragments[pos] = TeamNameFragment.newInstance(formData.getIsFilled(0),formData.getTeamName());
             else
                 fragments[pos] = MemberFragment.newInstance(pos);
             //fragments[pos] = MemberFragment.newInstance(pos, formData.getIsFilled(pos), formData.getTeamName(), formData.getMember(pos));
