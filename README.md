@@ -11,6 +11,7 @@ slack channel [https://cop290ninjacoders.slack.com/messages](https://cop290ninja
 * Add credits page  
 
 ###Immediate
+* Reset after sucessful submission.
 * Add icon of apk
 * Design document
 * Comment code and create javadocs
@@ -55,6 +56,15 @@ slack channel [https://cop290ninjacoders.slack.com/messages](https://cop290ninja
 	3. ^ this is behavior is correct, and is expected always. But sometimes not respected as below.
 	4. Enter 2013eez10430222222222 ... as many characters you want.
 	5. ^ does not check / stop allowing more entries.
+
+* can not submit when invalid name corrected.
+	1. Fill in correct entry number and name.
+	2. Click ok to save these details.
+	3. Now click edit.
+	4. Edit the name to something invalid, e.g. "coderkd10".
+	5. Now click ok to register. You'll get invalid name error msg.
+	6. Correct the name to a valid name.
+	7. Press ok. It does not work and you're unable to save these.
 
 ###New features
 * Add suggestions from name also along with entry number.
