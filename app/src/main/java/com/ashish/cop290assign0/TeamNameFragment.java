@@ -168,6 +168,10 @@ public final class TeamNameFragment extends Fragment {
 
     private void onSaveFilledDetails() {
         Log.i(TAG,String.format("save_data. entered:%s",getFilledTeamName()));
+        if(getFilledTeamName().isEmpty()) {
+            setEmptyTeamNameError(); //TODO trim filledTeamName
+            return;
+        }
         saveFilledTeamNameToForm();
         setIsfilled(true);
         displayFilledTeamName();
