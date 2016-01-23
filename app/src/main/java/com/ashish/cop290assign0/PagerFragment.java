@@ -145,10 +145,10 @@ public final class PagerFragment extends Fragment {
 
                     } else {
                         if(name.isEmpty()) {
-                            ((EditText) layout.findViewById(R.id.name)).setError("Name cannot be empty!");
+                            ((EditText) layout.findViewById(R.id.name)).setError("Name can't be empty!");
                         }
                         if(entryCode.isEmpty()) {
-                            ((EditText) layout.findViewById(R.id.entryCode)).setError("Entry Number cannot be empty!");
+                            ((EditText) layout.findViewById(R.id.entryCode)).setError("Entry Number can't be empty!");
                         } else {
                             if(!isEntryCodeValid)
                                 ((EditText) layout.findViewById(R.id.entryCode)).setError("Invalid entry no!");
@@ -164,7 +164,7 @@ public final class PagerFragment extends Fragment {
                         layout.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
                         layout.findViewById(R.id.input_layout).setVisibility(View.GONE);
                     } else{
-                        ((EditText) layout.findViewById(R.id.team_name)).setError("Team name cannot be empty");
+                        ((EditText) layout.findViewById(R.id.team_name)).setError("Team name can't be empty");
                     }
                 }
             }
@@ -217,8 +217,12 @@ public final class PagerFragment extends Fragment {
                                       int before, int count) {
                 if (InputValidator.isValidEntryCodeStructure(editText.getText().toString()) && count < 11)
                     fetchAndEditStudentDetails(editText.getText().toString(), editText, nameBox, okBttn, personImgView);
-                if (editText.getText().toString().length() == 11 && !InputValidator.isValidEntryCodeStructure(editText.getText().toString())) {
-                    editText.setError("Invalid entry no!");
+                if (editText.getText().toString().length() == 11){
+                    if(!InputValidator.isValidEntryCodeStructure(editText.getText().toString())) {
+                        editText.setError("Invalid entry no!");
+                        isInvalid = true;
+                    }
+                    else isInvalid = false;
                 }
             }
         });
