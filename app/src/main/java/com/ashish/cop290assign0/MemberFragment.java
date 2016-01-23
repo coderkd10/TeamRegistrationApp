@@ -20,7 +20,7 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 
 import org.json.JSONObject;
 
-public final class MemberFragment extends Fragment {
+public final class MemberFragment extends DetailsEntryFragment {
     boolean isInvalidatedByLdap;
     private int position = 0;
     private static final String TAG = MemberFragment.class.getSimpleName();
@@ -96,7 +96,7 @@ public final class MemberFragment extends Fragment {
         ScreenUtils.setErrorInEditText(getView(), R.id.name, "Invalid name!");
     }
     private void removeNameError() {
-        ScreenUtils.removeErrorFromEditText(getView(),R.id.name);
+        ScreenUtils.removeErrorFromEditText(getView(), R.id.name);
     }
     private boolean isValidUserInput() {
         boolean isValid = true;
@@ -152,6 +152,26 @@ public final class MemberFragment extends Fragment {
             switchToDisplayDetailsMode();
         else
             switchToEditDetailsMode();
+    }
+
+    public boolean isRequired() {
+        return (position == 1 || position == 2);
+    }
+    public boolean isCompletelyFilled() {
+        if(getIsfilled())
+            return true;
+        if(isRequired())
+            return isValidUserInput();
+        else {
+            if (!getFilledEntryNumber().isEmpty() && getFilledName().isEmpty()) {
+                ScreenUtils.setErrorInEditText(getView(), R.id.name, "Entry number entered, please enter name for this entry!");
+                return false;
+            } else if (!getFilledName().isEmpty() && getFilledEntryNumber().isEmpty()) {
+                ScreenUtils.setErrorInEditText(getView(), R.id.entryCode, "Name entered, please enter number entry for this name!");
+                return false;
+            }
+            return true;
+        }
     }
 
     @Override
@@ -226,6 +246,7 @@ public final class MemberFragment extends Fragment {
         view.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("------>","kd");
                 onSaveFilledDetails();
             }
         });
@@ -248,6 +269,7 @@ public final class MemberFragment extends Fragment {
 
     private void fillDetailsFromJson(JSONObject studentDataJson) {
         try {
+            Log.d(TAG,"response received from LDAP : " + studentDataJson);
             if (studentDataJson.getBoolean("isValid")) {
                 removeNameError();
                 setEntryNumber(studentDataJson.getString("entryNumber"));
@@ -261,6 +283,7 @@ public final class MemberFragment extends Fragment {
                     setImage(null);
                     setImageBorder(Color.parseColor("#ffffff"));
                 }
+                Log.d(TAG,"LDAP handler clicking submit");
                 onSaveFilledDetails();
             } else {
                 isInvalidatedByLdap = true;
@@ -290,7 +313,11 @@ public final class MemberFragment extends Fragment {
                     setInvalidEntryNumberError();
                     return;
                 }
+                getMember().setImage(null); //todo move to method
+                setImage(null);
+                setImageBorder(Color.parseColor("#ffffff"));
                 if(count < 11) {
+                    Log.d(TAG,"Request sent to LDAP for " +getFilledEntryNumber());
                     MainActivity.mLdapFetcher.getAndHandleStudentDetails(getFilledEntryNumber(), new LdapFetcher.studentJsonDataHandler() {
                         @Override
                         public void onGetJson(JSONObject studentDataJson) {

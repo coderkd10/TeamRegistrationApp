@@ -149,7 +149,7 @@
                     android:id="@+id/display_name"
                     android:text="Student's name"
                     android:textSize="22dp"
-                    android:maxWidth="220dp"
+                    android:maxWidth="200dp"
                     android:gravity="center"
                     android:textColor="@color/primaryColor"
                     android:layout_centerHorizontal="true"

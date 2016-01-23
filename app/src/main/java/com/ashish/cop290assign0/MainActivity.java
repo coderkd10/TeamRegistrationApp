@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static FormData mFormData;
     static ViewPager pager;
-    ViewPagerAdapter adapter;
+    static ViewPagerAdapter adapter;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -81,75 +81,100 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
     }
 
-    private static boolean isAllFilled() {
-        for(int i=0; i<=2; i++) {
-            if(!mFormData.getIsFilled(i)) {
-                pager.setCurrentItem(1, true);
-                return false;
+//    private static boolean isAllFilled() {
+//        for(int i=0; i<=2; i++) {
+//            if(!mFormData.getIsFilled(i)) {
+//                pager.setCurrentItem(1, true);
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+//
+//    private static boolean isValidInput(FormData formData) {
+//        return isValidInput(formData.getTeamName(),
+//                mFormData.getMember(1).getEntryNumber(),mFormData.getMember(1).getName(),
+//                mFormData.getMember(2).getEntryNumber(),mFormData.getMember(2).getName(),
+//                mFormData.getMember(3).getEntryNumber(),mFormData.getMember(3).getName());
+//    }
+//
+//    //TODO modularize
+//    //Checks for valid input and shows error accordingly.
+//    private static boolean isValidInput(String teamName, String entry1,
+//                               String name1,String entry2,
+//                               String name2,String entry3,String name3){
+//        if(teamName.isEmpty()){
+//            pager.setCurrentItem(0, true);
+//            ((EditText)pager.getChildAt(0).findViewById(R.id.team_name)).setError("Team name can't be empty!");
+//            return false;
+//        }
+//        if(entry1.isEmpty()) {
+//            pager.setCurrentItem(1, true);
+//            ((EditText)pager.getChildAt(1).findViewById(R.id.entryCode)).setError("Entry1 can't be empty!");
+//            return false;
+//        }
+//        if(name1.isEmpty()) {
+//            pager.setCurrentItem(1, true);
+//            ((EditText)pager.getChildAt(1).findViewById(R.id.name)).setError("Name1 can't be empty!");
+//            return false;
+//        }
+//        if(entry2.isEmpty()){
+//            pager.setCurrentItem(2, true);
+//            ((EditText)pager.getChildAt(2).findViewById(R.id.entryCode)).setError("Entry2 can't be empty!");
+//            return false;
+//        }
+//        if(name2.isEmpty()){
+//            pager.setCurrentItem(2, true);
+//            ((EditText)pager.getChildAt(2).findViewById(R.id.name)).setError("Name2 can't be empty!");
+//            return false;
+//        }
+//        if(entry3.isEmpty() && !name3.isEmpty()){
+//            pager.setCurrentItem(3, true);
+//            ((EditText)pager.getChildAt(3).findViewById(R.id.entryCode)).setError("Name3 entered, please enter entry for this name!");
+//            return false;
+//        }
+//        if(name3.isEmpty() && !entry3.isEmpty()){
+//            pager.setCurrentItem(3,true);
+//            ((EditText)pager.getChildAt(3).findViewById(R.id.name)).setError("Entry3 entered, please enter name for this entry!");
+//            return false;
+//        }
+//        return true;
+//    }
+
+    public static boolean isCompletelyFilled() {
+        boolean isComplete = true;
+        int incompleteFragmentMinIndex = 4; //TODO explain
+        for(int fragmentIndex = 3; fragmentIndex >= 0; fragmentIndex--) {
+            Log.d("-->","fragmentIndex="+fragmentIndex);
+            try {
+                if (!adapter.getFragment(fragmentIndex).isCompletelyFilled()) {
+                    isComplete = false;
+                    incompleteFragmentMinIndex = fragmentIndex;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        return true;
+        if(!isComplete) {
+            pager.setCurrentItem(incompleteFragmentMinIndex,true);
+        }
+        return isComplete;
     }
 
-    private static boolean isValidInput(FormData formData) {
-        return isValidInput(formData.getTeamName(),
-                mFormData.getMember(1).getEntryNumber(),mFormData.getMember(1).getName(),
-                mFormData.getMember(2).getEntryNumber(),mFormData.getMember(2).getName(),
-                mFormData.getMember(3).getEntryNumber(),mFormData.getMember(3).getName());
-    }
-
-    //TODO modularize
-    //Checks for valid input and shows error accordingly.
-    private static boolean isValidInput(String teamName, String entry1,
-                               String name1,String entry2,
-                               String name2,String entry3,String name3){
-        if(teamName.isEmpty()){
-            pager.setCurrentItem(0, true);
-            ((EditText)pager.getChildAt(0).findViewById(R.id.team_name)).setError("Team name can't be empty!");
-            return false;
-        }
-        if(entry1.isEmpty()) {
-            pager.setCurrentItem(1, true);
-            ((EditText)pager.getChildAt(1).findViewById(R.id.entryCode)).setError("Entry1 can't be empty!");
-            return false;
-        }
-        if(name1.isEmpty()) {
-            pager.setCurrentItem(1, true);
-            ((EditText)pager.getChildAt(1).findViewById(R.id.name)).setError("Name1 can't be empty!");
-            return false;
-        }
-        if(entry2.isEmpty()){
-            pager.setCurrentItem(2, true);
-            ((EditText)pager.getChildAt(2).findViewById(R.id.entryCode)).setError("Entry2 can't be empty!");
-            return false;
-        }
-        if(name2.isEmpty()){
-            pager.setCurrentItem(2, true);
-            ((EditText)pager.getChildAt(2).findViewById(R.id.name)).setError("Name2 can't be empty!");
-            return false;
-        }
-        if(entry3.isEmpty() && !name3.isEmpty()){
-            pager.setCurrentItem(3, true);
-            ((EditText)pager.getChildAt(3).findViewById(R.id.entryCode)).setError("Name3 entered, please enter entry for this name!");
-            return false;
-        }
-        if(name3.isEmpty() && !entry3.isEmpty()){
-            pager.setCurrentItem(3,true);
-            ((EditText)pager.getChildAt(3).findViewById(R.id.name)).setError("Entry3 entered, please enter name for this entry!");
-            return false;
-        }
-        return true;
-    }
     //Called on submit button click
     public static void onSubmit(final View v){
         Log.d(MainActivity.class.getSimpleName(),"Submit pressed. mFormData="+mFormData);
-        if(!isValidInput(mFormData))
-            return;
-        Map<String,String> data = mFormData.toMap();
-        if(!isAllFilled())
+////        if(!isValidInput(mFormData))
+////            return;
+//
+//        Map<String,String> data = mFormData.toMap();
+//        if(!isAllFilled())
+//            return;
+
+        if(!isCompletelyFilled())
             return;
 
-        //Map<String,String> data = mFormData.toMap();
+        Map<String,String> data = mFormData.toMap();
         if(data!=null) {
             //Creating a progressDialog to shows while the data is being posted.
             final ProgressDialog pDialog = createProgressDialog(v,"Please wait", "Sending data to the server.....");

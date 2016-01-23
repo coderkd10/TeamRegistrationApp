@@ -29,6 +29,10 @@ public class ViewPagerAdapter extends PagerAdapter {
         this.formData = formData;
     }
 
+    public DetailsEntryFragment getFragment(int index) {
+        return (DetailsEntryFragment) fragments[index];
+    }
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         Log.i(TAG,String.format("destroyItem called. position:%d, object:%s, container:%s",position,object,container));
@@ -55,6 +59,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         } else {
             Log.d(TAG,"instantiateItem, reused previous fragment");
         }
+        fragments[position] = fragment;
         return fragment;
     }
 

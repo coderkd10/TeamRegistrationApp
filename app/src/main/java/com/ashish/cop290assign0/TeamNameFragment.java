@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.ashish.cop290assign0.utils.ScreenUtils;
 
-public final class TeamNameFragment extends Fragment {
+public final class TeamNameFragment extends DetailsEntryFragment {
     private static final String TAG = TeamNameFragment.class.getSimpleName();
 
     public static TeamNameFragment newInstance() {
@@ -42,9 +42,18 @@ public final class TeamNameFragment extends Fragment {
     private void setEmptyTeamNameError() {
         ScreenUtils.setErrorInEditText(getView(), R.id.team_name, "Team name can't be empty");
     }
+    private boolean isValidUserInput() {
+        if(getFilledTeamName().isEmpty()) {
+            setEmptyTeamNameError();
+            return false;
+        } else {
+            return true;
+        }
+    }
     private void saveFilledTeamNameToForm() {
         setTeamNameInForm(getFilledTeamName());
     }
+
     private void displayTeamName(String teamName) {
         ScreenUtils.setTextInTextView(getView(), R.id.display_team_name, teamName);
     }
@@ -79,6 +88,15 @@ public final class TeamNameFragment extends Fragment {
             switchToDisplayDetailsMode();
         else
             switchToEditDetailsMode();
+    }
+
+    public boolean isRequired() {
+        return true;
+    }
+    public boolean isCompletelyFilled() {
+        if(getIsfilled())
+            return true;
+        return isValidUserInput();
     }
 
     @Override

@@ -29,7 +29,7 @@ public class Member implements Serializable {
     }
 
     public Member() {};
-    public Member(String entryNumber, String name) throws IllegalArgumentException {
+    public Member(String entryNumber, String name) {
         this();
         this.setEntryNumber(entryNumber);
         this.setName(name);
