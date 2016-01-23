@@ -3,28 +3,17 @@ package com.ashish.cop290assign0;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.ashish.cop290assign0.data.Member;
-import com.ashish.cop290assign0.utils.InputValidator;
-import com.ashish.cop290assign0.utils.LdapFetcher;
 import com.ashish.cop290assign0.utils.ScreenUtils;
-import com.github.siyamed.shapeimageview.CircularImageView;
-
-import org.json.JSONObject;
 
 public final class TeamNameFragment extends Fragment {
     private String teamName;
@@ -38,7 +27,7 @@ public final class TeamNameFragment extends Fragment {
     }
 
     private String getFilledTeamName() {
-        return ScreenUtils.getStringFromEditText(getView(),R.id.team_name);
+        return ScreenUtils.getStringFromTextView(getView(), R.id.team_name);
     }
 
 

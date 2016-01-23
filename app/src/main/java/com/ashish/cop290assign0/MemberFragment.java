@@ -11,10 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.ashish.cop290assign0.data.FormData;
 import com.ashish.cop290assign0.data.Member;
 import com.ashish.cop290assign0.utils.InputValidator;
 import com.ashish.cop290assign0.utils.LdapFetcher;
@@ -24,15 +22,13 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import org.json.JSONObject;
 
 public final class MemberFragment extends Fragment {
-    //private Member member;
-    //boolean isFilled;
     boolean isInvalidatedByLdap;
     private int position = 0;
     private static final String TAG = MemberFragment.class.getSimpleName();
 
     @Override
     public String toString() {
-        return String.format("%s isFilled:%b; isInvalidatedByLdap:%b",TAG,position,isInvalidatedByLdap);
+        return String.format("%s{position:%d; isInvalidatedByLdap:%b}",TAG,position,isInvalidatedByLdap);
     }
 
     public static MemberFragment newInstance(int position) {
@@ -53,26 +49,40 @@ public final class MemberFragment extends Fragment {
         MainActivity.mFormData.setIsFilled(position,isFilled);
     }
     private String getFilledEntryNumber() {
-        return ScreenUtils.getStringFromEditText(getView(), R.id.entryCode);
+        return ScreenUtils.getStringFromTextView(getView(), R.id.entryCode);
     }
     private String getFilledName() {
-        return ScreenUtils.getStringFromEditText(getView(),R.id.name);
+        return ScreenUtils.getStringFromTextView(getView(), R.id.name);
     }
     private void setEntryNumber(String entryNumber) {
-        ScreenUtils.setTextInEditText(getView(),R.id.entryCode,entryNumber);
+        ScreenUtils.setTextInTextView(getView(), R.id.entryCode, entryNumber);
     }
     private void setName(String name) {
-        ScreenUtils.setTextInEditText(getView(),R.id.name,name);
+        ScreenUtils.setTextInTextView(getView(), R.id.name, name);
     }
     private void setImage(Bitmap image) {
-        CircularImageView memberImageView = (CircularImageView) getView().findViewById(R.id.img);
-        if(image != null)
-            memberImageView.setImageBitmap(image);
-        else
-            memberImageView.setImageResource(R.mipmap.ic_launcher);
+        try {
+            CircularImageView memberImageView = (CircularImageView) getView().findViewById(R.id.img);
+            if (image != null)
+                memberImageView.setImageBitmap(image);
+            else
+                memberImageView.setImageResource(R.mipmap.ic_launcher);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     private void setImageBorder(int color) {
-        ((CircularImageView) getView().findViewById(R.id.img)).setBorderColor(color);
+        try {
+            ((CircularImageView) getView().findViewById(R.id.img)).setBorderColor(color);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void markRequiredFields(){
+        if (position != 3) {
+            ScreenUtils.addRedAsteriskToEditText(getView(), R.id.entryCode);
+            ScreenUtils.addRedAsteriskToEditText(getView(), R.id.name);
+        }
     }
     private void setEmptyEntryNumberError() {
         ScreenUtils.setErrorInEditText(getView(), R.id.entryCode, "Entry number can't be empty!");
@@ -108,18 +118,48 @@ public final class MemberFragment extends Fragment {
         }
         return isValid && !isInvalidatedByLdap;
     }
-    private void saveFilledToForm() {
+    private void saveFilledDetailsToForm() {
         getMember().setEntryNumber(getFilledEntryNumber()).setName(getFilledName());
     }
-
+    private void displayDetails(String entryNumber, String name) {
+        ScreenUtils.setTextInTextView(getView(),R.id.display_entry_code,entryNumber);
+        ScreenUtils.setTextInTextView(getView(), R.id.display_name, name);
+    }
+    private void displayFilledDetails() {
+        displayDetails(getFilledEntryNumber(), getFilledName());
+    }
+    private void switchToEditDetailsMode() {
+        try {
+            if (position == 2 || position == 3) {
+                getView().findViewById(R.id.submit_bttn).setVisibility(View.GONE);
+            }
+            getView().findViewById(R.id.display_layout).setVisibility(View.GONE);
+            getView().findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void switchToDisplayDetailsMode() {
+        try {
+            getView().findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.input_layout).setVisibility(View.GONE);
+            if (position == 2 || position == 3)
+                getView().findViewById(R.id.submit_bttn).setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void updateViewMode() {
+        if(getIsfilled())
+            switchToDisplayDetailsMode();
+        else
+            switchToEditDetailsMode();
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("position", position);
-        //outState.putBoolean("isFilled", isFilled);
-        //outState.putBoolean("isInvalidatedByLdap", isInvalidatedByLdap);
-        //outState.putSerializable("member", member.setEntryNumber(getFilledEntryNumber()).setName(getFilledName()));
         if(!getIsfilled()) {
             if(!getFilledEntryNumber().isEmpty())
                 outState.putString("filledEntryNumber",getFilledEntryNumber());
@@ -134,39 +174,25 @@ public final class MemberFragment extends Fragment {
         Log.d(TAG, String.format("[%d] onCreate called. saveInstanceState:%s", position, savedInstanceState));
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-//            this.isFilled = savedInstanceState.getBoolean("isFilled");
-//            this.isInvalidatedByLdap = savedInstanceState.getBoolean("isInvalidatedByLdap");
             this.position = savedInstanceState.getInt("position");
-//            this.member = (Member) savedInstanceState.getSerializable("member");
-            //if(savedInstanceState.containsKey("filledEntryNumber"))
         }
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater,final ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, String.format("[%d] onCreateView called. savedInstanceState:%s, inflater:%s, container:%s", position, savedInstanceState, inflater, container));
-        View view;
-        view = inflater.inflate(R.layout.student_info_layout, null);
+        View view = inflater.inflate(R.layout.student_info_layout, null);
+        ScreenUtils.setTextInTextView(view, R.id.member_no, "#" + position);
         addEntryNumberOnTextChangeListener(view);
-        ((TextView) view.findViewById(R.id.member_no)).setText("#" + position);
-        init(view);
         setOnClickListeners(view);
         return view;
     }
 
     @Override
     public void  onActivityCreated(Bundle savedInstanceState) {
-        Log.d(TAG,String.format("[%d] onActivityCreated called. savedInstanceState:%s",position,savedInstanceState));
+        Log.d(TAG, String.format("[%d] onActivityCreated called. savedInstanceState:%s", position, savedInstanceState));
         super.onActivityCreated(savedInstanceState);
-        View view = getView();
-        ((TextView)view.findViewById(R.id.display_name)).setText(getMember().getName());
-        ((TextView)view.findViewById(R.id.display_entry_code)).setText(getMember().getEntryNumber());
-        if(getMember().getImage()!=null) {
-            setImage(getMember().getImage());
-            setImageBorder(Color.parseColor("#ff3C16"));
-        }
-//        setEntryNumber(member.getEntryNumber());
-//        setName(member.getName());
+        markRequiredFields();
         if(savedInstanceState != null) {
             if (savedInstanceState.containsKey("filledEntryNumber"))
                 setEntryNumber(savedInstanceState.getString("filledEntryNumber"));
@@ -177,56 +203,39 @@ public final class MemberFragment extends Fragment {
             else
                 setName(getMember().getName());
         }
+        displayDetails(getMember().getEntryNumber(), getMember().getName());
+        if(getMember().getImage()!=null) {
+            setImage(getMember().getImage());
+            setImageBorder(Color.parseColor("#ff3C16"));
+        }
+        updateViewMode();
     }
 
-    private void init(View view){
-        if(getIsfilled()){
-            view.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.input_layout).setVisibility(View.GONE);
-            if(position == 2 || position == 3)
-                view.findViewById(R.id.submit_bttn).setVisibility(View.VISIBLE);
+    private void onSaveFilledDetails() {
+        Log.i(TAG,String.format("[%d] save_data. entered:{%s,%s}; isInvalidatedByLdap:%b",position,getFilledEntryNumber(),getFilledName(),isInvalidatedByLdap));
+        if(!isValidUserInput()) {
+            Log.i(TAG,String.format("[%d] save_data. Not saved due to invalid user details",position));
+            return;
         }
-        if (position != 3) {
-            ScreenUtils.addRedAsteriskToEditText(view, R.id.entryCode);
-            ScreenUtils.addRedAsteriskToEditText(view, R.id.name);
-        }
+        saveFilledDetailsToForm();
+        setIsfilled(true);
+        displayFilledDetails();
+        ScreenUtils.hideKeyboard(getView()); //hide keyboard
+        updateViewMode();
     }
 
     private void setOnClickListeners(final View view){
         view.findViewById(R.id.save_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String entryCode = getFilledEntryNumber();
-                String name = getFilledName();
-                Log.i(MemberFragment.class.getSimpleName(),String.format("save_data %d pressed. entered:{%s,%s}; member:%s; isFilled:%b; isInvalidatedByLdap:%b",position,entryCode,name,getMember(),getIsfilled(),isInvalidatedByLdap));
-                if(!isValidUserInput())
-                    return;
-                //isFilled = true;
-                saveFilledToForm();
-                setIsfilled(true);
-                //TODO write in a method
-                ((TextView) view.findViewById(R.id.display_entry_code)).setText(entryCode);
-                ((TextView) view.findViewById(R.id.display_name)).setText(name);
-                ScreenUtils.hideKeyboard(v); //hidden keyboard
-                view.findViewById(R.id.display_layout).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.input_layout).setVisibility(View.GONE);
-                if(position == 2 || position == 3) {
-                    view.findViewById(R.id.submit_bttn).setVisibility(View.VISIBLE);
-                }
+                onSaveFilledDetails();
             }
         });
         view.findViewById(R.id.edit_data).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //isFilled = false;
-                MainActivity.mFormData.setIsFilled(position, false);
-
-                if (position == 2 || position == 3) {
-                    view.findViewById(R.id.submit_bttn).setVisibility(View.GONE);
-                }
-
-                view.findViewById(R.id.display_layout).setVisibility(View.GONE);
-                view.findViewById(R.id.input_layout).setVisibility(View.VISIBLE);
+                setIsfilled(false);
+                updateViewMode();
             }
         });
         if(position != 0) {
@@ -274,6 +283,7 @@ public final class MemberFragment extends Fragment {
                 }
             }
         });
+        //entryNumberBox.removeTextChangedListener();
     }
 
     private void fetchAndEditStudentDetails(final String entryCode, final EditText entryNumBox, final EditText nameBox, final View okBttn, final CircularImageView personImgView){
