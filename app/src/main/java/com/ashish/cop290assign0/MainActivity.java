@@ -1,18 +1,11 @@
 package com.ashish.cop290assign0;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -22,6 +15,7 @@ import com.ashish.cop290assign0.data.FormData;
 import com.ashish.cop290assign0.mainActivityFragment.ViewPagerAdapter;
 import com.ashish.cop290assign0.utils.LdapFetcher;
 import com.ashish.cop290assign0.utils.PostRequest;
+import com.ashish.cop290assign0.utils.ScreenUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONException;
@@ -59,11 +53,6 @@ public class MainActivity extends AppCompatActivity {
         mLdapFetcher = new LdapFetcher(requestQueue);
         mPostRequest = new PostRequest(requestQueue);
     }
-
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//
-//    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -143,9 +132,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean isCompletelyFilled() {
         boolean isComplete = true;
-        int incompleteFragmentMinIndex = 4; //TODO explain
+        int incompleteFragmentMinIndex=0;
         for(int fragmentIndex = 3; fragmentIndex >= 0; fragmentIndex--) {
-            Log.d("-->","fragmentIndex="+fragmentIndex);
             try {
                 if (!adapter.getFragment(fragmentIndex).isCompletelyFilled()) {
                     isComplete = false;
@@ -177,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         Map<String,String> data = mFormData.toMap();
         if(data!=null) {
             //Creating a progressDialog to shows while the data is being posted.
-            final ProgressDialog pDialog = createProgressDialog(v,"Please wait", "Sending data to the server.....");
+            final ProgressDialog pDialog = ScreenUtils.createProgressDialog(v, "Please wait", "Sending data to the server.....");
             Log.d("onSubmit", data.toString());
             //posting to the server
             mPostRequest.post(Config.SERVER_URL, data,
@@ -189,17 +177,17 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonResponse = new JSONObject(response);
                                 if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
-                                    make_dialog(v,"Data not posted!", "Some required fields are missing!","Ok");
+                                    ScreenUtils.makeDialog(v, "Data not posted!", "Some required fields are missing!", "Ok");
                                 else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
-                                    make_dialog(v,"Data not posted!","One or more users with given details have already registered.","Ok");
+                                    ScreenUtils.makeDialog(v, "Data not posted!", "One or more users with given details have already registered.", "Ok");
                                 else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
-                                    make_dialog(v, "Data posted!", "Registration completed", "Ok");
+                                    ScreenUtils.makeDialog(v, "Data posted!", "Registration completed", "Ok");
                                     //resetTextBoxes();
                                 }
                             } catch (JSONException jsonException) {
-                                make_dialog(v,"Umm...","Unexpected response from the server, contact server administrator!","Ok");
+                                ScreenUtils.makeDialog(v, "Umm...", "Unexpected response from the server, contact server administrator!", "Ok");
                             } catch (Exception e) {
-                                make_dialog(v,"Uh-oh","Something bad happened. Might be aliens!","Ok");
+                                ScreenUtils.makeDialog(v, "Uh-oh", "Something bad happened. Might be aliens!", "Ok");
                             }
                         }
                     },
@@ -207,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void handle(VolleyError error) {
                             pDialog.dismiss();
-                            make_dialog(v,"Uh-oh","Looks like you're not connected to the internet.Please check your internet connection and try again.","Ok");
+                            ScreenUtils.makeDialog(v, "Uh-oh", "Looks like you're not connected to the internet.Please check your internet connection and try again.", "Ok");
                         }
                     }
             );
@@ -219,38 +207,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //Creates a progressDialog
-    private static ProgressDialog createProgressDialog(View v,String title,String description){
-        ProgressDialog progressDialog = new ProgressDialog(v.getContext());
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        progressDialog.setCancelable(false);
-        progressDialog.setTitle(title);
-        progressDialog.setMessage(description);
-        progressDialog.show();
-        return progressDialog;
-    }
-
-    //creates and shows a custom dialog
-    private static void make_dialog(View v,String title,String msg,String button_text){
-        final Dialog dialog = new Dialog(v.getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.error_dialog_layout);
-        //dialog.setCancelable(false);
-        ((TextView)dialog.findViewById(R.id.title_text)).setText(title);
-        ((TextView)dialog.findViewById(R.id.error_text)).setText(msg);
-        ((Button)dialog.findViewById(R.id.error_button)).setText(button_text);
-        (dialog.findViewById(R.id.error_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        dialog.show();
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-    }
 }
