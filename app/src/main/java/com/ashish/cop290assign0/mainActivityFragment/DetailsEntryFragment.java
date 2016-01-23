@@ -1,4 +1,4 @@
-package com.ashish.cop290assign0;
+package com.ashish.cop290assign0.mainActivityFragment;
 
 import android.support.v4.app.Fragment;
 

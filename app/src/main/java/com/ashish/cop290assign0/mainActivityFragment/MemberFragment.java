@@ -1,4 +1,4 @@
-package com.ashish.cop290assign0;
+package com.ashish.cop290assign0.mainActivityFragment;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.ashish.cop290assign0.config.Config;
+import com.ashish.cop290assign0.MainActivity;
+import com.ashish.cop290assign0.R;
 import com.ashish.cop290assign0.data.Member;
 import com.ashish.cop290assign0.utils.InputValidator;
 import com.ashish.cop290assign0.utils.LdapFetcher;

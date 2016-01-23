@@ -1,5 +1,5 @@
 package com.ashish.cop290assign0.utils;
-import com.ashish.cop290assign0.Config;
+import com.ashish.cop290assign0.config.Config;
 
 /**
  * Utilities to check if input data is valid.

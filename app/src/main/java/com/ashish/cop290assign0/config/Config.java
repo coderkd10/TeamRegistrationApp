@@ -1,4 +1,4 @@
-package com.ashish.cop290assign0;
+package com.ashish.cop290assign0.config;
 
 /**
  * Created by Ashish on 10/01/2016.

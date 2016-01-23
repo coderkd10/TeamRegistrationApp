@@ -12,13 +12,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.ashish.cop290assign0.config.Config;
 import com.ashish.cop290assign0.data.FormData;
+import com.ashish.cop290assign0.mainActivityFragment.ViewPagerAdapter;
 import com.ashish.cop290assign0.utils.LdapFetcher;
 import com.ashish.cop290assign0.utils.PostRequest;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -26,7 +27,6 @@ import com.viewpagerindicator.CirclePageIndicator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
 
 

@@ -7,7 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.ashish.cop290assign0.Config;
+import com.ashish.cop290assign0.config.Config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
