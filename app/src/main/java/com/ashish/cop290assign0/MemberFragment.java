@@ -48,10 +48,10 @@ public final class MemberFragment extends Fragment {
         MainActivity.mFormData.setIsFilled(position,isFilled);
     }
     private String getFilledEntryNumber() {
-        return ScreenUtils.getStringFromTextView(getView(), R.id.entryCode);
+        return ScreenUtils.getStringFromTextView(getView(), R.id.entryCode).trim();
     }
     private String getFilledName() {
-        return ScreenUtils.getStringFromTextView(getView(), R.id.name);
+        return ScreenUtils.getStringFromTextView(getView(), R.id.name).trim();
     }
     private void setEntryNumber(String entryNumber) {
         ScreenUtils.setTextInTextView(getView(), R.id.entryCode, entryNumber);
@@ -103,18 +103,14 @@ public final class MemberFragment extends Fragment {
         if(getFilledEntryNumber().isEmpty()) {
             setEmptyEntryNumberError();
             isValid = false;
+        } else if(!InputValidator.isValidEntryCodeStructure(getFilledEntryNumber())) {
+            setInvalidEntryNumberError();
+            isValid = false;
         }
         if(getFilledName().isEmpty()) {
             setEmptyNameError();
             isValid = false;
-        }
-        if(!isValid)
-            return false;
-        if(!InputValidator.isValidEntryCodeStructure(getFilledEntryNumber())) {
-            setInvalidEntryNumberError();
-            isValid = false;
-        }
-        if(!InputValidator.isValidName(getFilledName())) {
+        } else if(!InputValidator.isValidName(getFilledName())) {
             setInvalidNameError();
             isValid = false;
         }
