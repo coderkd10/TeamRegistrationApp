@@ -30,6 +30,7 @@ import org.jsoup.select.Elements;
 
 
 public class LdapFetcher {
+    private static final String TAG = LdapFetcher.class.getSimpleName();
     /**
      * Uses a GET request to fetch ldap data of student.
      * @param
@@ -110,8 +111,11 @@ public class LdapFetcher {
                     public void onResponse(String response) {
                         try{
 //                            JSONObject parsedLdapData = parseLdapResponse(Jsoup.parse(response));
-//                            jsonHandler.onGetJson(parsedLdapData);
-                            new ParseAndHandleResponse(inputEntryNumber,response,jsonHandler).run();
+                            JSONObject parsedLdapData = parseLdapUsingRegex(response);
+                            Log.d(TAG,"parsedLdapData:"+parsedLdapData);
+                            if(parsedLdapData != null)
+                                jsonHandler.onGetJson(parsedLdapData);
+//                            new ParseAndHandleResponse(inputEntryNumber,response,jsonHandler).run();
                         } catch (Exception e){
                             Log.e(LdapFetcher.class.getSimpleName(),"Exception occurred in getStudentDetails/onResponse:"+e.toString(),e);
                         }
@@ -151,6 +155,58 @@ public class LdapFetcher {
             Log.d("userID of " + entryNum,userId);
             return userId;
         }
+    }
+
+    private JSONObject parseLdapUsingRegex(String response) throws JSONException{
+        JSONObject toReturn = new JSONObject();
+//        Log.d(TAG,"--> response = " + response );
+        String h1HeaderRegexString = "<H1>(.*?)<\\/H1>";
+        Pattern h1HeaderRegex = Pattern.compile(h1HeaderRegexString);
+        Matcher h1HeaderMatcher = h1HeaderRegex.matcher(response);
+//        if(!response.matches(h1HeaderRegex))
+//            return null;
+//        String r1 = "<html>\n" +
+//                "                                                                       <head>\n" +
+//                "                                                                       <style type=\"text/css\">\n" +
+//                "                                                                       <!-- BODY {background:none transparent;}-->\n" +
+//                "                                                                       </style>\n" +
+//                "                                                                       </head>\n" +
+//                "                                                                       <body>\n" +
+//                "                                                                       <H1>Abhishek Kedia (2013EE10431)</H1>";
+//        Log.d(TAG,"in r1       : " + h1Regex.matcher(r1).find() + "; text : ");
+//        Log.d(TAG,"in response : " + h1Regex.matcher(response).find());
+//        String h1HeaderText = Pattern.compile("H1").matcher(response).group(1);
+        if(!h1HeaderMatcher.find())
+            return null;
+        String h1HeaderText = h1HeaderMatcher.group(1);
+        if(h1HeaderText.equals(" ()")) {
+            toReturn.put("isValid",false);
+        } else {
+            String entryNumRegex = "\\((\\d{4}[a-zA-z]{2}[a-zA-z0-9]\\d{4})\\)";
+            Pattern entryNumPattern = Pattern.compile(entryNumRegex);
+            Matcher entryNumMatcher = entryNumPattern.matcher(h1HeaderText);
+            if(!entryNumMatcher.find()){
+                toReturn.put("isValid",false);
+            } else {
+                String entryNum = entryNumMatcher.group(0);
+                entryNum = entryNum.substring(1, entryNum.length() - 1);
+                String fullName = h1HeaderText.replaceAll(entryNumRegex, "").trim();
+                if (fullName.isEmpty()) {
+                    toReturn.put("isValid", false);
+                } else {
+                    toReturn.put("isValid", true);
+                    toReturn.put("entryNumber", entryNum);
+                    toReturn.put("name", fullName);
+                }
+                Pattern imgBase64SrcRegex = Pattern.compile("<img.*src='data:image\\/gif;base64,(.*?)' \\/>");
+                Matcher imgBas64Matcher = imgBase64SrcRegex.matcher(response);
+                if(imgBas64Matcher.find()) {
+                    toReturn.put("img",imgBas64Matcher.group(1));
+                }
+            }
+        }
+        
+        return toReturn;
     }
 
     /**
