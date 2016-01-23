@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.android.volley.VolleyError;
 import com.ashish.cop290assign0.data.Member;
 import com.ashish.cop290assign0.utils.InputValidator;
 import com.ashish.cop290assign0.utils.LdapFetcher;
@@ -94,7 +93,10 @@ public final class MemberFragment extends Fragment {
         ScreenUtils.setErrorInEditText(getView(), R.id.name, "Name can't be empty!");
     }
     private void setInvalidNameError() {
-        ScreenUtils.setErrorInEditText(getView(),R.id.name, "Invalid name!");
+        ScreenUtils.setErrorInEditText(getView(), R.id.name, "Invalid name!");
+    }
+    private void removeNameError() {
+        ScreenUtils.removeErrorFromEditText(getView(),R.id.name);
     }
     private boolean isValidUserInput() {
         boolean isValid = true;
@@ -242,105 +244,65 @@ public final class MemberFragment extends Fragment {
             view.findViewById(R.id.submit_bttn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MainActivity.onSubmit(v);
+                    MainActivity.onSubmit(v); //TODO
                 }
             });
         }
     }
 
-    private void addEntryNumberOnTextChangeListener(final View layout){
-        final EditText entryNumberBox = ((EditText)layout.findViewById(R.id.entryCode)); //also entry number text box
-        final EditText nameBox = (EditText) layout.findViewById(R.id.name);
-        final View saveDataButton = layout.findViewById(R.id.save_data);
-        final CircularImageView personImgView = (CircularImageView) layout.findViewById(R.id.img);
-
-        entryNumberBox.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //TODO: play here
+    private void fillDetailsFromJson(JSONObject studentDataJson) {
+        try {
+            if (studentDataJson.getBoolean("isValid")) {
+                removeNameError();
+                setEntryNumber(studentDataJson.getString("entryNumber"));
+                setName(studentDataJson.getString("name"));
+                if(studentDataJson.has("img")) {
+                    getMember().setImage(ScreenUtils.base64StringToBitmap(studentDataJson.getString("img"))); //TODO change
+                    setImage(ScreenUtils.base64StringToBitmap(studentDataJson.getString("img")));
+                    setImageBorder(Color.parseColor("#ff3C16"));
+                } else {
+                    getMember().setImage(null);
+                    setImage(null);
+                    setImageBorder(Color.parseColor("#ffffff"));
+                }
+                onSaveFilledDetails();
+            } else {
+                isInvalidatedByLdap = true;
+                setInvalidEntryNumberError();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void addEntryNumberOnTextChangeListener(final View view){
+        final EditText entryNumberEditText = ((EditText)view.findViewById(R.id.entryCode));
+        if(entryNumberEditText == null)
+            return;
+        entryNumberEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //TODO: play here
-            }
+            public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //TODO play here
-                //Log -> s,start,before,count
                 isInvalidatedByLdap = false;
-                if (InputValidator.isValidEntryCodeStructure(entryNumberBox.getText().toString()) && count < 11)
-                    fetchAndEditStudentDetails(entryNumberBox.getText().toString(), entryNumberBox, nameBox, saveDataButton, personImgView);
-                if (entryNumberBox.getText().toString().length() == 11) {
-                    if (!InputValidator.isValidEntryCodeStructure(entryNumberBox.getText().toString())) {
-                        //isFilled = false; //TODO try & remove this
-                        entryNumberBox.setError("Invalid entry no!");
-                    }
-//                    else
-//                        isFilled = true;    //TODO try & remove this
+                if (getFilledEntryNumber().length() != Config.ENTRY_NUMBER_LENGTH)
+                    return;
+                if(!InputValidator.isValidEntryCodeStructure(getFilledEntryNumber())) {
+                    setInvalidEntryNumberError();
+                    return;
+                }
+                if(count < 11) {
+                    MainActivity.mLdapFetcher.getAndHandleStudentDetails(getFilledEntryNumber(), new LdapFetcher.studentJsonDataHandler() {
+                        @Override
+                        public void onGetJson(JSONObject studentDataJson) {
+                            fillDetailsFromJson(studentDataJson);
+                        }
+                    });
                 }
             }
         });
-        //entryNumberBox.removeTextChangedListener();
     }
-
-    private void fetchAndEditStudentDetails(final String entryCode, final EditText entryNumBox, final EditText nameBox, final View okBttn, final CircularImageView personImgView){
-        /**
-         * TODO
-         * 1. Fetch Details of student with entry number `entryCode`
-         * 2. Change picture received according to the picture received
-         * 3. Change name according to name received
-         * 4. Click done button
-         */
-        MainActivity.mLdapFetcher.getAndHandleStudentDetails(entryCode,
-                new LdapFetcher.studentJsonDataHandler() {
-                    @Override
-                    public void onGetJson(JSONObject studentDataJson) {
-                        try {
-                            if (studentDataJson.getBoolean("isValid")) {
-                                //isFilled = true;
-                                isInvalidatedByLdap = false;
-                                nameBox.setError(null); //remove if there is any error marked in name box
-                                entryNumBox.setText(studentDataJson.getString("entryNumber"));
-                                nameBox.setText(studentDataJson.getString("name"));
-                                if (studentDataJson.has("img")) {
-                                    Bitmap img = ScreenUtils.base64StringToBitmap(studentDataJson.getString("img"));
-                                    //MainActivity.images[position] = img;
-                                    //MainActivity.mFormData.getMember(position).setImage(img);
-                                    getMember().setImage(img);
-                                    personImgView.setImageBitmap(getMember().getImage());
-                                    personImgView.setBorderColor(Color.parseColor("#ff3C16"));
-                                } else {
-                                    //MainActivity.images[position] = "";
-                                    //MainActivity.mFormData.getMember(position).setImage("");
-                                    getMember().setImage(null);
-                                    personImgView.setImageResource(R.mipmap.ic_launcher);
-                                    personImgView.setBorderColor(Color.parseColor("#ffffff"));
-                                }
-                                okBttn.performClick();
-                            } else {
-                                isInvalidatedByLdap = true;
-                                setInvalidEntryNumberError();
-                            }
-                            ;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new LdapFetcher.ldapRequestErrorHandler() {
-                    @Override
-                    public void handle(VolleyError error) {
-//                        if (!entryCode.isEmpty()) {
-//                            if (InputValidator.isValidEntryCodeStructure(entryCode)) {
-//                                isFilled = true;
-//                            }
-//                        }
-                    }
-                }
-        ); //TODO indent properly
-    }
-
 }
