@@ -313,10 +313,10 @@ public final class MemberFragment extends DetailsEntryFragment {
                     setInvalidEntryNumberError();
                     return;
                 }
-                getMember().setImage(null); //todo move to method
-                setImage(null);
-                setImageBorder(Color.parseColor("#ffffff"));
                 if(count < 11) {
+                    getMember().setImage(null); //todo move to method
+                    setImage(null);
+                    setImageBorder(Color.parseColor("#ffffff"));
                     Log.d(TAG,"Request sent to LDAP for " +getFilledEntryNumber());
                     MainActivity.mLdapFetcher.getAndHandleStudentDetails(getFilledEntryNumber(), new LdapFetcher.studentJsonDataHandler() {
                         @Override

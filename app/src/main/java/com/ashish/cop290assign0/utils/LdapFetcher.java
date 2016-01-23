@@ -1,7 +1,9 @@
 package com.ashish.cop290assign0.utils;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.os.Process;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -42,13 +44,64 @@ public class LdapFetcher {
         void handle(VolleyError error);
     }
 
+    private class GetUsingJsoup extends AsyncTask<Void,Void,Document> {
+        String url;
+        studentJsonDataHandler jsonHandler;
+        GetUsingJsoup(String url, studentJsonDataHandler jsonHandler) {
+            this.url = url;
+            this.jsonHandler = jsonHandler;
+        }
+        @Override
+        protected Document doInBackground(Void... v) {
+            try {
+                return Jsoup.connect(url).get();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        @Override
+        protected void onPostExecute(Document responseAsHTML) {
+            try {
+                JSONObject parsedLdapData = parseLdapResponse(responseAsHTML);
+                jsonHandler.onGetJson(parsedLdapData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class ParseAndHandleResponse extends Thread {
+        String inputEntryNumber;
+        String response;
+        studentJsonDataHandler jsonHandler;
+        ParseAndHandleResponse(String inputEntryNumber, String response, studentJsonDataHandler jsonHandler){
+            this.inputEntryNumber = inputEntryNumber;
+            this.response = response;
+            this.jsonHandler = jsonHandler;
+            //Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+            //Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
+            Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
+        }
+        public void run() {
+            try {
+//                Document responseAsHTML = Jsoup.parse(response);
+//                Document responseAsHTML = Jsoup.connect(Config.LDAP_BASE_URL+"?uid="+entryNumToUserId(inputEntryNumber)).get();
+//                JSONObject parsedLdapData = parseLdapResponse(responseAsHTML);
+//                jsonHandler.onGetJson(parsedLdapData);
+                new GetUsingJsoup(Config.LDAP_BASE_URL+"?uid="+entryNumToUserId(inputEntryNumber),jsonHandler).execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private RequestQueue ldapRequestQueue;
 
     public LdapFetcher(RequestQueue requestQueue){
         ldapRequestQueue = requestQueue;
     }
 
-    public void getAndHandleStudentDetails(String inputEntryNumber,final studentJsonDataHandler jsonHandler, final ldapRequestErrorHandler errorHandler){
+    public void getAndHandleStudentDetails(final String inputEntryNumber,final studentJsonDataHandler jsonHandler, final ldapRequestErrorHandler errorHandler){
         StringRequest strReq = new StringRequest(
                 Request.Method.GET,
                 Config.LDAP_BASE_URL+"?uid="+entryNumToUserId(inputEntryNumber),
@@ -56,8 +109,9 @@ public class LdapFetcher {
                     @Override
                     public void onResponse(String response) {
                         try{
-                            JSONObject parsedLdapData = parseLdapResponse(Jsoup.parse(response));
-                            jsonHandler.onGetJson(parsedLdapData);
+//                            JSONObject parsedLdapData = parseLdapResponse(Jsoup.parse(response));
+//                            jsonHandler.onGetJson(parsedLdapData);
+                            new ParseAndHandleResponse(inputEntryNumber,response,jsonHandler).run();
                         } catch (Exception e){
                             Log.e(LdapFetcher.class.getSimpleName(),"Exception occurred in getStudentDetails/onResponse:"+e.toString(),e);
                         }
