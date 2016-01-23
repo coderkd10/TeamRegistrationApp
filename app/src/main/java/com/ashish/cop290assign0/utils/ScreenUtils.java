@@ -56,8 +56,16 @@ public class ScreenUtils {
         }
     }
 
-    public static Bitmap base64StringToBitmap(String i) {
-        byte[] b = Base64.decode(i, Base64.DEFAULT);
+    public static byte[] base64StringToByteArray(String base64String) {
+        try {
+            return Base64.decode(base64String, Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static Bitmap base64StringToBitmap(String base64String) {
+        byte[] b = base64StringToByteArray(base64String);
         return BitmapFactory.decodeByteArray(b, 0, b.length);
     }
 

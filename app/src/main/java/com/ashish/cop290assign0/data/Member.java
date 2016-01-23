@@ -44,25 +44,14 @@ public class Member implements Serializable {
     public String getName() {
         return name;
     }
-    public Bitmap getImage() {
+    public boolean hasImage() {
+        return (image != null);
+    }
+    public Bitmap getImageBitmap() {
         if(image == null)
             return null;
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
-
-//    public void setEntryNumber(String entryNumber) throws IllegalArgumentException {
-//        if(InputValidator.isValidEntryCodeStructure(entryNumber))
-//            this.entryNumber = entryNumber;
-//        else
-//            throw new IllegalArgumentException("Structurally invalid entry number");
-//    }
-//    public void setName(String name) {
-//        if(InputValidator.isValidName(name))
-//            this.name = name;
-//        else
-//            throw new IllegalArgumentException("Invalid name");
-//    }
-
     public Member setEntryNumber(String entryNumber) {
         this.entryNumber = entryNumber;
         return this;
@@ -71,23 +60,22 @@ public class Member implements Serializable {
         this.name = name;
         return this;
     }
-    //TODO take byte[]/base64 string as input
-    public Member setImage(Bitmap imageBitmap)
-    {
-        //Log.d("--> member setImage","isImageNull:"+(image==null)+", isGivenImageNull:"+(imageBitmap==null));
-        if(imageBitmap == null)
-            this.image = null;
-        else {
-//            ByteBuffer buffer = ByteBuffer.allocate(imageBitmap.getByteCount());
-//            imageBitmap.copyPixelsToBuffer(buffer);
-//            this.image = buffer.array();
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            image = stream.toByteArray();
-        }
-        //Log.d("--> member setImage","done. isImageNull:"+(image==null));
+
+    public Member setImage(byte[] image) {
+        this.image = image;
         return this;
     }
+//    public Member setImage(Bitmap imageBitmap)
+//    {
+//        if(imageBitmap == null)
+//            this.image = null;
+//        else {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//            image = stream.toByteArray();
+//        }
+//        return this;
+//    }
     public String toString() {
         return String.format("{EntryNumber:%s, Name:%s, isImageNull:%b}",entryNumber,name,(image==null));
     }

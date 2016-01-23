@@ -202,8 +202,8 @@ public final class MemberFragment extends Fragment {
                 setName(getMember().getName());
         }
         displayDetails(getMember().getEntryNumber(), getMember().getName());
-        if(getMember().getImage()!=null) {
-            setImage(getMember().getImage());
+        if(getMember().hasImage()) {
+            setImage(getMember().getImageBitmap());
             setImageBorder(Color.parseColor("#ff3C16"));
         }
         updateViewMode();
@@ -253,8 +253,8 @@ public final class MemberFragment extends Fragment {
                 setEntryNumber(studentDataJson.getString("entryNumber"));
                 setName(studentDataJson.getString("name"));
                 if(studentDataJson.has("img")) {
-                    getMember().setImage(ScreenUtils.base64StringToBitmap(studentDataJson.getString("img"))); //TODO change
-                    setImage(ScreenUtils.base64StringToBitmap(studentDataJson.getString("img")));
+                    getMember().setImage(ScreenUtils.base64StringToByteArray(studentDataJson.getString("img")));
+                    setImage(getMember().getImageBitmap());
                     setImageBorder(Color.parseColor("#ff3C16"));
                 } else {
                     getMember().setImage(null);
