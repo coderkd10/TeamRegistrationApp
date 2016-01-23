@@ -3,7 +3,6 @@ package com.ashish.cop290assign0;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -318,9 +317,9 @@ public final class MemberFragment extends DetailsEntryFragment {
                     setImage(null);
                     setImageBorder(Color.parseColor("#ffffff"));
                     Log.d(TAG,"Request sent to LDAP for " +getFilledEntryNumber());
-                    MainActivity.mLdapFetcher.getAndHandleStudentDetails(getFilledEntryNumber(), new LdapFetcher.studentJsonDataHandler() {
+                    MainActivity.mLdapFetcher.getAndHandleStudentDetails(getFilledEntryNumber(), new LdapFetcher.StudentJsonDataHandler() {
                         @Override
-                        public void onGetJson(JSONObject studentDataJson) {
+                        public void handle(JSONObject studentDataJson) {
                             fillDetailsFromJson(studentDataJson);
                         }
                     });
