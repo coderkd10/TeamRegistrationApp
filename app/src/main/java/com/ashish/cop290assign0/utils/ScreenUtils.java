@@ -145,8 +145,10 @@ public class ScreenUtils {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //ask why??
         dialog.setContentView(R.layout.error_dialog_layout);
         dialog.setCancelable(false);
-        if(success)
+        if(success) {
             dialog.findViewById(R.id.dialog_title_bar).setBackgroundColor(Color.parseColor("#12B42C"));
+            ((Button)dialog.findViewById(R.id.error_button)).setTextColor(Color.parseColor("#12B42C"));
+        }
         ((TextView)dialog.findViewById(R.id.title_text)).setText(title);
         ((TextView)dialog.findViewById(R.id.error_text)).setText(msg);
         ((Button)dialog.findViewById(R.id.error_button)).setText(buttonText);
