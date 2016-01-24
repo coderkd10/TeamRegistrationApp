@@ -7,3 +7,7 @@
 /captures
 .idea
 *.iml
+*.aux
+*.bbl
+*.blg
+*.log
