@@ -1,32 +1,26 @@
 package com.ashish.cop290assign0;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.ashish.cop290assign0.config.Config;
 import com.ashish.cop290assign0.data.FormData;
+import com.ashish.cop290assign0.mainActivityFragment.ViewPagerAdapter;
 import com.ashish.cop290assign0.utils.LdapFetcher;
 import com.ashish.cop290assign0.utils.PostRequest;
+import com.ashish.cop290assign0.utils.ScreenUtils;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -60,11 +54,6 @@ public class MainActivity extends AppCompatActivity {
         mPostRequest = new PostRequest(requestQueue);
     }
 
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//
-//    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -81,71 +70,12 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
     }
 
-//    private static boolean isAllFilled() {
-//        for(int i=0; i<=2; i++) {
-//            if(!mFormData.getIsFilled(i)) {
-//                pager.setCurrentItem(1, true);
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-//
-//    private static boolean isValidInput(FormData formData) {
-//        return isValidInput(formData.getTeamName(),
-//                mFormData.getMember(1).getEntryNumber(),mFormData.getMember(1).getName(),
-//                mFormData.getMember(2).getEntryNumber(),mFormData.getMember(2).getName(),
-//                mFormData.getMember(3).getEntryNumber(),mFormData.getMember(3).getName());
-//    }
-//
-//    //TODO modularize
-//    //Checks for valid input and shows error accordingly.
-//    private static boolean isValidInput(String teamName, String entry1,
-//                               String name1,String entry2,
-//                               String name2,String entry3,String name3){
-//        if(teamName.isEmpty()){
-//            pager.setCurrentItem(0, true);
-//            ((EditText)pager.getChildAt(0).findViewById(R.id.team_name)).setError("Team name can't be empty!");
-//            return false;
-//        }
-//        if(entry1.isEmpty()) {
-//            pager.setCurrentItem(1, true);
-//            ((EditText)pager.getChildAt(1).findViewById(R.id.entryCode)).setError("Entry1 can't be empty!");
-//            return false;
-//        }
-//        if(name1.isEmpty()) {
-//            pager.setCurrentItem(1, true);
-//            ((EditText)pager.getChildAt(1).findViewById(R.id.name)).setError("Name1 can't be empty!");
-//            return false;
-//        }
-//        if(entry2.isEmpty()){
-//            pager.setCurrentItem(2, true);
-//            ((EditText)pager.getChildAt(2).findViewById(R.id.entryCode)).setError("Entry2 can't be empty!");
-//            return false;
-//        }
-//        if(name2.isEmpty()){
-//            pager.setCurrentItem(2, true);
-//            ((EditText)pager.getChildAt(2).findViewById(R.id.name)).setError("Name2 can't be empty!");
-//            return false;
-//        }
-//        if(entry3.isEmpty() && !name3.isEmpty()){
-//            pager.setCurrentItem(3, true);
-//            ((EditText)pager.getChildAt(3).findViewById(R.id.entryCode)).setError("Name3 entered, please enter entry for this name!");
-//            return false;
-//        }
-//        if(name3.isEmpty() && !entry3.isEmpty()){
-//            pager.setCurrentItem(3,true);
-//            ((EditText)pager.getChildAt(3).findViewById(R.id.name)).setError("Entry3 entered, please enter name for this entry!");
-//            return false;
-//        }
-//        return true;
-//    }
 
+    //Checks for valid and complete input and shows error accordingly.
     public static boolean isCompletelyFilled() {
         boolean isComplete = true;
-        int incompleteFragmentMinIndex = 4; //TODO explain
+        int incompleteFragmentMinIndex=0;
         for(int fragmentIndex = 3; fragmentIndex >= 0; fragmentIndex--) {
-            Log.d("-->","fragmentIndex="+fragmentIndex);
             try {
                 if (!adapter.getFragment(fragmentIndex).isCompletelyFilled()) {
                     isComplete = false;
@@ -161,96 +91,69 @@ public class MainActivity extends AppCompatActivity {
         return isComplete;
     }
 
-    //Called on submit button click
-    public static void onSubmit(final View v){
-        Log.d(MainActivity.class.getSimpleName(),"Submit pressed. mFormData="+mFormData);
-////        if(!isValidInput(mFormData))
-////            return;
-//
-//        Map<String,String> data = mFormData.toMap();
-//        if(!isAllFilled())
-//            return;
 
-        if(!isCompletelyFilled())
+    public static void onSubmit(final View view) {
+        Log.d(TAG, "Submit pressed. mFormData=" + mFormData);
+
+        if(!isCompletelyFilled()) {
+            Log.v(TAG,"form not submitted because data is incompletely filled");
             return;
+        }
 
-        Map<String,String> data = mFormData.toMap();
+        final Map<String,String> data = mFormData.toMap();
         if(data!=null) {
-            //Creating a progressDialog to shows while the data is being posted.
-            final ProgressDialog pDialog = createProgressDialog(v,"Please wait", "Sending data to the server.....");
-            Log.d("onSubmit", data.toString());
-            //posting to the server
-            mPostRequest.post(Config.SERVER_URL, data,
-                    new PostRequest.ServerResponseHandler() {
-                        @Override
-                        public void handle(String response) {
-                            //TODO
-                            pDialog.dismiss();
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
-                                    make_dialog(v,"Data not posted!", "Some required fields are missing!","Ok");
-                                else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
-                                    make_dialog(v,"Data not posted!","One or more users with given details have already registered.","Ok");
-                                else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
-                                    make_dialog(v, "Data posted!", "Registration completed", "Ok");
-                                    //resetTextBoxes();
-                                }
-                            } catch (JSONException jsonException) {
-                                make_dialog(v,"Umm...","Unexpected response from the server, contact server administrator!","Ok");
-                            } catch (Exception e) {
-                                make_dialog(v,"Uh-oh","Something bad happened. Might be aliens!","Ok");
-                            }
-                        }
-                    },
-                    new PostRequest.ErrorHandler(){
-                        @Override
-                        public void handle(VolleyError error) {
-                            pDialog.dismiss();
-                            make_dialog(v,"Uh-oh","Looks like you're not connected to the internet.Please check your internet connection and try again.","Ok");
-                        }
-                    }
-            );
-        } else {
-            //data is null
-            //some input is invalid
-            //TODO handle invalid input case
+            ScreenUtils.makeConfirmationDialog(view, mFormData, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFinalSubmit(view,data);
+                }
+            });
         }
     }
 
-
-    //Creates a progressDialog
-    private static ProgressDialog createProgressDialog(View v,String title,String description){
-        ProgressDialog progressDialog = new ProgressDialog(v.getContext());
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        progressDialog.setCancelable(false);
-        progressDialog.setTitle(title);
-        progressDialog.setMessage(description);
-        progressDialog.show();
-        return progressDialog;
+    //Called on submit button click
+    public static void onFinalSubmit(final View v, Map<String,String> data) {
+        //Creating a progressDialog to shows while the data is being posted.
+        final ProgressDialog pDialog = ScreenUtils.createProgressDialog(v, "Please wait", "Sending data to the server.....");
+        Log.d("onSubmit", data.toString());
+        //posting to the server
+        mPostRequest.post(Config.SERVER_URL, data,
+                new PostRequest.ServerResponseHandler() {
+                    @Override
+                    public void handle(String response) {
+                        //TODO
+                        pDialog.dismiss();
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
+                                ScreenUtils.makeDialog(v, "Data not posted!", "Some required fields are missing!", "Ok");
+                            else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
+                                ScreenUtils.makeDialog(v, "Data not posted!", "One or more users with given details have already registered.", "Ok");
+                            else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
+                                ScreenUtils.makeDialog(v, "Data posted!", "Registration completed", "Ok");
+                                //resetTextBoxes();
+                            }
+                        } catch (JSONException jsonException) {
+                            ScreenUtils.makeDialog(v, "Umm...", "Unexpected response from the server, contact server administrator!", "Ok");
+                        } catch (Exception e) {
+                            ScreenUtils.makeDialog(v, "Uh-oh", "Something bad happened. Might be aliens!", "Ok");
+                        }
+                    }
+                },
+                new PostRequest.ErrorHandler(){
+                    @Override
+                    public void handle(VolleyError error) {
+                        pDialog.dismiss();
+                        ScreenUtils.makeDialog(v, "Uh-oh", "Looks like you're not connected to the internet.Please check your internet connection and try again.", "Ok");
+                    }
+                }
+        );
+//        } else {
+//            //data is null
+//            //some input is invalid
+//            //TODO handle invalid input case
+//        }
     }
 
-    //creates and shows a custom dialog
-    private static void make_dialog(View v,String title,String msg,String button_text){
-        final Dialog dialog = new Dialog(v.getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.error_dialog_layout);
-        //dialog.setCancelable(false);
-        ((TextView)dialog.findViewById(R.id.title_text)).setText(title);
-        ((TextView)dialog.findViewById(R.id.error_text)).setText(msg);
-        ((Button)dialog.findViewById(R.id.error_button)).setText(button_text);
-        (dialog.findViewById(R.id.error_button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        dialog.show();
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-    }
+
 }

@@ -79,4 +79,7 @@ public class Member implements Serializable {
     public String toString() {
         return String.format("{EntryNumber:%s, Name:%s, isImageNull:%b}",entryNumber,name,(image==null));
     }
+    public String toFormattedString() {
+        return String.format("%s (%s)",getName(),getEntryNumber());
+    }
 }

@@ -68,16 +68,16 @@
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/img1"
                     android:src="@mipmap/ic_launcher"
-                    app:siBorderWidth="3dp"
+                    app:siBorderWidth="1dp"
                     app:siBorderColor="#f5f5f5"
                     android:layout_width="50dp"
                     android:layout_height="50dp"/>
                 <TextView
                     android:id="@+id/detail1"
                     android:textColor="#000"
-                    android:textSize="18dp"
+                    android:textSize="16sp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="15dp"
                     android:text="Student1 (Entry 1)"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -93,16 +93,16 @@
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/img2"
                     android:src="@mipmap/ic_launcher"
-                    app:siBorderWidth="3dp"
+                    app:siBorderWidth="1dp"
                     app:siBorderColor="#f5f5f5"
                     android:layout_width="50dp"
                     android:layout_height="50dp"/>
                 <TextView
                     android:id="@+id/detail2"
                     android:textColor="#000"
-                    android:textSize="18dp"
+                    android:textSize="16sp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="15dp"
                     android:text="Student2 (Entry 2)"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -118,16 +118,16 @@
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/img3"
                     android:src="@mipmap/ic_launcher"
-                    app:siBorderWidth="3dp"
+                    app:siBorderWidth="1dp"
                     app:siBorderColor="#f5f5f5"
                     android:layout_width="50dp"
                     android:layout_height="50dp"/>
                 <TextView
                     android:id="@+id/detail3"
                     android:textColor="#000"
-                    android:textSize="18dp"
+                    android:textSize="16sp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="15dp"
                     android:text="Student3 (Entry 3)"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -148,8 +148,9 @@
                 android:layout_toRightOf="@id/centered_view"
                 android:textAllCaps="false"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="1dp"
                 android:textColor="#ffde3715"
                 android:background="@drawable/button_backg"
                 android:layout_width="match_parent"
@@ -159,8 +160,10 @@
                 android:text="Cancel"
                 android:layout_toLeftOf="@id/centered_view"
                 android:textAllCaps="false"
+                android:layout_marginLeft="2dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="1dp"
                 android:textColor="#727272"
                 android:background="@drawable/button_backg"
                 android:layout_width="match_parent"
