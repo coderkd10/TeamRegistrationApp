@@ -202,7 +202,7 @@ public class ScreenUtils {
     //TODO move to a new class
     //TODO show team name in confirmation dialog
     public static void makeConfirmationDialog(View view, FormData formData, final View.OnClickListener submitClickHandler) {
-        final Dialog dialog = new Dialog(view.getContext());
+        final Dialog dialog = new Dialog(view.getContext(),R.style.DialogSlideAnim);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirm_dialog_layout);
         dialog.setCancelable(false);
