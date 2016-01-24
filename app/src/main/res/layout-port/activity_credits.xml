@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <RelativeLayout
-            android:id="@+id/member_text"
+            android:id="@+id/credits_text"
             android:layout_marginLeft="45dp"
             android:layout_marginTop="-5dp"
             android:background="@drawable/red_shadow"
@@ -53,9 +53,18 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
     </RelativeLayout>
+    <TextView
+        android:id="@+id/title"
+        android:text="Made with \u2764 by"
+        android:textColor="#727272"
+        android:textSize="16sp"
+        android:layout_below="@id/top_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:id="@+id/info_layout"
-        android:layout_below="@id/top_layout"
+        android:layout_below="@id/title"
         android:background="#f5f5f5"
         android:gravity="center"
         android:orientation="vertical"
