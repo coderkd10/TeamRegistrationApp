@@ -91,15 +91,27 @@ public class MainActivity extends AppCompatActivity {
         return isComplete;
     }
 
-    //Called on submit button click
-    public static void onSubmit(final View v) {
-        Log.d(TAG,"Submit pressed. mFormData="+mFormData);
+
+    public static void onSubmit(final View view) {
+        Log.d(TAG, "Submit pressed. mFormData=" + mFormData);
 
         if(!isCompletelyFilled())
             return;
 
-        Map<String,String> data = mFormData.toMap();
+        final Map<String,String> data = mFormData.toMap();
         if(data!=null) {
+            ScreenUtils.makeConfirmationDialog(view, mFormData, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onFinalSubmit(view,data);
+                }
+            });
+        }
+    }
+
+    //Called on submit button click
+    public static void onFinalSubmit(final View v, Map<String,String> data) {
+
             //Creating a progressDialog to shows while the data is being posted.
             final ProgressDialog pDialog = ScreenUtils.createProgressDialog(v, "Please wait", "Sending data to the server.....");
             Log.d("onSubmit", data.toString());
@@ -135,11 +147,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
             );
-        } else {
-            //data is null
-            //some input is invalid
-            //TODO handle invalid input case
-        }
+//        } else {
+//            //data is null
+//            //some input is invalid
+//            //TODO handle invalid input case
+//        }
     }
 
 

@@ -20,6 +20,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ashish.cop290assign0.R;
+import com.ashish.cop290assign0.data.FormData;
+import com.ashish.cop290assign0.data.Member;
+import com.github.siyamed.shapeimageview.CircularImageView;
 
 /**
  * Collection of static methods to manipulate objects on the screen / display.
@@ -53,6 +56,32 @@ public class ScreenUtils {
 
     public static void removeErrorFromEditText(View v, int id) {
         setErrorInEditText(v, id, null);
+    }
+
+    public static void setMemberImageInCircularImageView(View view, int id, Bitmap memberImage) {
+        try {
+            CircularImageView memberImageView = (CircularImageView) view.findViewById(id);
+            if (memberImage != null)
+                memberImageView.setImageBitmap(memberImage);
+            else
+                memberImageView.setImageResource(R.mipmap.ic_launcher);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void setImageBorderInCircularImageView(View view, int id, int color) {
+        try {
+            ((CircularImageView) view.findViewById(id)).setBorderColor(color);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void setMemberImageAndBorderInCircularImageView(View view, int id, Bitmap memberImage) {
+        setMemberImageInCircularImageView(view, id, memberImage);
+        if(memberImage == null)
+            setImageBorderInCircularImageView(view,id,Color.parseColor("#ffffff"));
+        else
+            setImageBorderInCircularImageView(view,id,Color.parseColor("#ff3C16"));
     }
 
     public static void hideKeyboard(View v) {
@@ -108,10 +137,12 @@ public class ScreenUtils {
         return progressDialog;
     }
 
+
     //creates and shows a custom dialog
+    //TODO make the header of dialog colored according to success or failure. RED if failed, green if success.
     public static void makeDialog(View view, String title, String msg, String buttonText){
         final Dialog dialog = new Dialog(view.getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //ask why??
         dialog.setContentView(R.layout.error_dialog_layout);
         dialog.setCancelable(false);
         ((TextView)dialog.findViewById(R.id.title_text)).setText(title);
@@ -123,6 +154,83 @@ public class ScreenUtils {
                 dialog.dismiss();
             }
         });
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.show();
+        dialog.getWindow().setAttributes(layoutParams);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    public static void setTextInTextView(Dialog v, int id, CharSequence text) {
+        try {
+            ((TextView) v.findViewById(id)).setText(text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void setMemberImageInCircularImageView(Dialog view, int id, Bitmap memberImage) {
+        try {
+            CircularImageView memberImageView = (CircularImageView) view.findViewById(id);
+            if (memberImage != null)
+                memberImageView.setImageBitmap(memberImage);
+            else
+                memberImageView.setImageResource(R.mipmap.ic_launcher);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void setImageBorderInCircularImageView(Dialog view, int id, int color) {
+        try {
+            ((CircularImageView) view.findViewById(id)).setBorderColor(color);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void setMemberImageAndBorderInCircularImageView(Dialog view, int id, Bitmap memberImage) {
+        setMemberImageInCircularImageView(view,id,memberImage);
+        if(memberImage == null)
+            setImageBorderInCircularImageView(view,id,Color.parseColor("#ffffff"));
+        else
+            setImageBorderInCircularImageView(view,id,Color.parseColor("#ff3C16"));
+    }
+    //TODO move to a new class
+    public static void makeConfirmationDialog(View view, FormData formData, final View.OnClickListener submitClickHandler) {
+        final Dialog dialog = new Dialog(view.getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.confirm_dialog_layout);
+        dialog.setCancelable(false);
+
+//        dialog.show();
+//        view = dialog.getCurrentFocus(); //TODO improve this
+        setTextInTextView(dialog, R.id.detail1, formData.getMember(1).toFormattedString());
+        setMemberImageAndBorderInCircularImageView(dialog, R.id.img1, formData.getMember(1).getImageBitmap());
+        setTextInTextView(dialog, R.id.detail2, formData.getMember(2).toFormattedString());
+        setMemberImageAndBorderInCircularImageView(dialog, R.id.img2, formData.getMember(2).getImageBitmap());
+        if(formData.getIsFilled(3)) {
+            setTextInTextView(dialog,R.id.detail3,formData.getMember(3).toFormattedString());
+            setMemberImageAndBorderInCircularImageView(dialog, R.id.img3, formData.getMember(3).getImageBitmap());
+        } else {
+            dialog.findViewById(R.id.student3_layout).setVisibility(View.GONE);
+        }
+
+        //set button listener
+        //cancel button
+        (dialog.findViewById(R.id.cancel)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        (dialog.findViewById(R.id.submit)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                submitClickHandler.onClick(v); //TODO improve
+            }
+        });
+
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(dialog.getWindow().getAttributes());
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
