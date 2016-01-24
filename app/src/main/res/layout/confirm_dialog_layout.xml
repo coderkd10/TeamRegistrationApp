@@ -9,11 +9,11 @@
     <RelativeLayout
         android:background="@drawable/layout_shadow"
         android:layout_width="match_parent"
-        android:layout_height="342dp">
+        android:layout_height="362dp">
         <LinearLayout
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:gravity="center"
             android:background="@color/themeColor">
             <TextView
