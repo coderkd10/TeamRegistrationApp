@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                             if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
                                 ScreenUtils.makeDialog(v, "Data not posted!", "Some required fields are missing!", "Ok",false);
                             else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
-                                ScreenUtils.makeDialog(v, "Data not posted!", "One or more users with given details have already registered.", "Ok",false);
+                                ScreenUtils.makeDialog(v, "User(s) already registered!", "One or more users with given details have already registered.", "Ok",false);
                             else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
                                 ScreenUtils.makeDialog(v, "Data posted!", "Registration completed", "Ok",true);
                                 //resetTextBoxes();

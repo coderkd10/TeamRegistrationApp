@@ -6,13 +6,12 @@
     android:background="@android:color/transparent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:gravity="center"
-        android:orientation="vertical"
+    <RelativeLayout
         android:background="@drawable/layout_shadow"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="342dp">
         <LinearLayout
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center"
@@ -25,112 +24,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-        <LinearLayout
-            android:background="#f5f5f5"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/team_name_layout"
-                android:background="#fff"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <!--<com.github.siyamed.shapeimageview.CircularImageView-->
-                    <!--android:id="@+id/img0"-->
-                    <!--android:src="@mipmap/ic_launcher"-->
-                    <!--app:siBorderWidth="3dp"-->
-                    <!--app:siBorderColor="#f5f5f5"-->
-                    <!--android:layout_width="50dp"-->
-                    <!--android:layout_height="50dp"/>-->
-                <TextView
-                    android:id="@+id/team_name"
-                    android:textColor="@color/themeColor"
-                    android:textSize="18dp"
-                    android:layout_margin="10dp"
-                    android:text="Team name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/student1_layout"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.github.siyamed.shapeimageview.CircularImageView
-                    android:id="@+id/img1"
-                    android:src="@mipmap/ic_launcher"
-                    app:siBorderWidth="1dp"
-                    app:siBorderColor="#f5f5f5"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"/>
-                <TextView
-                    android:id="@+id/detail1"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="15dp"
-                    android:text="Student1 (Entry 1)"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/student2_layout"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.github.siyamed.shapeimageview.CircularImageView
-                    android:id="@+id/img2"
-                    android:src="@mipmap/ic_launcher"
-                    app:siBorderWidth="1dp"
-                    app:siBorderColor="#f5f5f5"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"/>
-                <TextView
-                    android:id="@+id/detail2"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="15dp"
-                    android:text="Student2 (Entry 2)"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/student3_layout"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.github.siyamed.shapeimageview.CircularImageView
-                    android:id="@+id/img3"
-                    android:src="@mipmap/ic_launcher"
-                    app:siBorderWidth="1dp"
-                    app:siBorderColor="#f5f5f5"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"/>
-                <TextView
-                    android:id="@+id/detail3"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="15dp"
-                    android:text="Student3 (Entry 3)"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </LinearLayout>
         <RelativeLayout
+            android:id="@+id/button_layout"
+            android:layout_alignParentBottom="true"
             android:background="#f5f5f5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -144,7 +40,6 @@
                 android:text="Submit"
                 android:layout_toRightOf="@id/centered_view"
                 android:textAllCaps="false"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_marginLeft="1dp"
@@ -158,7 +53,6 @@
                 android:layout_toLeftOf="@id/centered_view"
                 android:textAllCaps="false"
                 android:layout_marginLeft="2dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="1dp"
                 android:textColor="#727272"
@@ -166,5 +60,111 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/team_name_layout"
+            android:layout_below="@id/title"
+            android:background="#fff"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/team_name"
+                android:textColor="@color/themeColor"
+                android:textSize="18dp"
+                android:layout_margin="10dp"
+                android:text="Team name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <ScrollView
+            android:layout_below="@id/team_name_layout"
+            android:layout_above="@id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="#f5f5f5"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/student1_layout"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.github.siyamed.shapeimageview.CircularImageView
+                        android:id="@+id/img1"
+                        android:src="@mipmap/ic_launcher"
+                        app:siBorderWidth="1dp"
+                        app:siBorderColor="#f5f5f5"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"/>
+                    <TextView
+                        android:id="@+id/detail1"
+                        android:textColor="#000"
+                        android:textSize="16sp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="15dp"
+                        android:text="Student1 (Entry 1)"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/student2_layout"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.github.siyamed.shapeimageview.CircularImageView
+                        android:id="@+id/img2"
+                        android:src="@mipmap/ic_launcher"
+                        app:siBorderWidth="1dp"
+                        app:siBorderColor="#f5f5f5"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"/>
+                    <TextView
+                        android:id="@+id/detail2"
+                        android:textColor="#000"
+                        android:textSize="16sp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="15dp"
+                        android:text="Student2 (Entry 2)"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/student3_layout"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.github.siyamed.shapeimageview.CircularImageView
+                        android:id="@+id/img3"
+                        android:src="@mipmap/ic_launcher"
+                        app:siBorderWidth="1dp"
+                        app:siBorderColor="#f5f5f5"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"/>
+                    <TextView
+                        android:id="@+id/detail3"
+                        android:textColor="#000"
+                        android:textSize="16sp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="15dp"
+                        android:text="Student3 (Entry 3)"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
 </RelativeLayout>
