@@ -209,6 +209,7 @@ public class ScreenUtils {
 
 //        dialog.show();
 //        view = dialog.getCurrentFocus(); //TODO improve this
+        setTextInTextView(dialog,R.id.team_name,formData.getTeamName());
         setTextInTextView(dialog, R.id.detail1, formData.getMember(1).toFormattedString());
         setMemberImageAndBorderInCircularImageView(dialog, R.id.img1, formData.getMember(1).getImageBitmap());
         setTextInTextView(dialog, R.id.detail2, formData.getMember(2).toFormattedString());
