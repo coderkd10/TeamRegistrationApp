@@ -17,35 +17,16 @@ public class CreditsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_credits);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_credits, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     public void exit(View view){
-        finish();
+        finish(); // closes the activity
     }
     public void openForm(View view){
         Intent intent = new Intent(CreditsActivity.this,MainActivity.class);
-        startActivity(intent);
-        finish();
+        startActivity(intent); //starting new intent
+        finish(); //closing current activity
     }
+
+    //opens url (in the default browser) depending on the view which is clicked
     public void handleLinks(View view){
         String url = "";
         switch(view.getId()){

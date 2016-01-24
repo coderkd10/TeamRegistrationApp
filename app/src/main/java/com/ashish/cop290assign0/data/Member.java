@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 
 /**
- * Represents a member (i.e. student) who details is to be entered.
+ * Represents a member (i.e. student) whose details are to be entered.
  * @author Abhishek Kedia
  */
 public class Member implements Serializable {

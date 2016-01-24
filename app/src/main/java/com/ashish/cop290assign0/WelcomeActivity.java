@@ -11,9 +11,6 @@ import android.view.animation.AlphaAnimation;
 
 
 public class WelcomeActivity extends ActionBarActivity {
-
-    Handler handler;
-    Runnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,18 +18,16 @@ public class WelcomeActivity extends ActionBarActivity {
         showIcon();
     }
 
+    //pop in animation for team icon
     private void showIcon(){
-        View icon = findViewById(R.id.icon);
-        View iconLayout = findViewById(R.id.icon_layout);
         View iconLayoutMain = findViewById(R.id.icon_layout_main);
-        AlphaAnimation animation = new AlphaAnimation(0.1f, 1.0f);
-        animation.setDuration(1200);
-        //animation.setStartOffset(5000);
+        AlphaAnimation animation = new AlphaAnimation(0.1f, 1.0f); //defining start and end alpha values for animation
+        animation.setDuration(1200); //setting animation duration
         animation.setFillAfter(true);
         iconLayoutMain.startAnimation(animation);
-        //iconLayoutMain.animate().scaleY(1);
     }
 
+    //called on procced button click
     public void proceed(View v){
         Intent intent = new Intent(WelcomeActivity.this,MainActivity.class);
         startActivity(intent);

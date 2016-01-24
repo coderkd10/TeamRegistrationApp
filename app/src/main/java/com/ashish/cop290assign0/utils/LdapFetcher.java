@@ -49,6 +49,7 @@ public class LdapFetcher {
         };
     }
 
+    //fetching student details from LDAP using entered entry number
     public void getAndHandleStudentDetails(final String inputEntryNumber, final StudentJsonDataHandler resultHandler, final Response.ErrorListener errorHandler){
         String studentUserId;
         try{
@@ -62,6 +63,8 @@ public class LdapFetcher {
         Log.d(TAG,String.format("Sending request for entryNumber:%s",inputEntryNumber));
         ldapRequestQueue.add(strReq);
     }
+
+    //fetching student details from LDAP using entered entry number
     public void getAndHandleStudentDetails(final String inputEntryNumber, final StudentJsonDataHandler resultHandler){
         getAndHandleStudentDetails(inputEntryNumber, resultHandler, new Response.ErrorListener(){
             @Override
@@ -71,6 +74,7 @@ public class LdapFetcher {
         });
     }
 
+    //converts entry number to userId for fetching details from LDAP
     private String entryNumberToUserId(String entryNumber) throws IllegalArgumentException{
         Pattern entryNumberDataExtractPattern = Pattern.compile(Config.REGEX_ENTRY_NUMBER);
         Matcher entryNumDataMatcher = entryNumberDataExtractPattern.matcher(entryNumber);
@@ -83,6 +87,7 @@ public class LdapFetcher {
         }
     }
 
+    //gets entry number from the html using regex pattern matching
     private Map<String,String> getEntryNumberAndNameFromLdapH1Text(String h1Text) {
         Pattern h1TextFormatRegEx = Pattern.compile("^(.+?) \\((20\\d{2}[a-zA-z]{2}[a-zA-z\\d]\\d{4})\\)$");
         Matcher h1TextFormatMatcher = h1TextFormatRegEx.matcher(h1Text);
@@ -93,6 +98,8 @@ public class LdapFetcher {
         entryNumberAndName.put("entryNumber",h1TextFormatMatcher.group(2));
         return entryNumberAndName;
     };
+
+    //gets base64 image from the html using regex pattern matching
     private String getImageSrcInBase64(String htmlSrc) {
         Pattern imgBase64SrcRegex = Pattern.compile("<img.*src='data:image/gif;base64,(.*?)' />");
         Matcher imgBas64Matcher = imgBase64SrcRegex.matcher(htmlSrc);

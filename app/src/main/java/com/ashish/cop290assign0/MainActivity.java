@@ -32,15 +32,15 @@ public class MainActivity extends AppCompatActivity {
     static ViewPager pager;
     static ViewPagerAdapter adapter;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName(); //tag for Logging errors caused by this activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG,String.format("onCreate called. savedInstanceState:%s",savedInstanceState));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
-        if(savedInstanceState != null) {
+        init(); //initializing pager and adapter
+        if(savedInstanceState != null) { //retrieving previously saved data(if any)
             pager.setCurrentItem(savedInstanceState.getInt("currentPage"));
             mFormData = (FormData) savedInstanceState.getSerializable("formData");
         }
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         CirclePageIndicator circleIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         circleIndicator.setViewPager(pager);
 
+        //creating new Volley RequestQueue
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         mLdapFetcher = new LdapFetcher(requestQueue);
         mPostRequest = new PostRequest(requestQueue);
@@ -92,9 +93,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    //Called on submit button click
     public static void onSubmit(final View view) {
         Log.d(TAG, "Submit pressed. mFormData=" + mFormData);
 
+        //checking if data is completely filled
         if(!isCompletelyFilled()) {
             Log.v(TAG,"form not submitted because data is incompletely filled");
             return;
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Called on submit button click
+    //Called on final form data submission
     public static void onFinalSubmit(final View v, Map<String,String> data) {
         //Creating a progressDialog to shows while the data is being posted.
         final ProgressDialog pDialog = ScreenUtils.createProgressDialog(v, "Please wait", "Sending data to the server.....");

@@ -32,6 +32,8 @@ import com.github.siyamed.shapeimageview.CircularImageView;
  * @author Abhishek Kedia
  */
 public class ScreenUtils {
+
+    //gets and returns text from a given textview
     public static String getStringFromTextView(View v, int id) {
         try {
             return ((TextView) v.findViewById(id)).getText().toString();
@@ -41,6 +43,7 @@ public class ScreenUtils {
         }
     }
 
+    //gets given text to a textview
     public static void setTextInTextView(View v, int id, CharSequence text) {
         try {
             ((TextView) v.findViewById(id)).setText(text);
