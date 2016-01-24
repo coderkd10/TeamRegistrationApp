@@ -126,7 +126,7 @@
         android:text="Made with \u2764 by"
         android:textColor="#727272"
         android:textSize="16sp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="60dp"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -160,11 +160,25 @@
                 android:id="@+id/detail1"
                 android:textColor="#000"
                 android:textSize="18sp"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="15dp"
                 android:text="Abhishek Kedia"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/kedia_github"
+                android:clickable="true"
+                android:onClick="handleLinks"
+                android:src="@drawable/github"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <ImageView
+                android:id="@+id/kedia_twiiter"
+                android:clickable="true"
+                android:onClick="handleLinks"
+                android:src="@drawable/twitter"
+                android:layout_marginLeft="5dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/student2_layout"
@@ -185,11 +199,25 @@
                 android:id="@+id/detail2"
                 android:textColor="#000"
                 android:textSize="18sp"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="15dp"
                 android:text="Ashish Ranjan"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/ashish_github"
+                android:clickable="true"
+                android:onClick="handleLinks"
+                android:src="@drawable/github"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <ImageView
+                android:id="@+id/ashish_twiiter"
+                android:clickable="true"
+                android:onClick="handleLinks"
+                android:src="@drawable/twitter"
+                android:layout_marginLeft="5dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/student3_layout"
@@ -210,11 +238,25 @@
                 android:id="@+id/detail3"
                 android:textColor="#000"
                 android:textSize="18sp"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="15dp"
                 android:text="Arnav Kansal"
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/arnav_github"
+                android:clickable="true"
+                android:onClick="handleLinks"
+                android:src="@drawable/github"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <ImageView
+                android:id="@+id/arnav_twiiter"
+                android:clickable="true"
+                android:onClick="handleLinks"
+                android:src="@drawable/twitter"
+                android:layout_marginLeft="5dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
