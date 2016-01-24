@@ -97,7 +97,8 @@ public final class TeamNameFragment extends DetailsEntryFragment {
     public boolean isCompletelyFilled() {
         if(getIsfilled())
             return true;
-        return isValidUserInput();
+        isValidUserInput();
+        return false;
     }
 
     @Override
@@ -136,7 +137,7 @@ public final class TeamNameFragment extends DetailsEntryFragment {
     private void onSaveFilledDetails() {
         Log.i(TAG,String.format("save_data. entered:%s",getFilledTeamName()));
         if(getFilledTeamName().isEmpty()) {
-            setEmptyTeamNameError(); //TODO trim filledTeamName
+            setEmptyTeamNameError();
             return;
         }
         saveFilledTeamNameToForm();

@@ -162,8 +162,10 @@ public final class MemberFragment extends DetailsEntryFragment {
     public boolean isCompletelyFilled() {
         if(getIsfilled())
             return true;
-        if(isRequired())
-            return isValidUserInput();
+        if(isRequired()) {
+            isValidUserInput();
+            return false;
+        }
         else {
             if (!getFilledEntryNumber().isEmpty() && getFilledName().isEmpty()) {
                 ScreenUtils.setErrorInEditText(getView(), R.id.name, "Entry number entered, please enter name for this entry!");
