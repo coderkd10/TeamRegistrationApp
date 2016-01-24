@@ -140,11 +140,13 @@ public class ScreenUtils {
 
     //creates and shows a custom dialog
     //TODO make the header of dialog colored according to success or failure. RED if failed, green if success.
-    public static void makeDialog(View view, String title, String msg, String buttonText){
+    public static void makeDialog(View view, String title, String msg, String buttonText,boolean success){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //ask why??
         dialog.setContentView(R.layout.error_dialog_layout);
         dialog.setCancelable(false);
+        if(success)
+            dialog.findViewById(R.id.dialog_title_bar).setBackgroundColor(Color.parseColor("#12B42C"));
         ((TextView)dialog.findViewById(R.id.title_text)).setText(title);
         ((TextView)dialog.findViewById(R.id.error_text)).setText(msg);
         ((Button)dialog.findViewById(R.id.error_button)).setText(buttonText);

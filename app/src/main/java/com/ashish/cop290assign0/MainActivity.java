@@ -126,17 +126,17 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
-                                ScreenUtils.makeDialog(v, "Data not posted!", "Some required fields are missing!", "Ok");
+                                ScreenUtils.makeDialog(v, "Data not posted!", "Some required fields are missing!", "Ok",false);
                             else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
-                                ScreenUtils.makeDialog(v, "Data not posted!", "One or more users with given details have already registered.", "Ok");
+                                ScreenUtils.makeDialog(v, "Data not posted!", "One or more users with given details have already registered.", "Ok",false);
                             else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
-                                ScreenUtils.makeDialog(v, "Data posted!", "Registration completed", "Ok");
+                                ScreenUtils.makeDialog(v, "Data posted!", "Registration completed", "Ok",true);
                                 //resetTextBoxes();
                             }
                         } catch (JSONException jsonException) {
-                            ScreenUtils.makeDialog(v, "Umm...", "Unexpected response from the server, contact server administrator!", "Ok");
+                            ScreenUtils.makeDialog(v, "Umm...", "Unexpected response from the server, contact server administrator!", "Ok",false);
                         } catch (Exception e) {
-                            ScreenUtils.makeDialog(v, "Uh-oh", "Something bad happened. Might be aliens!", "Ok");
+                            ScreenUtils.makeDialog(v, "Uh-oh", "Something bad happened. Might be aliens!", "Ok",false);
                         }
                     }
                 },
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void handle(VolleyError error) {
                         pDialog.dismiss();
-                        ScreenUtils.makeDialog(v, "Uh-oh", "Looks like you're not connected to the internet.Please check your internet connection and try again.", "Ok");
+                        ScreenUtils.makeDialog(v, "Uh-oh", "Looks like you're not connected to the internet.Please check your internet connection and try again.", "Ok",false);
                     }
                 }
         );
