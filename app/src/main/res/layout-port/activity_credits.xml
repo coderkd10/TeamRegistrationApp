@@ -106,7 +106,7 @@
                 android:clickable="true"
                 android:onClick="handleLinks"
                 android:src="@drawable/twitter"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
         </LinearLayout>
@@ -145,7 +145,7 @@
                 android:clickable="true"
                 android:onClick="handleLinks"
                 android:src="@drawable/twitter"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
         </LinearLayout>
@@ -184,7 +184,7 @@
                 android:clickable="true"
                 android:onClick="handleLinks"
                 android:src="@drawable/twitter"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
         </LinearLayout>
