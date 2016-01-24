@@ -95,8 +95,10 @@ public class MainActivity extends AppCompatActivity {
     public static void onSubmit(final View view) {
         Log.d(TAG, "Submit pressed. mFormData=" + mFormData);
 
-        if(!isCompletelyFilled())
+        if(!isCompletelyFilled()) {
+            Log.v(TAG,"form not submitted because data is incompletely filled");
             return;
+        }
 
         final Map<String,String> data = mFormData.toMap();
         if(data!=null) {
@@ -111,42 +113,41 @@ public class MainActivity extends AppCompatActivity {
 
     //Called on submit button click
     public static void onFinalSubmit(final View v, Map<String,String> data) {
-
-            //Creating a progressDialog to shows while the data is being posted.
-            final ProgressDialog pDialog = ScreenUtils.createProgressDialog(v, "Please wait", "Sending data to the server.....");
-            Log.d("onSubmit", data.toString());
-            //posting to the server
-            mPostRequest.post(Config.SERVER_URL, data,
-                    new PostRequest.ServerResponseHandler() {
-                        @Override
-                        public void handle(String response) {
-                            //TODO
-                            pDialog.dismiss();
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
-                                    ScreenUtils.makeDialog(v, "Data not posted!", "Some required fields are missing!", "Ok");
-                                else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
-                                    ScreenUtils.makeDialog(v, "Data not posted!", "One or more users with given details have already registered.", "Ok");
-                                else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
-                                    ScreenUtils.makeDialog(v, "Data posted!", "Registration completed", "Ok");
-                                    //resetTextBoxes();
-                                }
-                            } catch (JSONException jsonException) {
-                                ScreenUtils.makeDialog(v, "Umm...", "Unexpected response from the server, contact server administrator!", "Ok");
-                            } catch (Exception e) {
-                                ScreenUtils.makeDialog(v, "Uh-oh", "Something bad happened. Might be aliens!", "Ok");
+        //Creating a progressDialog to shows while the data is being posted.
+        final ProgressDialog pDialog = ScreenUtils.createProgressDialog(v, "Please wait", "Sending data to the server.....");
+        Log.d("onSubmit", data.toString());
+        //posting to the server
+        mPostRequest.post(Config.SERVER_URL, data,
+                new PostRequest.ServerResponseHandler() {
+                    @Override
+                    public void handle(String response) {
+                        //TODO
+                        pDialog.dismiss();
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Data not posted!"))
+                                ScreenUtils.makeDialog(v, "Data not posted!", "Some required fields are missing!", "Ok");
+                            else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("User Already Registered"))
+                                ScreenUtils.makeDialog(v, "Data not posted!", "One or more users with given details have already registered.", "Ok");
+                            else if(jsonResponse.getString("RESPONSE_MESSAGE").equalsIgnoreCase("Registration completed")) {
+                                ScreenUtils.makeDialog(v, "Data posted!", "Registration completed", "Ok");
+                                //resetTextBoxes();
                             }
-                        }
-                    },
-                    new PostRequest.ErrorHandler(){
-                        @Override
-                        public void handle(VolleyError error) {
-                            pDialog.dismiss();
-                            ScreenUtils.makeDialog(v, "Uh-oh", "Looks like you're not connected to the internet.Please check your internet connection and try again.", "Ok");
+                        } catch (JSONException jsonException) {
+                            ScreenUtils.makeDialog(v, "Umm...", "Unexpected response from the server, contact server administrator!", "Ok");
+                        } catch (Exception e) {
+                            ScreenUtils.makeDialog(v, "Uh-oh", "Something bad happened. Might be aliens!", "Ok");
                         }
                     }
-            );
+                },
+                new PostRequest.ErrorHandler(){
+                    @Override
+                    public void handle(VolleyError error) {
+                        pDialog.dismiss();
+                        ScreenUtils.makeDialog(v, "Uh-oh", "Looks like you're not connected to the internet.Please check your internet connection and try again.", "Ok");
+                    }
+                }
+        );
 //        } else {
 //            //data is null
 //            //some input is invalid

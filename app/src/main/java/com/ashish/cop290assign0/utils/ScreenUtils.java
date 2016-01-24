@@ -190,12 +190,15 @@ public class ScreenUtils {
     }
     public static void setMemberImageAndBorderInCircularImageView(Dialog view, int id, Bitmap memberImage) {
         setMemberImageInCircularImageView(view,id,memberImage);
-        if(memberImage == null)
-            setImageBorderInCircularImageView(view,id,Color.parseColor("#ffffff"));
-        else
+//        if(memberImage == null)
+//            //setImageBorderInCircularImageView(view,id,Color.parseColor("#ffffff"));
+//        else
+//        if(memberImage != null)
             setImageBorderInCircularImageView(view,id,Color.parseColor("#ff3C16"));
     }
+
     //TODO move to a new class
+    //TODO show team name in confirmation dialog
     public static void makeConfirmationDialog(View view, FormData formData, final View.OnClickListener submitClickHandler) {
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
