@@ -52,6 +52,7 @@ public class ScreenUtils {
         }
     }
 
+    //attaches an error to a given edittext
     public static void setErrorInEditText(View v, int id, CharSequence error) {
         try {
             ((EditText) v.findViewById(id)).setError(error);
@@ -60,10 +61,12 @@ public class ScreenUtils {
         }
     }
 
+    //removes error from a given edittext
     public static void removeErrorFromEditText(View v, int id) {
         setErrorInEditText(v, id, null);
     }
 
+    //sets member image,if no image fetched from LDAP then default is shown
     public static void setMemberImageInCircularImageView(View view, int id, Bitmap memberImage) {
         try {
             CircularImageView memberImageView = (CircularImageView) view.findViewById(id);
@@ -75,6 +78,8 @@ public class ScreenUtils {
             e.printStackTrace();
         }
     }
+
+    //sets border color to member images
     public static void setImageBorderInCircularImageView(View view, int id, int color) {
         try {
             ((CircularImageView) view.findViewById(id)).setBorderColor(color);
@@ -90,6 +95,7 @@ public class ScreenUtils {
             setImageBorderInCircularImageView(view,id,Color.parseColor("#ff3C16"));
     }
 
+    //hides keyboard
     public static void hideKeyboard(View v) {
         try {
             InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -99,6 +105,7 @@ public class ScreenUtils {
         }
     }
 
+    //converts base64 string to byte array
     public static byte[] base64StringToByteArray(String base64String) {
         try {
             return Base64.decode(base64String, Base64.DEFAULT);
@@ -107,6 +114,8 @@ public class ScreenUtils {
             return null;
         }
     }
+
+    //converts base64 string to Bitmap
     public static Bitmap base64StringToBitmap(String base64String) {
         byte[] b = base64StringToByteArray(base64String);
         return BitmapFactory.decodeByteArray(b, 0, b.length);
