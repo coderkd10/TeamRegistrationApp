@@ -198,7 +198,7 @@ public class ScreenUtils {
 //            //setImageBorderInCircularImageView(view,id,Color.parseColor("#ffffff"));
 //        else
 //        if(memberImage != null)
-            setImageBorderInCircularImageView(view,id,Color.parseColor("#ff3C16"));
+            //setImageBorderInCircularImageView(view,id,Color.parseColor("#ff3C16"));
     }
 
     //TODO move to a new class
