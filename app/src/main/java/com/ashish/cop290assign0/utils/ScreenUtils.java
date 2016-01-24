@@ -1,8 +1,10 @@
 package com.ashish.cop290assign0.utils;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ashish.cop290assign0.CreditsActivity;
 import com.ashish.cop290assign0.R;
 import com.ashish.cop290assign0.data.FormData;
 import com.ashish.cop290assign0.data.Member;
@@ -140,7 +143,7 @@ public class ScreenUtils {
 
     //creates and shows a custom dialog
     //TODO make the header of dialog colored according to success or failure. RED if failed, green if success.
-    public static void makeDialog(View view, String title, String msg, String buttonText,boolean success){
+    public static void makeDialog(final View view, String title, String msg, String buttonText,final boolean success){
         final Dialog dialog = new Dialog(view.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //ask why??
         dialog.setContentView(R.layout.error_dialog_layout);
@@ -156,6 +159,11 @@ public class ScreenUtils {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                if(success) {
+                    Intent intent = new Intent(view.getContext(),CreditsActivity.class);
+                    view.getContext().startActivity(intent);
+                    ((Activity)view.getContext()).finish();
+                }
             }
         });
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
